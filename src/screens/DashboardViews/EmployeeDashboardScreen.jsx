@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import fetchUser from "../../hooks/get/fetchUser";
-
+import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../../components/LoadingScreen";
 const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
         const data = await fetchUser(getUser.uid);
+        console.log(data);
+        if (data.UserRole === "Admin") {
+          navigate("/admindashboard");
+        }
+        setLoading(false);
         setUserData(data);
       } catch (error) {
         console.error("Error:", error);
@@ -17,10 +25,14 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
     fetchAndSetUserData();
   }, []);
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="w-auto h-auto relative">
       <Navbar userData={userData} />
-      <div className="flex h-full w-full flex-col px-8 py-8 md:px-24">
+      <div className="flex h-full w-full flex-col px-8 py-8 md:px-24 md:mt-24">
         <label className="text-xl font-bold text-[#152852]">Your Tasks</label>
         <div className="mt-5 flex w-full justify-center">
           <div className="shadow-xy flex h-80 w-full flex-col items-center justify-center rounded-xl md:w-11/12">

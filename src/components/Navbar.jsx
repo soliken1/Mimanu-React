@@ -46,7 +46,10 @@ const Navbar = ({ userData }) => {
       </div>
 
       <div className="hidden flex-row gap-8 md:flex">
-        <Link className="flex flex-row items-center justify-center gap-4 duration-300">
+        <Link
+          to="/dashboard"
+          className="flex flex-row items-center justify-center gap-4 duration-300"
+        >
           <label className="cursor-pointer rounded-xl border-white px-4 py-2 text-lg text-white duration-300 hover:border-b">
             Home
           </label>
@@ -73,9 +76,7 @@ const Navbar = ({ userData }) => {
         </Link>
         <Link
           className="flex flex-row items-center justify-center gap-4 duration-300"
-          asp-area=""
-          asp-controller="Auth"
-          asp-action="Profile"
+          to="/editprofile"
         >
           <label className="cursor-pointer rounded-xl border-white px-4 py-2 text-lg text-white hover:border-b">
             Settings
@@ -188,12 +189,14 @@ const Navbar = ({ userData }) => {
               {isLoading ? (
                 <label className="w-28 h-4 rounded-full animate-pulse duration-300 bg-[#050419]"></label>
               ) : (
-                <label className="hidden text-white md:flex">{username}</label>
+                <label className="hidden text-white md:flex cursor-pointer">
+                  {username}
+                </label>
               )}
 
               <img
                 src={userImg}
-                className="h-12 w-12 rounded-full shadow-sm shadow-[#152852]"
+                className="h-12 w-12 rounded-full object-cover shadow-sm shadow-[#152852]"
               />
             </div>
           </Link>
