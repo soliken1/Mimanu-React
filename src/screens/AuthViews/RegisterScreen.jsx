@@ -1,15 +1,122 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import fetchUser from "../../hooks/get/fetchUser";
+import LoadingScreen from "../../components/LoadingScreen";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db, auth } from "../../config/firebaseConfigs";
+const RegisterScreen = ({ getUser }) => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "",
+    username: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
-const RegisterScreen = () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedData = { ...prev, [name]: value };
+
+      if (name === "firstName" || name === "lastName" || name === "role") {
+        updatedData.username = generateUsername(
+          updatedData.firstName,
+          updatedData.lastName,
+          updatedData.role
+        );
+      }
+      return updatedData;
+    });
+  };
+
+  const generateUsername = (firstName, lastName, role) => {
+    if (!firstName || !lastName || !role) return "";
+    const rolePrefix = role === "Trainor" ? "TRA" : "EMP";
+    const firstInitial = firstName.charAt(0).toLowerCase();
+    return `${rolePrefix}_${firstInitial}${lastName}`;
+  };
+
+  useEffect(() => {
+    const fetchAndSetUserData = async () => {
+      try {
+        const data = await fetchUser(getUser.uid);
+        setLoading(false);
+        setUserData(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchAndSetUserData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.role
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      const userDoc = {
+        UID: user.uid,
+        FirstName: formData.firstName,
+        LastName: formData.lastName,
+        Email: formData.email,
+        UserRole: formData.role,
+        Username: formData.username,
+        UserImg:
+          "https://res.cloudinary.com/dip5gm9sj/image/upload/v1738510538/profile_images/osnoqwziewk117iq51pw.jpg",
+      };
+
+      await setDoc(doc(db, "Users", user.uid), userDoc);
+    } catch (error) {
+      console.error("Error registering user:", error);
+      setError(error.message);
+    }
+  };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
-    <div className="flex h-full w-full flex-col md:flex-row">
-      <div className="h-full w-full p-8 md:w-3/12">
-        <div className="shadow-xy flex h-32 w-full flex-col rounded-xl py-6 md:h-64">
-          <div className="px-8 font-semibold">
-            <label className="text-[#152852]">Accounts</label>
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20">
+      <Navbar userData={userData} />
+      <div class="h-full w-full p-8 md:w-3/12 md:mt-24">
+        <div class="shadow-xy flex h-32 w-full flex-col rounded-xl py-6 md:h-64">
+          <div class="px-8 font-semibold">
+            <label class="text-[#152852]">Accounts</label>
           </div>
 
-          <div className="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg border-[#DC3A3A] bg-gray-100 px-4">
+          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg border-[#DC3A3A] bg-gray-100 px-4">
             <svg
               width="12"
               height="13"
@@ -30,150 +137,126 @@ const RegisterScreen = () => {
                 stroke-linejoin="round"
               />
             </svg>
-            <label className="text-[#152852]">Account Creation</label>
+            <label class="text-[#152852]">Account Creation</label>
           </div>
         </div>
       </div>
-      <div className="flex h-full w-full flex-col gap-4 p-8 md:w-9/12">
-        <div className="border-b-2 border-b-red-500 py-2">
-          <label className="w-full text-xl font-semibold text-[#152852]">
+      <div class="flex h-full w-full flex-col gap-4 p-8 md:w-9/12 md:mt-24">
+        <div class="border-b-2 border-b-red-500 py-2">
+          <label class="w-full text-xl font-semibold text-[#152852]">
             Register User
           </label>
         </div>
 
-        <form
-          className="flex w-full flex-col gap-4"
-          asp-action="Register"
-          method="post"
-        >
-          <div className="flex w-full flex-col gap-1">
-            <label className="text-[#152852]" asp-for="Username"></label>
+        <form class="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
+          <div class="flex w-full flex-col gap-1">
+            <label class="text-[#152852]"></label>
             <input
-              asp-for="Username"
+              name="username"
               placeholder="EMP_jDoe"
-              id="Username"
-              readonly
-              className="w-full rounded-xl px-4 py-2"
+              readonly={true}
+              value={formData.username}
+              class="w-full rounded-xl px-4 py-2 border border-black"
+              disabled={true}
             />
-            <label className="text-xs">
+            <label class="text-xs">
               This is displayed throughout the public within the website instead
               of your full name.
             </label>
-            <span
-              asp-validation-for="Username"
-              id="UsernameSpan"
-              className="text-xs text-red-500"
-            ></span>
           </div>
 
-          <div className="flex w-full flex-row gap-5">
-            <div className="flex w-1/2 flex-col gap-1">
-              <label className="text-[#152852]" asp-for="FirstName">
-                First Name
-              </label>
+          <div class="flex w-full flex-row gap-5">
+            <div class="flex w-1/2 flex-col gap-1">
+              <label class="text-[#152852]">First Name</label>
               <input
-                asp-for="FirstName"
                 placeholder="John"
-                id="FirstName"
-                className="rounded-xl px-4 py-2"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                class="rounded-xl px-4 py-2 border border-black"
               />
-              <span
-                asp-validation-for="FirstName"
-                className="text-xs text-red-500"
-              ></span>
             </div>
 
-            <div className="flex w-1/2 flex-col gap-1">
-              <label className="text-[#152852]" asp-for="LastName">
-                Last Name
-              </label>
+            <div class="flex w-1/2 flex-col gap-1">
+              <label class="text-[#152852]">Last Name</label>
               <input
-                asp-for="LastName"
                 placeholder="Doe"
-                id="LastName"
-                className="rounded-xl px-4 py-2"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                class="rounded-xl px-4 py-2 border border-black"
               />
-              <span
-                asp-validation-for="LastName"
-                className="text-xs text-red-500"
-              ></span>
             </div>
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-[#152852]">Role</label>
-            <div className="flex flex-row items-center gap-4">
-              <input
-                type="radio"
-                asp-for="Role"
-                id="Trainor"
-                value="Trainor"
-                onclick="clearRoleError()"
-              />{" "}
-              Trainor
-              <br />
-              <input
-                type="radio"
-                asp-for="Role"
-                id="Employee"
-                value="Employee"
-                onclick="clearRoleError()"
-              />{" "}
-              Employee
-              <br />
+            <div className="flex flex-row gap-4">
+              <label className="flex flex-row items-center gap-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="Trainor"
+                  placeholder="Trainor"
+                  onChange={handleChange}
+                  checked={formData.role === "Trainor"}
+                />
+                Trainor
+              </label>
+              <label className="flex flex-row items-center gap-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="Employee"
+                  onChange={handleChange}
+                  checked={formData.role === "Employee"}
+                />
+                Employee
+              </label>
             </div>
-            <span
-              asp-validation-for="Role"
-              className="text-xs text-red-500"
-              id="RoleError"
-            ></span>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[#152852]" asp-for="Email"></label>
+            <label className="text-[#152852]">Email</label>
             <input
-              asp-for="Email"
+              name="email"
+              type="email"
               placeholder="sampleemail@example.com"
-              className="rounded-xl px-4 py-2"
+              className="rounded-xl px-4 py-2 border border-black"
+              value={formData.email}
+              onChange={handleChange}
             />
-            <span
-              asp-validation-for="Email"
-              className="text-xs text-red-500"
-            ></span>
           </div>
 
-          <div className="flex w-full flex-row gap-5">
-            <div className="flex w-1/2 flex-col gap-1">
-              <label className="text-[#152852]" asp-for="Password"></label>
+          <div class="flex w-full flex-row gap-5">
+            <div class="flex w-1/2 flex-col gap-1">
+              <label>Password</label>
               <input
-                asp-for="Password"
+                name="password"
                 type="password"
-                className="rounded-xl px-4 py-2"
+                className="rounded-xl px-4 py-2 border border-black"
+                value={formData.password}
+                onChange={handleChange}
               />
-              <span
-                asp-validation-for="Password"
-                className="text-xs text-red-500"
-              ></span>
             </div>
 
-            <div className="flex w-1/2 flex-col gap-1">
-              <label asp-for="ConfirmPassword">Confirm Password</label>
+            <div class="flex w-1/2 flex-col gap-1">
+              <label>Confirm Password</label>
               <input
-                asp-for="ConfirmPassword"
+                name="confirmPassword"
                 type="password"
-                className="rounded-xl px-4 py-2"
+                className="rounded-xl px-4 py-2 border border-black"
+                value={formData.confirmPassword}
+                onChange={handleChange}
               />
-              <span
-                asp-validation-for="ConfirmPassword"
-                className="text-xs text-red-500"
-              ></span>
             </div>
           </div>
 
-          <div className="flex items-center justify-center">
+          <div class="flex items-center justify-center flex-col gap-2">
+            {error && <div className="text-red-500">{error}</div>}
             <button
               type="submit"
-              className="mt-5 rounded-xl bg-[#DC3A3A] px-16 py-2 text-white drop-shadow-xl duration-300 hover:bg-[#BE3030]"
+              class="mt-5 rounded-xl bg-[#DC3A3A] px-16 py-2 text-white drop-shadow-xl duration-300 hover:bg-[#BE3030]"
             >
               Register
             </button>
