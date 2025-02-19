@@ -6,6 +6,8 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs";
+import { toast, Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 const RegisterScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -42,7 +44,11 @@ const RegisterScreen = ({ getUser }) => {
     if (!firstName || !lastName || !role) return "";
     const rolePrefix = role === "Trainor" ? "TRA" : "EMP";
     const firstInitial = firstName.charAt(0).toLowerCase();
-    return `${rolePrefix}_${firstInitial}${lastName}`;
+
+    const uniqueNumber = Math.floor(Math.random() * 10000);
+    const formattedNumber = uniqueNumber.toString().padStart(4, "0");
+
+    return `${rolePrefix}${formattedNumber}_${firstInitial}${lastName}`;
   };
 
   useEffect(() => {
@@ -98,9 +104,48 @@ const RegisterScreen = ({ getUser }) => {
       };
 
       await setDoc(doc(db, "Users", user.uid), userDoc);
+      toast.success("Successfully Registered User", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "",
+        username: "",
+      });
     } catch (error) {
-      console.error("Error registering user:", error);
-      setError(error.message);
+      toast.error(`Something went Wrong! Please Try Again ${error}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "",
+        username: "",
+      });
+      console.error(error.message);
     }
   };
 
@@ -153,7 +198,7 @@ const RegisterScreen = ({ getUser }) => {
             <label class="text-[#152852]"></label>
             <input
               name="username"
-              placeholder="EMP_jDoe"
+              placeholder="EMP1234_jDoe"
               readonly={true}
               value={formData.username}
               class="w-full rounded-xl px-4 py-2 border border-black"
@@ -263,6 +308,7 @@ const RegisterScreen = ({ getUser }) => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
