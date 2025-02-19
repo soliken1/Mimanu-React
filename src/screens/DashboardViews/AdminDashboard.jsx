@@ -58,7 +58,7 @@ const AdminDashboard = ({ getUser }) => {
             <label className="text-6xl font-semibold">200</label>
             <div className="flex flex-row items-center justify-center gap-1 text-lg font-semibold">
               <label className="text-green-500">+100</label>
-              <img className="h-[11px] w-[15px]" src="~/res/up_green.png" />
+              <img className="h-[11px] w-[15px]" src="/up_green.png" />
             </div>
           </div>
           <label className="text-xl">Total Number of Users</label>
@@ -110,7 +110,7 @@ const AdminDashboard = ({ getUser }) => {
             <label className="text-6xl font-semibold">50</label>
             <div className="flex flex-row items-center justify-center gap-1 text-lg font-semibold">
               <label className="text-green-500">+10</label>
-              <img className="h-[11px] w-[15px]" src="~/res/up_green.png" />
+              <img className="h-[11px] w-[15px]" src="/up_green.png" />
             </div>
           </div>
           <label className="text-xl">Total Number of Courses</label>
@@ -160,7 +160,7 @@ const AdminDashboard = ({ getUser }) => {
                 Trust
               </label>
             </div>
-            <img className="absolute bottom-4 right-4" src="~/res/People.png" />
+            <img className="absolute bottom-4 right-4" src="/People.png" />
           </div>
         </div>
       </div>
@@ -172,10 +172,7 @@ const AdminDashboard = ({ getUser }) => {
         <div className="shadow-xy relative flex h-[280px] w-full flex-col items-center gap-2 rounded-xl md:w-[300px]">
           <div className="h-1/3 w-full rounded-t-xl bg-gradient-to-b from-rose-300 to-rose-500"></div>
           <div className="absolute top-12 transform md:left-4 md:top-12 md:translate-x-2/3">
-            <img
-              src="~/res/SampleProfile.jpg"
-              className="h-28 w-28 rounded-full"
-            />
+            <img src="/SampleProfile.jpg" className="h-28 w-28 rounded-full" />
             <div className="flex flex-col items-center justify-center">
               <label className="text-xl font-semibold text-black">
                 EMP_kMacas

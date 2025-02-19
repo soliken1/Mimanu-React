@@ -36,7 +36,7 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
         <label className="text-xl font-bold text-[#152852]">Your Tasks</label>
         <div className="mt-5 flex w-full justify-center">
           <div className="shadow-xy flex h-80 w-full flex-col items-center justify-center rounded-xl md:w-11/12">
-            <img src="~/res/rocket.png" />
+            <img src="/rocket.png" />
             <label className="text-xl">You've Completed All Your Tasks!</label>
             <label className="text-sm">
               Try Other Courses or Read Some Tips
@@ -52,7 +52,7 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
             <div className="flex flex-row flex-wrap justify-evenly gap-8">
               <div className="shadow-xy h-[275px] w-full rounded-xl md:w-[350px]">
                 <div className="flex h-[110px] w-full items-center justify-center rounded-t-xl bg-rose-300">
-                  <img className="h-20 w-20" src="~/res/sample_tip.png" />
+                  <img className="h-20 w-20" src="/sample_tip.png" />
                 </div>
                 <div className="flex flex-col px-6 py-4">
                   <label className="text-lg font-semibold">Test Yourself</label>
@@ -78,7 +78,7 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
               Microcourses
             </label>
             <div className="shadow-xy flex h-32 w-full flex-col items-center justify-center gap-2 rounded-xl">
-              <img src="~/res/sample_microcourse.png" />
+              <img src="/sample_microcourse.png" />
               <label className="font-semibold">Persuading Others</label>
             </div>
           </div>
@@ -94,7 +94,7 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
             <div className="h-1/3 w-full rounded-t-xl bg-gradient-to-b from-rose-300 to-rose-500"></div>
             <div className="absolute top-12 transform md:left-4 md:top-12 md:translate-x-2/3">
               <img
-                src="~/res/SampleProfile.jpg"
+                src="/SampleProfile.jpg"
                 className="h-28 w-28 rounded-full"
               />
               <div className="flex flex-col items-center justify-center">
