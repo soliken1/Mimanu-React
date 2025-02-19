@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import EmailIcon from "../../assets/email.svg";
-import BookIcon from "../../assets/book.png";
 import { auth } from "../../config/firebaseConfigs";
 import { sendPasswordResetEmail } from "firebase/auth";
 const ForgotPasswordScreen = () => {
@@ -34,7 +32,7 @@ const ForgotPasswordScreen = () => {
         <div class="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
       </div>
       <div class="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
-        <img class="h-48 w-48" src={BookIcon} />
+        <img class="h-48 w-48" src="/book.png" />
         <label class="text-3xl">Forgot Your Password?</label>
         <label class="text-sm font-medium">
           Please Enter Your Email For Verification
@@ -44,7 +42,7 @@ const ForgotPasswordScreen = () => {
           class="mt-5 flex w-full flex-col gap-5 px-16"
         >
           <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-            <img class="h-5 w-5" src={EmailIcon} />
+            <img class="h-5 w-5" src="/email.svg" />
             <input
               class="border-0 mx-4 w-full bg-transparent placeholder:text-black"
               onChange={(e) => setEmail(e.target.value)}

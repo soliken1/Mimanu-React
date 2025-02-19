@@ -14,6 +14,8 @@ import AdminDashboard from "./screens/DashboardViews/AdminDashboard.jsx";
 import ForgotPassword from "./screens/AuthViews/ForgotPasswordScreen.jsx";
 import Profile from "./screens/AuthViews/ProfileScreen.jsx";
 import EditProfile from "./screens/AuthViews/EditProfileScreen.jsx";
+import CourseInfo from "./screens/Courses/Employee/CourseInfoScreen.jsx";
+import EmployeeScreen from "./screens/Courses/Employee/EmployeeScreen.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -84,6 +86,16 @@ export default function App() {
               element={
                 <EmployeeDashboard getUser={getUser} onLogout={handleLogout} />
               }
+            />
+            <Route
+              path="/course"
+              element={
+                <EmployeeScreen getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/course/:courseId"
+              element={<CourseInfo getUser={getUser} onLogout={handleLogout} />}
             />
             <Route
               path="/admindashboard"
