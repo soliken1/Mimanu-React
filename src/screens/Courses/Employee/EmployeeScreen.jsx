@@ -71,7 +71,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
             Assigned Courses
           </label>
           <div className="flex flex-col flex-wrap gap-5 md:flex-row">
-            <Link to={`/course/${courseId}`}>
+            <Link to={`/course/home/${courseId}`}>
               <div className="shadow-xy relative flex h-[180px] w-full flex-col gap-1 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4 md:w-[350px]">
                 <label className="max-w-[200px] cursor-pointer text-xl text-white">
                   Leading at the Speed of Trust 4.0
@@ -83,13 +83,13 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                   <label className="z-0 cursor-pointer rounded-xl bg-gray-900 px-6 py-1 text-center text-white">
                     Leadership
                   </label>
-                  <label className="z-0 cursor-pointer rounded-xl bg-gray-900 px-6 py-1 text-center text-white">
+                  <label className="z-10 cursor-pointer rounded-xl bg-gray-900 px-6 py-1 text-center text-white">
                     Trust
                   </label>
                 </div>
                 <img
                   className="-z-0 absolute bottom-4 right-4"
-                  src="~/res/People.png"
+                  src="/People.png"
                 />
               </div>
             </Link>
@@ -106,7 +106,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
           <div className="flex flex-col">
             <label className="text-xl font-bold text-[#152852]">Tasks</label>
             <div className="mt-5 flex flex-col items-center justify-center gap-5">
-              <img className="h-20 w-20" src="~/res/confetti.png" />
+              <img className="h-20 w-20" src="/confetti.png" />
               <label className="max-w-[125px] text-wrap text-center text-lg text-[#152852]">
                 You Have No Tasks Currently!
               </label>

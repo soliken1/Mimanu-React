@@ -52,7 +52,7 @@ const CourseInfo = ({ getUser, onLogout }) => {
               Trust
             </label>
           </div>
-          <img class="-z-0 absolute bottom-4 right-4" src="~/res/People.png" />
+          <img class="-z-0 absolute bottom-4 right-4" src="/People.png" />
         </div>
 
         <div class="flex h-full w-full flex-col gap-8 md:flex-row">
@@ -131,7 +131,7 @@ const CourseInfo = ({ getUser, onLogout }) => {
                   Recent Tasks
                 </label>
                 <div class="flex flex-row items-center justify-center gap-5">
-                  <img src="~/res/confetti.png" class="h-16 w-16" />
+                  <img src="/confetti.png" class="h-16 w-16" />
                   <label class="max-w-[200px] text-center text-lg text-[#152852]">
                     You Have No Tasks Currently!
                   </label>

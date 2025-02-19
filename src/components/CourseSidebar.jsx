@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 const CourseSidebar = () => {
+  const { courseId } = useParams();
   return (
     <>
       <div class="flex flex-col">
-        <Link>
+        <Link to={`/course/home/${courseId}`}>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="12"
@@ -31,7 +32,7 @@ const CourseSidebar = () => {
           </div>
         </Link>
 
-        <Link>
+        <Link to={`/course/modules/${courseId}`}>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="11"
@@ -57,7 +58,7 @@ const CourseSidebar = () => {
           </div>
         </Link>
 
-        <Link>
+        <Link to={`/course/tasks/${courseId}`}>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="11"
@@ -101,7 +102,7 @@ const CourseSidebar = () => {
           </div>
         </Link>
 
-        <Link>
+        <Link to={`/course/results/${courseId}`}>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="10"
@@ -134,13 +135,8 @@ const CourseSidebar = () => {
         </Link>
       </div>
       <div class="flex-1 mt-5 flex items-end justify-end px-4">
-        <Link
-          class="flex flex-row items-center gap-2"
-          asp-area=""
-          asp-controller="Courses"
-          asp-action="Course"
-        >
-          <img src="~/res/left.svg" />
+        <Link class="flex flex-row items-center gap-2" to="/course">
+          <img src="/left.svg" />
           <label class="cursor-pointer text-sm font-semibold text-[#152852]">
             Back To Courses
           </label>

@@ -16,6 +16,9 @@ import Profile from "./screens/AuthViews/ProfileScreen.jsx";
 import EditProfile from "./screens/AuthViews/EditProfileScreen.jsx";
 import CourseInfo from "./screens/Courses/Employee/CourseInfoScreen.jsx";
 import EmployeeScreen from "./screens/Courses/Employee/EmployeeScreen.jsx";
+import CourseModules from "./screens/Courses/Employee/CourseModulesScreen.jsx";
+import TaskScreen from "./screens/Courses/Employee/TaskScreen.jsx";
+import ResultScreen from "./screens/Courses/Employee/ResultScreen.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -94,8 +97,24 @@ export default function App() {
               }
             />
             <Route
-              path="/course/:courseId"
+              path="/course/home/:courseId"
               element={<CourseInfo getUser={getUser} onLogout={handleLogout} />}
+            />
+            <Route
+              path="/course/modules/:courseId"
+              element={
+                <CourseModules getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/course/tasks/:courseId"
+              element={<TaskScreen getUser={getUser} onLogout={handleLogout} />}
+            />
+            <Route
+              path="/course/results/:courseId"
+              element={
+                <ResultScreen getUser={getUser} onLogout={handleLogout} />
+              }
             />
             <Route
               path="/admindashboard"
