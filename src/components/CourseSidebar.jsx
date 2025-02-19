@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CourseSidebar = () => {
   return (
     <>
       <div class="flex flex-col">
-        <a>
-          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg">
+        <Link>
+          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="12"
               height="13"
@@ -28,10 +29,10 @@ const CourseSidebar = () => {
             </svg>
             <label class="cursor-pointer text-sm text-[#152852]">Home</label>
           </div>
-        </a>
+        </Link>
 
-        <a>
-          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lgpx-4">
+        <Link>
+          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="11"
               height="13"
@@ -54,9 +55,9 @@ const CourseSidebar = () => {
             </svg>
             <label class="cursor-pointer text-sm text-[#152852]">Modules</label>
           </div>
-        </a>
+        </Link>
 
-        <a>
+        <Link>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="11"
@@ -98,9 +99,9 @@ const CourseSidebar = () => {
             </svg>
             <label class="cursor-pointer text-sm text-[#152852]">Tasks</label>
           </div>
-        </a>
+        </Link>
 
-        <a>
+        <Link>
           <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg px-4">
             <svg
               width="10"
@@ -130,10 +131,10 @@ const CourseSidebar = () => {
             </svg>
             <label class="cursor-pointer text-sm text-[#152852]">Result</label>
           </div>
-        </a>
+        </Link>
       </div>
       <div class="flex-1 mt-5 flex items-end justify-end px-4">
-        <a
+        <Link
           class="flex flex-row items-center gap-2"
           asp-area=""
           asp-controller="Courses"
@@ -143,7 +144,7 @@ const CourseSidebar = () => {
           <label class="cursor-pointer text-sm font-semibold text-[#152852]">
             Back To Courses
           </label>
-        </a>
+        </Link>
       </div>
     </>
   );

@@ -1,7 +1,4 @@
 import React from "react";
-import Book from "../../assets/book.png";
-import Email from "../../assets/email.svg";
-import Password from "../../assets/password.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -44,14 +41,14 @@ const LoginScreen = ({ onLogin }) => {
         <div className="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
       </div>
       <div className="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
-        <img className="h-48 w-48" src={Book} />
+        <img className="h-48 w-48" src="/book.png" />
         <label className="text-3xl">Welcome Back!</label>
         <label className="text-sm font-medium">
           Enter Your Credentials To Login
         </label>
         <div method="post" className="mt-5 flex w-full flex-col gap-5 px-16">
           <div className="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-            <img className="h-5 w-5" src={Email} />
+            <img className="h-5 w-5" src="/email.svg" />
             <input
               className="border-0 mx-4 w-full bg-transparent placeholder:text-black"
               placeholder="Email"
@@ -60,7 +57,7 @@ const LoginScreen = ({ onLogin }) => {
             />
           </div>
           <div className="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-            <img className="h-5 w-5" src={Password} />
+            <img className="h-5 w-5" src="/password.svg" />
             <input
               placeholder="Password"
               className="border-0 mx-4 w-full bg-transparent placeholder:text-black"
