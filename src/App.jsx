@@ -19,6 +19,11 @@ import EmployeeScreen from "./screens/Courses/Employee/EmployeeScreen.jsx";
 import CourseModules from "./screens/Courses/Employee/CourseModulesScreen.jsx";
 import TaskScreen from "./screens/Courses/Employee/TaskScreen.jsx";
 import ResultScreen from "./screens/Courses/Employee/ResultScreen.jsx";
+import MBTIScreen from "./screens/Forms/mbti.jsx";
+import SelfFormScreen from "./screens/Forms/self.jsx";
+import SuperiorFormScreen from "./screens/Forms/superior.jsx";
+import PeerFormScreen from "./screens/Forms/peer.jsx";
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -68,6 +73,10 @@ export default function App() {
             )
           }
         />
+        <Route path="/mbti-form" element={<MBTIScreen />} />
+        <Route path="/self-form" element={<SelfFormScreen />} />
+        <Route path="/superior-form" element={<SuperiorFormScreen />} />
+        <Route path="/peer-form" element={<PeerFormScreen />} />
         {isLoggedIn ? (
           <>
             <Route
