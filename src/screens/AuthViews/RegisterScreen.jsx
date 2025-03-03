@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
+import { CiSearch } from "react-icons/ci";
 import fetchUser from "../../hooks/get/fetchUser";
 import LoadingScreen from "../../components/LoadingScreen";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -8,9 +8,11 @@ import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import RegisterModal from "../../components/RegisterModal";
+import fetchUsers from "../../hooks/get/fetchUsers";
 const RegisterScreen = ({ getUser }) => {
-  const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userData, setUserData] = useState([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -22,6 +24,10 @@ const RegisterScreen = ({ getUser }) => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRole, setSelectedRole] = useState("All");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +58,11 @@ const RegisterScreen = ({ getUser }) => {
   };
 
   useEffect(() => {
+    const fetchAllUsers = async () => {
+      const data = await fetchUsers();
+      console.log(data);
+      setUsers(data);
+    };
     const fetchAndSetUserData = async () => {
       try {
         const data = await fetchUser(getUser.uid);
@@ -61,7 +72,7 @@ const RegisterScreen = ({ getUser }) => {
         console.error("Error:", error);
       }
     };
-
+    fetchAllUsers();
     fetchAndSetUserData();
   }, []);
 
@@ -149,165 +160,125 @@ const RegisterScreen = ({ getUser }) => {
     }
   };
 
+  const handleFilter = (role) => {
+    setSelectedRole(role);
+    if (role === "All") {
+      setFilteredUsers(users);
+    } else {
+      setFilteredUsers(users.filter((user) => user.role === role));
+    }
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredUsers(
+      users.filter(
+        (user) =>
+          user.username.toLowerCase().includes(query) ||
+          user.firstName.toLowerCase().includes(query) ||
+          user.lastName.toLowerCase().includes(query)
+      )
+    );
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20">
-      <Navbar userData={userData} />
-      <div class="h-full w-full p-8 md:w-3/12 md:mt-24">
-        <div class="shadow-xy flex h-32 w-full flex-col rounded-xl py-6 md:h-64">
-          <div class="px-8 font-semibold">
-            <label class="text-[#152852]">Accounts</label>
-          </div>
-
-          <div class="border-s-4 mx-4 mt-2 flex flex-row items-center gap-2 rounded-e-lg border-[#DC3A3A] bg-gray-100 px-4">
-            <svg
-              width="12"
-              height="13"
-              viewBox="0 0 12 13"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M11 12.25V11C11 10.337 10.7366 9.70107 10.2678 9.23223C9.79893 8.76339 9.16304 8.5 8.5 8.5H3.5C2.83696 8.5 2.20107 8.76339 1.73223 9.23223C1.26339 9.70107 1 10.337 1 11V12.25"
-                stroke="#152852"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M6 6C7.38071 6 8.5 4.88071 8.5 3.5C8.5 2.11929 7.38071 1 6 1C4.61929 1 3.5 2.11929 3.5 3.5C3.5 4.88071 4.61929 6 6 6Z"
-                stroke="#152852"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <label class="text-[#152852]">Account Creation</label>
-          </div>
-        </div>
-      </div>
-      <div class="flex h-full w-full flex-col gap-4 p-8 md:w-9/12 md:mt-24">
-        <div class="border-b-2 border-b-red-500 py-2">
-          <label class="w-full text-xl font-semibold text-[#152852]">
-            Register User
-          </label>
-        </div>
-
-        <form class="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
-          <div class="flex w-full flex-col gap-1">
-            <label class="text-[#152852]"></label>
-            <input
-              name="username"
-              placeholder="EMP1234_jDoe"
-              readonly={true}
-              value={formData.username}
-              class="w-full rounded-xl px-4 py-2 border border-black"
-              disabled={true}
-            />
-            <label class="text-xs">
-              This is displayed throughout the public within the website instead
-              of your full name.
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+      <div className="w-2/12 h-full min-h-screen"></div>
+      <div className="w-10/12 h-full min-h-screen p-10">
+        <div className="h-auto flex flex-row justify-between">
+          <div className="flex flex-col">
+            <label className="text-2xl font-semibold poppins-normal">
+              Users
+            </label>
+            <label className="text-gray-500 poppins-normal">
+              List of All Users on the Platform
             </label>
           </div>
-
-          <div class="flex w-full flex-row gap-5">
-            <div class="flex w-1/2 flex-col gap-1">
-              <label class="text-[#152852]">First Name</label>
-              <input
-                placeholder="John"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                class="rounded-xl px-4 py-2 border border-black"
-              />
-            </div>
-
-            <div class="flex w-1/2 flex-col gap-1">
-              <label class="text-[#152852]">Last Name</label>
-              <input
-                placeholder="Doe"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                class="rounded-xl px-4 py-2 border border-black"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-[#152852]">Role</label>
-            <div className="flex flex-row gap-4">
-              <label className="flex flex-row items-center gap-2">
-                <input
-                  type="radio"
-                  name="role"
-                  value="Trainor"
-                  placeholder="Trainor"
-                  onChange={handleChange}
-                  checked={formData.role === "Trainor"}
-                />
-                Trainor
-              </label>
-              <label className="flex flex-row items-center gap-2">
-                <input
-                  type="radio"
-                  name="role"
-                  value="Employee"
-                  onChange={handleChange}
-                  checked={formData.role === "Employee"}
-                />
-                Employee
-              </label>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-[#152852]">Email</label>
-            <input
-              name="email"
-              type="email"
-              placeholder="sampleemail@example.com"
-              className="rounded-xl px-4 py-2 border border-black"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div class="flex w-full flex-row gap-5">
-            <div class="flex w-1/2 flex-col gap-1">
-              <label>Password</label>
-              <input
-                name="password"
-                type="password"
-                className="rounded-xl px-4 py-2 border border-black"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div class="flex w-1/2 flex-col gap-1">
-              <label>Confirm Password</label>
-              <input
-                name="confirmPassword"
-                type="password"
-                className="rounded-xl px-4 py-2 border border-black"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div class="flex items-center justify-center flex-col gap-2">
-            {error && <div className="text-red-500">{error}</div>}
+          <div className="flex items-center justify-center pe-10">
             <button
-              type="submit"
-              class="mt-5 rounded-xl bg-[#DC3A3A] px-16 py-2 text-white drop-shadow-xl duration-300 hover:bg-[#BE3030]"
+              className="bg-[#152852] text-white poppins-normal flex flex-row gap-4 items-center px-6 py-2 rounded-lg shadow-xy-subtle"
+              onClick={() => setIsModalOpen(true)}
             >
-              Register
+              <FaPlus />
+              Add User
             </button>
           </div>
-        </form>
+        </div>
+        <div className=" w-full flex flex-col gap-4 h-auto mt-5">
+          <div className="w-full flex flex-col gap-4 h-auto mt-5">
+            <label className="poppins-normal text-lg">
+              All Users ({filteredUsers.length})
+            </label>
+            <div className="w-full h-auto flex justify-between">
+              {/* Role Filter Buttons */}
+              <div className="p-1 flex flex-row gap-2 bg-gray-200 rounded-md">
+                {["All", "Employee", "Trainer", "Admin"].map((role) => (
+                  <button
+                    key={role}
+                    className={`px-2 py-1 rounded-lg ${
+                      selectedRole === role ? "bg-white font-bold" : ""
+                    }`}
+                    onClick={() => handleFilter(role)}
+                  >
+                    {role}
+                  </button>
+                ))}
+              </div>
+              {/* Search Bar */}
+              <div className="relative flex items-center p-1 bg-gray-200 rounded-xl">
+                <CiSearch className="absolute w-6 h-6 transform translate-x-2" />
+                <input
+                  type="text"
+                  placeholder="Search User"
+                  className="bg-white px-10 py-2 rounded-lg"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+              </div>
+            </div>
+            {/* User List */}
+            <div className="flex flex-col gap-2">
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <div
+                    key={user.id}
+                    className="flex justify-between bg-gray-100 p-3 rounded-lg"
+                  >
+                    <div className="flex flex-row items-center gap-4">
+                      <img
+                        src={user.UserImg}
+                        className="w-12 h-12 object-cover rounded-full"
+                      />
+                      <p className="font-semibold">{user.username}</p>
+                      <p className="text-sm text-gray-600">
+                        {user.FirstName} {user.LastName} - {user.UserRole}
+                      </p>
+                    </div>
+                    <button className="text-red-500 hover:underline">
+                      Remove
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 mt-3">No users found</p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
+
+      <RegisterModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        error={error}
+      />
       <ToastContainer />
     </div>
   );
