@@ -154,24 +154,6 @@ const Navbar = ({ userData }) => {
                 Courses
               </label>
             </Link>
-            <Link
-              className="flex flex-row items-center justify-center gap-4 duration-300"
-              asp-area=""
-              asp-controller="Diagnostic"
-              asp-action="Summary"
-            >
-              <label className="cursor-pointer rounded-xl border-white px-4 py-2 text-lg text-white duration-300 hover:border-b">
-                Diagnostic
-              </label>
-            </Link>
-            <Link
-              className="flex flex-row items-center justify-center gap-4 duration-300"
-              to="/editprofile"
-            >
-              <label className="cursor-pointer rounded-xl border-white px-4 py-2 text-lg text-white hover:border-b">
-                Settings
-              </label>
-            </Link>
           </div>
           <div className="flex-1 flex flex-row items-center justify-center gap-8 md:hidden">
             <Link className="flex items-center justify-center">
