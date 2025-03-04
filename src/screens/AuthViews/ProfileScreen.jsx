@@ -6,6 +6,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { auth } from "../../config/firebaseConfigs";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
+import HelpButton from "../../components/HelpButton";
 const ProfileScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -64,6 +65,7 @@ const ProfileScreen = ({ getUser }) => {
           Display Maybe Achievements Here
         </div>
       </div>
+      <HelpButton />
     </div>
   );
 };
