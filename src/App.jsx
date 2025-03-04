@@ -24,16 +24,25 @@ import SelfFormScreen from "./screens/Forms/self.jsx";
 import SuperiorFormScreen from "./screens/Forms/superior.jsx";
 import PeerFormScreen from "./screens/Forms/peer.jsx";
 import TrainorScreen from "./screens/Courses/Trainor/TrainorScreen.jsx";
-
+import fetchUser from "./hooks/get/fetchUser.js";
+import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
         setUser(user);
+
+        fetchUser(user.uid)
+          .then((res) => {
+            setRole(res.UserRole);
+            console.log("User Role: ", role);
+          })
+          .catch((err) => console.error(err));
       } else {
         setIsLoggedIn(false);
         setUser(null);
@@ -54,16 +63,26 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        {/*Handling of Logins, Route User Role To Appropriate Routes*/}
         <Route
           path="/"
           element={
             isLoggedIn ? (
-              <Navigate to="/dashboard" />
+              role === "Employee" ? (
+                <Navigate to="/dashboard" />
+              ) : role === "Admin" ? (
+                <Navigate to="/admindashboard" />
+              ) : role === "Trainor" ? (
+                <Navigate to="/tdashboard" />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
             ) : (
               <Login onLogin={handleLogin} />
             )
           }
         />
+        {/*Unprotected Routes but /forgotpassword route has a condition if user is logged in redirect to editprofile*/}
         <Route
           path="/forgotpassword"
           element={
@@ -74,10 +93,14 @@ export default function App() {
             )
           }
         />
+
+        {/*Unprotected Form Routes*/}
         <Route path="/mbti-form" element={<MBTIScreen />} />
         <Route path="/self-form" element={<SelfFormScreen />} />
         <Route path="/superior-form" element={<SuperiorFormScreen />} />
         <Route path="/peer-form" element={<PeerFormScreen />} />
+
+        {/*Protected Routes*/}
         {isLoggedIn ? (
           <>
             <Route
@@ -98,6 +121,12 @@ export default function App() {
               path="/dashboard"
               element={
                 <EmployeeDashboard getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/tdashboard"
+              element={
+                <TrainorDashboard getUser={getUser} onLogout={handleLogout} />
               }
             />
             <Route
@@ -140,6 +169,7 @@ export default function App() {
             />
           </>
         ) : (
+          //Fallback when if user is already logged in and when accessing "/" reroute back to their appropriate dashboard
           <Route path="*" element={<Navigate to="/" />} />
         )}
       </Routes>
