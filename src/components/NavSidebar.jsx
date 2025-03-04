@@ -41,7 +41,7 @@ const NavSidebar = ({ userData }) => {
         <img src="/book.png" className="h-16 w-16 drop-shadow-lg" />
         <label className="font-semibold">MiManuTMS</label>
       </div>
-      <div className="flex-1 flex flex-col justify-between px-8">
+      <div className="flex-1 flex flex-col justify-between px-6">
         <div className="flex flex-col gap-4">
           {userData?.UserRole === "Admin" ? (
             <>
@@ -95,7 +95,7 @@ const NavSidebar = ({ userData }) => {
           </button>
           <Link
             to="/profile"
-            className=" w-full flex flex-row hover:bg-[#152852] rounded-xl hover:scale-105 duration-100 hover:px-2 items-center gap-4  h-16"
+            className=" min-w-full w-auto px-1 flex flex-row hover:bg-[#152852] rounded-xl duration-100 items-center gap-4  h-16"
           >
             <img
               src={userData.UserImg}

@@ -26,6 +26,7 @@ import PeerFormScreen from "./screens/Forms/peer.jsx";
 import TrainorScreen from "./screens/Courses/Trainor/TrainorScreen.jsx";
 import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
 import fetchUserRole from "./hooks/get/fetchUserRole.js";
+import TCourseInfo from "./screens/Courses/Trainor/CourseInfoScreen.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -37,7 +38,6 @@ export default function App() {
         setUser(user);
         try {
           const userRole = await fetchUserRole(user.uid);
-          console.log("Fetched role:", userRole);
           setRole(userRole);
         } catch (error) {
           console.error("Error fetching user role:", error);
@@ -143,7 +143,13 @@ export default function App() {
               }
             />
             <Route
-              path="/course/home/:courseId"
+              path="/tcourse/:courseId"
+              element={
+                <TCourseInfo getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/course/:courseId"
               element={<CourseInfo getUser={getUser} onLogout={handleLogout} />}
             />
             <Route
