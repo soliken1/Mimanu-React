@@ -4,6 +4,7 @@ import NavSidebar from "../../../components/NavSidebar";
 import { useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import { Link } from "react-router-dom";
+import CourseSidebar from "../../../components/CourseSidebar";
 const TCourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -44,20 +45,7 @@ const TCourseInfo = ({ getUser }) => {
           </label>
         </div>
         <div className="w-full h-full flex-flex-row mt-6">
-          <div className="w-[15vh] flex flex-col gap-2">
-            <Link to="/" className="text-sm hover:underline">
-              Home
-            </Link>
-            <Link to="/" className="text-sm hover:underline">
-              Modules
-            </Link>
-            <Link to="/" className="text-sm hover:underline">
-              Assignments
-            </Link>
-            <Link to="/" className="text-sm hover:underline">
-              Results
-            </Link>
-          </div>
+          <CourseSidebar userData={userData} />
           <div className="flex-1 flex flex-col"></div>
         </div>
       </div>
