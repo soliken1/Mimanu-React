@@ -13,6 +13,7 @@ import {
   EmailAuthProvider,
   sendEmailVerification,
 } from "firebase/auth";
+import { Link } from "react-router-dom";
 
 const EditProfileScreen = ({ getUser }) => {
   const navigate = useNavigate();
@@ -153,87 +154,107 @@ const EditProfileScreen = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-white">
-        <form onSubmit={handleUpdateProfile}>
-          <div className="mb-4">
-            <div className="flex flex-col items-center">
-              <img
-                src={previewImg || userImg || userData.UserImg}
-                className="w-32 h-32 rounded-full object-cover mb-2"
-                alt="Profile"
-              />
+      <form
+        onSubmit={handleUpdateProfile}
+        className="w-full ps-72 h-auto min-h-screen px-12 pb-12 pt-16 flex flex-col bg-[#FAF9F6]"
+      >
+        <div className="flex flex-row w-full gap-12">
+          <div className="w-2/4 shadow-y p-8 rounded-xl">
+            <label className="text-xl font-semibold">Edit Profile</label>
+            <div className="mb-4">
+              <div className="flex flex-col items-center mt-5">
+                <img
+                  src={previewImg || userImg || userData.UserImg}
+                  className="w-32 h-32 rounded-full object-cover mb-2"
+                  alt="Profile"
+                />
 
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="mt-2 rounded-full py-1 shadow-md px-4"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="Email" className="block mb-2 font-medium">
+                New Email
+              </label>
               <input
-                type="file"
-                accept="image/*"
-                className="mt-2 rounded-full py-1 shadow-md px-4"
-                onChange={handleImageChange}
+                type="email"
+                id="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border px-4 py-2 rounded-lg"
               />
             </div>
           </div>
+          <div className="w-2/4 shadow-y p-8 rounded-xl">
+            <label className="text-xl font-semibold">Change Password</label>
+            <div className="mb-4 mt-8">
+              <label
+                htmlFor="CurrentPassword"
+                className="block mb-2 font-medium"
+              >
+                Current Password
+              </label>
+              <input
+                type="password"
+                id="CurrentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full border px-4 py-2 rounded-lg"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="Email" className="block mb-2 font-medium">
-              New Email
-            </label>
-            <input
-              type="email"
-              id="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="NewPassword" className="block mb-2 font-medium">
+                New Password
+              </label>
+              <input
+                type="password"
+                id="NewPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full border px-4 py-2 rounded-lg"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="CurrentPassword" className="block mb-2 font-medium">
-              Current Password
-            </label>
-            <input
-              type="password"
-              id="CurrentPassword"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg"
-            />
+            <div className="mb-4">
+              <label
+                htmlFor="ConfirmPassword"
+                className="block mb-2 font-medium"
+              >
+                Confirm New Password
+              </label>
+              <input
+                type="password"
+                id="ConfirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full border px-4 py-2 rounded-lg"
+              />
+            </div>
           </div>
+        </div>
+        <div className="w-full h-auto flex justify-center items-center gap-5 mt-12">
+          <button
+            type="submit"
+            className="px-12 py-2 cursor-pointer bg-[#152852] text-white rounded-lg"
+          >
+            Update
+          </button>
 
-          <div className="mb-4">
-            <label htmlFor="NewPassword" className="block mb-2 font-medium">
-              New Password
-            </label>
-            <input
-              type="password"
-              id="NewPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="ConfirmPassword" className="block mb-2 font-medium">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              id="ConfirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg"
-            />
-          </div>
-
-          <div className="w-full h-auto flex justify-center items-center">
-            <button
-              type="submit"
-              className="px-6 py-2 w-48 cursor-pointer bg-red-500 text-white rounded-lg"
-            >
-              Update
-            </button>
-          </div>
-        </form>
-      </div>
+          <Link
+            to="/profile"
+            className="px-12 py-2 cursor-pointer bg-gray-700 text-white rounded-lg"
+          >
+            Cancel
+          </Link>
+        </div>
+      </form>
     </div>
   );
 };
