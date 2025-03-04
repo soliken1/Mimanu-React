@@ -33,7 +33,7 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full h-auto min-h-screen p-12 bg-white"></div>
+      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-white"></div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
-import Navbar from "../../components/Navbar";
+import NavSidebar from "../../components/NavSidebar";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../../components/LoadingScreen";
 import fetchUser from "../../hooks/get/fetchUser";
@@ -152,19 +151,9 @@ const EditProfileScreen = ({ getUser }) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-row">
-      <Navbar userData={userData} />
-      <div className="h-full w-full p-8 md:w-3/12 md:mt-24">
-        <Sidebar />
-      </div>
-
-      <div className="flex h-full w-full flex-col gap-4 p-8 md:w-9/12 md:mt-24">
-        <div className="border-b-2 border-b-red-500 py-2">
-          <label className="w-full text-xl font-semibold text-[#152852]">
-            Edit Profile
-          </label>
-        </div>
-
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+      <NavSidebar userData={userData} />
+      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-white">
         <form onSubmit={handleUpdateProfile}>
           <div className="mb-4">
             <div className="flex flex-col items-center">

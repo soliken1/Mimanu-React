@@ -198,7 +198,7 @@ const RegisterScreen = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full h-auto min-h-screen p-12 bg-white">
+      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-white">
         <div className="h-auto flex flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-2xl font-semibold poppins-normal">
@@ -277,7 +277,7 @@ const RegisterScreen = ({ getUser }) => {
                         <label className="text-sm">
                           {user.FirstName} {user.LastName}{" "}
                           <label
-                            className={`px-2 rounded-xs ${
+                            className={`px-2  rounded-xs ${
                               user.UserRole === "Admin"
                                 ? "bg-red-200"
                                 : user.UserRole === "Trainor"
