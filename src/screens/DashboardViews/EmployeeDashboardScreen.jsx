@@ -12,9 +12,10 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
     const fetchAndSetUserData = async () => {
       try {
         const data = await fetchUser(getUser.uid);
-        console.log(data);
         if (data.UserRole === "Admin") {
           navigate("/admindashboard");
+        } else if (data.UserRole === "Trainor") {
+          navigate("/tdashboard");
         }
         setLoading(false);
         setUserData(data);
