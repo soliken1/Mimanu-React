@@ -24,28 +24,29 @@ import SelfFormScreen from "./screens/Forms/self.jsx";
 import SuperiorFormScreen from "./screens/Forms/superior.jsx";
 import PeerFormScreen from "./screens/Forms/peer.jsx";
 import TrainorScreen from "./screens/Courses/Trainor/TrainorScreen.jsx";
-import fetchUser from "./hooks/get/fetchUser.js";
 import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
+import fetchUserRole from "./hooks/get/fetchUserRole.js";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        setIsLoggedIn(true);
         setUser(user);
-
-        fetchUser(user.uid)
-          .then((res) => {
-            setRole(res.UserRole);
-            console.log("User Role: ", role);
-          })
-          .catch((err) => console.error(err));
+        try {
+          const userRole = await fetchUserRole(user.uid);
+          console.log("Fetched role:", userRole);
+          setRole(userRole);
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+        }
+        setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
         setUser(null);
+        setRole(null);
       }
     });
 
