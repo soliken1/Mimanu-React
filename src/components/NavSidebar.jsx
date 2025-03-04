@@ -73,22 +73,27 @@ const NavSidebar = ({ userData }) => {
             <CiSettings className="w-6 h-6" />
             <label className="cursor-pointer">Settings</label>
           </Link>
-          <button onClick={logout} className="flex flex-row gap-2 w-full">
+          <button
+            onClick={logout}
+            className="flex flex-row gap-2 w-full border-b pb-4 border-white"
+          >
             <IoLogOutOutline className="w-6 h-6" />
             <label className="cursor-pointer">Logout</label>
           </button>
           <Link
             to="/profile"
-            className="mt-5 w-full flex flex-row items-center gap-4 border-t border-white h-16"
+            className=" w-full flex flex-row hover:bg-[#152852] rounded-xl hover:scale-105 duration-100 hover:px-2 items-center gap-4  h-16"
           >
             <img
               src={userData.UserImg}
               className="w-10 h-10 object-cover rounded-full"
             />
             <div className="flex flex-col">
-              <label className="text-sm text-nowrap">{userData.Username}</label>
+              <label className="text-sm text-nowrap cursor-pointer">
+                {userData.Username}
+              </label>
               <label
-                className={`px-2 text-xs text-black rounded-xs ${
+                className={`px-2 text-xs text-black rounded-xs cursor-pointer ${
                   userData.UserRole === "Admin"
                     ? "bg-red-200"
                     : userData.UserRole === "Trainor"
