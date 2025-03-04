@@ -55,6 +55,17 @@ const NavSidebar = ({ userData }) => {
                 <label className="cursor-pointer">Users</label>
               </Link>
             </>
+          ) : userData?.UserRole === "Trainor" ? (
+            <>
+              <Link className="flex flex-row gap-2 w-full " to="/dashboard">
+                <MdOutlineSpaceDashboard className="w-6 h-6" />
+                <label className="cursor-pointer">Dashboard</label>
+              </Link>
+              <Link className="flex flex-row gap-2 w-full " to="/tcourse">
+                <FaBook className="w-6 h-6" />
+                <label className="cursor-pointer">Courses</label>
+              </Link>
+            </>
           ) : (
             <>
               <Link className="flex flex-row gap-2 w-full " to="/dashboard">
