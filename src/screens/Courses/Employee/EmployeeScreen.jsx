@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import NavSidebar from "../../../components/NavSidebar";
+import HelpButton from "../../../components/HelpButton";
 const EmployeeScreen = ({ getUser, onLogout }) => {
   const courseId = "1";
   const navigate = useNavigate();
@@ -33,16 +34,31 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen flex flex-row p-12 bg-white">
-        <div className="w-8/12"></div>
-        <div className="w-4/12 flex justify-center">
-          <div className="p-2 shadow-y h-88 rounded-lg">
+      <div className="w-full ps-72 h-auto min-h-screen flex flex-row p-12 bg-[#FAF9F6]">
+        <div className="w-8/12 flex flex-col">
+          <label className="text-2xl font-semibold poppins-normal">
+            Courses
+          </label>
+          <label className="text-gray-500 poppins-normal">
+            Your Assigned Courses Here
+          </label>
+          <input
+            placeholder="Search Course"
+            className="border mt-5 py-2 px-4 rounded-xl w-96 border-black"
+          />
+        </div>
+        <div className="w-4/12 flex flex-col gap-12 items-center justify-evenly">
+          <div className="p-2 shadow-y h-88 w-84 rounded-lg">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar />
             </LocalizationProvider>
           </div>
+          <div className="p-8 shadow-y h-88 w-84 rounded-lg">
+            <label>Your Tasks</label>
+          </div>
         </div>
       </div>
+      <HelpButton />
     </div>
   );
 };

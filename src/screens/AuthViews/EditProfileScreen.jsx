@@ -14,7 +14,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { Link } from "react-router-dom";
-
+import HelpButton from "../../components/HelpButton";
 const EditProfileScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -255,6 +255,7 @@ const EditProfileScreen = ({ getUser }) => {
           </Link>
         </div>
       </form>
+      <HelpButton />
     </div>
   );
 };

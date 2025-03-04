@@ -198,7 +198,7 @@ const RegisterScreen = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-white">
+      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="h-auto flex flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-2xl font-semibold poppins-normal">

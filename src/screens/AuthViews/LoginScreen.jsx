@@ -30,7 +30,7 @@ const LoginScreen = ({ onLogin }) => {
 
   return (
     <div className="flex h-screen w-screen flex-row overflow-hidden">
-      <div className="-z-0 relative hidden h-full w-7/12 flex-col bg-[#FFFFF7] md:flex">
+      <div className="-z-0 relative hidden h-full w-7/12 flex-col bg-[#FAF9F6] md:flex">
         <label className="absolute left-32 top-28 text-6xl font-bold text-[#152852]">
           MiManuTMS
         </label>
