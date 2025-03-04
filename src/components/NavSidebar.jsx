@@ -8,7 +8,9 @@ import { CiSettings } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaBook } from "react-icons/fa";
 import NavLoader from "../components/NavLoader";
+import { useNavigate } from "react-router-dom";
 const NavSidebar = ({ userData }) => {
+  const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
@@ -57,7 +59,7 @@ const NavSidebar = ({ userData }) => {
             </>
           ) : userData?.UserRole === "Trainor" ? (
             <>
-              <Link className="flex flex-row gap-2 w-full " to="/dashboard">
+              <Link className="flex flex-row gap-2 w-full " to="/tdashboard">
                 <MdOutlineSpaceDashboard className="w-6 h-6" />
                 <label className="cursor-pointer">Dashboard</label>
               </Link>
