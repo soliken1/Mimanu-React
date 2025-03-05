@@ -25,21 +25,21 @@ const CourseSidebar = ({ userData }) => {
                 </label>
               </div>
             </Link>
-            <Link to={`/course/modules/${courseId}`}>
+            <Link to={`/course/${courseId}/modules`}>
               <div className=" flex flex-row items-center">
                 <label className="cursor-pointer text-sm text-[#152852] underline">
                   Modules
                 </label>
               </div>
             </Link>
-            <Link to={`/course/tasks/${courseId}`}>
+            <Link to={`/course/${courseId}/tasks`}>
               <div className=" flex flex-row items-center">
                 <label className="cursor-pointer text-sm text-[#152852] underline">
                   Tasks
                 </label>
               </div>
             </Link>
-            <Link to={`/course/results/${courseId}`}>
+            <Link to={`/course/${courseId}/results`}>
               <div className=" flex flex-row items-center">
                 <label className="cursor-pointer text-sm text-[#152852] underline">
                   Result
@@ -67,7 +67,7 @@ const CourseSidebar = ({ userData }) => {
             </div>
             <div className=" flex flex-row items-center">
               <Link
-                to={`/tcourse/modules/${courseId}`}
+                to={`/tcourse/${courseId}/modules`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
                 Modules
@@ -75,7 +75,7 @@ const CourseSidebar = ({ userData }) => {
             </div>
             <div className=" flex flex-row items-center">
               <Link
-                to={`/tcourse/tasks/${courseId}`}
+                to={`/tcourse/${courseId}/tasks`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
                 Tasks
@@ -83,7 +83,7 @@ const CourseSidebar = ({ userData }) => {
             </div>
             <div className=" flex flex-row items-center">
               <Link
-                to={`/tcourse/results/${courseId}`}
+                to={`/tcourse/${courseId}/results`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
                 Result

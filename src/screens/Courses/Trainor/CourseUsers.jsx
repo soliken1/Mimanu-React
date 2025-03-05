@@ -7,7 +7,6 @@ import CourseSidebar from "../../../components/CourseSidebar";
 import AddEmployeeModal from "../../../components/AddEmployeeModal";
 import fetchEnrolledEmployees from "../../../hooks/get/fetchEnrolledEmployees";
 import removeEnrolledEmployee from "../../../hooks/delete/removeEnrolledEmployee";
-
 const CourseUsers = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);

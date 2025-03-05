@@ -11,26 +11,18 @@ const TCourseInfo = ({ getUser }) => {
   const [courseData, setCourseData] = useState(null);
 
   useEffect(() => {
-    const fetchAndSetUserData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
-        setUserData(data);
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
+        const course = await fetchCourse(courseId);
+        setCourseData(course);
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
-    const fetchAndSetCourseData = async () => {
-      try {
-        const data = await fetchCourse(courseId);
-        setCourseData(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchAndSetCourseData();
-    fetchAndSetUserData();
+    fetchData();
   }, []);
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
@@ -46,7 +38,6 @@ const TCourseInfo = ({ getUser }) => {
         </div>
         <div className="w-full h-full flex-flex-row mt-6">
           <CourseSidebar userData={userData} />
-          <div className="flex-1 flex flex-col"></div>
         </div>
       </div>
     </div>
