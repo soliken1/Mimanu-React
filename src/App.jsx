@@ -28,10 +28,12 @@ import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
 import fetchUserRole from "./hooks/get/fetchUserRole.js";
 import TCourseInfo from "./screens/Courses/Trainor/CourseInfoScreen.jsx";
 import CourseUsers from "./screens/Courses/Trainor/CourseUsers.jsx";
+import LoadingScreen from "./components/LoadingScreen.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -49,6 +51,7 @@ export default function App() {
         setUser(null);
         setRole(null);
       }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -61,6 +64,10 @@ export default function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Router>

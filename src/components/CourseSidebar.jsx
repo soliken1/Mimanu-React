@@ -62,7 +62,7 @@ const CourseSidebar = ({ userData }) => {
                 to={`/tcourse/${courseId}/users`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
-                Users
+                Employees
               </Link>
             </div>
             <div className=" flex flex-row items-center">

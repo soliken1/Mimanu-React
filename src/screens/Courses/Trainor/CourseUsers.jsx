@@ -6,6 +6,7 @@ import fetchCourse from "../../../hooks/get/fetchCourse";
 import CourseSidebar from "../../../components/CourseSidebar";
 import AddEmployeeModal from "../../../components/AddEmployeeModal";
 import fetchEnrolledEmployees from "../../../hooks/get/fetchEnrolledEmployees";
+import removeEnrolledEmployee from "../../../hooks/delete/removeEnrolledEmployee";
 
 const CourseUsers = ({ getUser }) => {
   const { courseId } = useParams();
@@ -13,6 +14,7 @@ const CourseUsers = ({ getUser }) => {
   const [courseData, setCourseData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enrolledEmployees, setEnrolledEmployees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +35,26 @@ const CourseUsers = ({ getUser }) => {
     fetchData();
   }, [courseId]);
 
+  const filteredEmployees = enrolledEmployees.filter((employee) =>
+    `${employee.FirstName} ${employee.LastName} ${employee.Email}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  const handleRemoveEmployee = async (enrolledId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this employee?"
+    );
+    if (confirmDelete) {
+      const success = await removeEnrolledEmployee(enrolledId);
+      if (success) {
+        setEnrolledEmployees(
+          enrolledEmployees.filter((emp) => emp.id !== enrolledId)
+        );
+      }
+    }
+  };
+
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
@@ -50,12 +72,21 @@ const CourseUsers = ({ getUser }) => {
           <div className="flex-1 flex flex-col">
             <div className="flex flex-row justify-between">
               <label className="text-xl font-semibold">Employee List</label>
-              <button
-                className="px-4 py-2 cursor-pointer text-white rounded-lg shadow-y bg-[#152852]"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Add Employee
-              </button>
+              <div className="flex flex-row gap-2">
+                <input
+                  type="text"
+                  placeholder="Search employee..."
+                  className="px-3 py-2 border rounded-lg"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button
+                  className="px-4 py-2 cursor-pointer text-white rounded-lg shadow-y bg-[#152852]"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Add Employee
+                </button>
+              </div>
             </div>
             {/* Employees Table */}
             <div className="w-full mt-5 bg-white shadow-md rounded-lg ">
@@ -66,11 +97,12 @@ const CourseUsers = ({ getUser }) => {
                     <th className="py-3 px-6 text-left">Email</th>
                     <th className="py-3 px-6 text-left">Date Enrolled</th>
                     <th className="py-3 px-6 text-left">Status</th>
+                    <th className="py-3 px-6 text-left">Action</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
-                  {enrolledEmployees.length > 0 ? (
-                    enrolledEmployees.map((employee) => (
+                  {filteredEmployees.length > 0 ? (
+                    filteredEmployees.map((employee) => (
                       <tr key={employee.id} className=" hover:bg-gray-100">
                         <td className="py-3 px-6 flex flex-row items-center gap-4">
                           <img
@@ -92,6 +124,14 @@ const CourseUsers = ({ getUser }) => {
                           <label className="bg-green-500 text-white rounded-sm px-2 py-1">
                             Active
                           </label>
+                        </td>
+                        <td className="py-3 px-6">
+                          <button
+                            onClick={() => handleRemoveEmployee(employee.id)}
+                            className="text-red-500 hover:underline cursor-pointer"
+                          >
+                            Remove
+                          </button>
                         </td>
                       </tr>
                     ))
