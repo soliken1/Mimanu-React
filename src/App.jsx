@@ -27,6 +27,7 @@ import TrainorScreen from "./screens/Courses/Trainor/TrainorScreen.jsx";
 import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
 import fetchUserRole from "./hooks/get/fetchUserRole.js";
 import TCourseInfo from "./screens/Courses/Trainor/CourseInfoScreen.jsx";
+import CourseUsers from "./screens/Courses/Trainor/CourseUsers.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -146,6 +147,12 @@ export default function App() {
               path="/tcourse/:courseId"
               element={
                 <TCourseInfo getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/tcourse/:courseId/users"
+              element={
+                <CourseUsers getUser={getUser} onLogout={handleLogout} />
               }
             />
             <Route

@@ -10,6 +10,9 @@ import AddCourseModal from "../../../components/AddCourseModal";
 import { ToastContainer } from "react-toastify";
 import fetchCoursesByTrainor from "../../../hooks/get/fetchCoursesByTrainor";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
 const TrainorScreen = ({ getUser }) => {
   const navigate = useNavigate();
@@ -65,64 +68,73 @@ const TrainorScreen = ({ getUser }) => {
               <label className="cursor-pointer">Add Course</label>
             </button>
           </div>
-          <div className="mt-12 w-7/12 h-auto">
-            {courses.length > 0 ? (
-              <div className="flex flex-col gap-5">
-                {courses.map((course) => (
-                  <div
-                    key={course.id}
-                    className=" h-38 flex flex-row gap-5 shadow-y rounded-xl"
-                  >
+          <div className="flex flex-row gap-5 mt-12 ">
+            <div className=" w-7/12 h-full">
+              {courses.length > 0 ? (
+                <div className="flex flex-col gap-5">
+                  {courses.map((course) => (
                     <div
-                      className="rounded-s-lg h-full w-[5vh]"
-                      style={{ backgroundColor: course.CourseColor }}
-                    ></div>
-                    <div className="flex-1  py-4 flex flex-col">
-                      <label className="text-lg font-semibold">
-                        {course.CourseTitle}
-                      </label>
-                      <label className="text-sm text-gray-600">
-                        {course.CourseDescription}
-                      </label>
-                      <div className="flex flex-row gap-5">
-                        <div className="flex flex-row items-center gap-5 mt-2">
-                          {Array.isArray(course.CourseTags) &&
-                          course.CourseTags.length > 0 ? (
-                            course.CourseTags.map((tag, index) => (
-                              <div
-                                className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-2"
-                                key={index}
-                              >
-                                {tag}
-                              </div>
-                            ))
-                          ) : (
-                            <p className="text-gray-500 text-xs mt-5">
-                              No Tags
-                            </p>
-                          )}
+                      key={course.id}
+                      className=" h-38 flex flex-row gap-5 shadow-y rounded-xl"
+                    >
+                      <div
+                        className="rounded-s-lg h-full w-[5vh]"
+                        style={{ backgroundColor: course.CourseColor }}
+                      ></div>
+                      <div className="flex-1  py-4 flex flex-col">
+                        <label className="text-lg font-semibold">
+                          {course.CourseTitle}
+                        </label>
+                        <label className="text-sm text-gray-600">
+                          {course.CourseDescription}
+                        </label>
+                        <div className="flex flex-row gap-5">
+                          <div className="flex flex-row items-center gap-5 mt-2">
+                            {Array.isArray(course.CourseTags) &&
+                            course.CourseTags.length > 0 ? (
+                              course.CourseTags.map((tag, index) => (
+                                <div
+                                  className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-2"
+                                  key={index}
+                                >
+                                  {tag}
+                                </div>
+                              ))
+                            ) : (
+                              <p className="text-gray-500 text-xs mt-5">
+                                No Tags
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="mt-5 flex flex-row justify-between pe-8">
+                          <label className="text-sm text-gray-500">
+                            Ends on:{" "}
+                            {course.CourseEnd.toDate().toLocaleDateString()}
+                          </label>
+                          <Link
+                            to={`/tcourse/${course.id}`}
+                            className="text-sm flex flex-row gap-1 items-center"
+                          >
+                            View Course{" "}
+                            <MdKeyboardArrowRight className="w-5 h-5" />
+                          </Link>
                         </div>
                       </div>
-                      <div className="mt-5 flex flex-row justify-between pe-8">
-                        <label className="text-sm text-gray-500">
-                          Ends on:{" "}
-                          {course.CourseEnd.toDate().toLocaleDateString()}
-                        </label>
-                        <Link
-                          to={`/tcourse/${course.id}`}
-                          className="text-sm flex flex-row gap-1 items-center"
-                        >
-                          View Course{" "}
-                          <MdKeyboardArrowRight className="w-5 h-5" />
-                        </Link>
-                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              ) : (
+                <p>No courses found.</p>
+              )}
+            </div>
+            <div className="flex-1 flex justify-end items-center">
+              <div className="shadow-y rounded-lg">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar />
+                </LocalizationProvider>
               </div>
-            ) : (
-              <p>No courses found.</p>
-            )}
+            </div>
           </div>
         </div>
       </div>
