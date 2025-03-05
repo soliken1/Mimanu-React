@@ -8,7 +8,7 @@ import CourseSidebar from "../../../components/CourseSidebar";
 const TCourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
-  const [courseData, setCourseData] = useState(null); // Separate state for course
+  const [courseData, setCourseData] = useState(null);
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
