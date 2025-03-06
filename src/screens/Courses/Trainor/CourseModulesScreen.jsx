@@ -13,6 +13,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import deleteModule from "../../../hooks/delete/removeModule";
 import AddSubmoduleModal from "../../../components/AddSubmoduleModal";
 import deleteSubmodule from "../../../hooks/delete/removeSubmodule";
+import { MdLibraryBooks } from "react-icons/md";
 
 const TCourseModules = ({ getUser }) => {
   const { courseId } = useParams();
@@ -109,7 +110,7 @@ const TCourseModules = ({ getUser }) => {
                   key={module.id}
                 >
                   {/* MODULE HEADER */}
-                  <div className="flex flex-row justify-between p-4 bg-gray-200 ">
+                  <div className="flex flex-row justify-between p-4 bg-gray-200">
                     <div className="flex gap-2 items-center">
                       <IoMdArrowDropdown />
                       <label className="font-semibold">
@@ -141,8 +142,9 @@ const TCourseModules = ({ getUser }) => {
                         >
                           <Link
                             to={`/tcourse/${courseId}/modules/${module.id}/submodules/${submodule.id}`}
-                            className="w-full p-4"
+                            className="w-full p-4 flex flex-row gap-2 items-center"
                           >
+                            <MdLibraryBooks />
                             {submodule.SubmoduleTitle}
                           </Link>
                           <MdDelete

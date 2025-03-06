@@ -31,6 +31,8 @@ import CourseUsers from "./screens/Courses/Trainor/CourseUsers.jsx";
 import LoadingScreen from "./components/LoadingScreen.jsx";
 import TCourseModules from "./screens/Courses/Trainor/CourseModulesScreen.jsx";
 import TSubmoduleScreen from "./screens/Courses/Trainor/SubmoduleScreen.jsx";
+import TTaskScreen from "./screens/Courses/Trainor/TaskScreen.jsx";
+import SpecificTask from "./screens/Courses/Trainor/SpecificTask.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -168,6 +170,18 @@ export default function App() {
               path="/tcourse/:courseId/modules"
               element={
                 <TCourseModules getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/tcourse/:courseId/tasks"
+              element={
+                <TTaskScreen getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/tcourse/:courseId/tasks/:taskId"
+              element={
+                <SpecificTask getUser={getUser} onLogout={handleLogout} />
               }
             />
             <Route

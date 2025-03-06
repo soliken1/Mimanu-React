@@ -28,7 +28,6 @@ const fetchSubmodules = async (courseId, moduleId) => {
       ...doc.data(),
     }));
 
-    console.log("Fetched Submodules:", submodules);
     return submodules;
   } catch (error) {
     console.error("Error fetching submodules:", error);

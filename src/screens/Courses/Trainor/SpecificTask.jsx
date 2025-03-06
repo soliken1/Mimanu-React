@@ -5,7 +5,8 @@ import { useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import { Link } from "react-router-dom";
 import CourseSidebar from "../../../components/CourseSidebar";
-const TCourseInfo = ({ getUser }) => {
+
+const SpecificTask = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -45,4 +46,4 @@ const TCourseInfo = ({ getUser }) => {
   );
 };
 
-export default TCourseInfo;
+export default SpecificTask;
