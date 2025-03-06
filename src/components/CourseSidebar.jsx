@@ -8,7 +8,6 @@ const CourseSidebar = ({ userData }) => {
       if (!userData) {
         return;
       }
-      console.log(userData);
     };
 
     awaitUserData();
