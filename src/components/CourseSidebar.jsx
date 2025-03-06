@@ -15,7 +15,7 @@ const CourseSidebar = ({ userData }) => {
   }, [userData]);
   return (
     <>
-      <div className="w-[15vh] flex flex-col gap-2">
+      <div className="flex flex-row gap-4">
         {userData?.UserRole === "Employee" ? (
           <>
             <Link to={`/course/${courseId}`}>
