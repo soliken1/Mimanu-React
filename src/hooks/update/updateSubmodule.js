@@ -25,7 +25,6 @@ const updateSubmodule = async (
       submoduleId
     );
     await updateDoc(submoduleRef, updatedData);
-    console.log("Submodule updated successfully!");
   } catch (error) {
     console.error("Error updating submodule:", error);
   }

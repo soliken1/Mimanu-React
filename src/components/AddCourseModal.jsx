@@ -75,7 +75,6 @@ const AddCourseModal = ({ isOpen, onClose }) => {
         onClose();
       }, 3000);
     } else {
-      console.error("Error adding course:", result.message);
       toast.error(`${result.message}`, {
         position: "bottom-right",
         autoClose: 5000,
