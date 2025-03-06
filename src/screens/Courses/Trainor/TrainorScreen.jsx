@@ -128,7 +128,7 @@ const TrainorScreen = ({ getUser }) => {
                 <p>No courses found.</p>
               )}
             </div>
-            <div className="flex-1 flex justify-end items-center">
+            <div className="flex-1 flex justify-end h-88">
               <div className="shadow-y rounded-lg">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar />

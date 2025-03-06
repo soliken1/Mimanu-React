@@ -137,14 +137,19 @@ const TCourseModules = ({ getUser }) => {
                       module.submodules.map((submodule) => (
                         <div
                           key={submodule.id}
-                          className="flex justify-between p-4 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                          className="flex justify-between items-center bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
                         >
-                          <label>{submodule.SubmoduleTitle}</label>
+                          <Link
+                            to={`/tcourse/${courseId}/modules/${module.id}/submodules/${submodule.id}`}
+                            className="w-full p-4"
+                          >
+                            {submodule.SubmoduleTitle}
+                          </Link>
                           <MdDelete
                             onClick={() =>
                               handleDeleteSubmodule(module.id, submodule.id)
                             }
-                            className="cursor-pointer text-red-500 hover:text-red-700"
+                            className=" cursor-pointer me-4 text-red-500 hover:text-red-700"
                           />
                         </div>
                       ))
