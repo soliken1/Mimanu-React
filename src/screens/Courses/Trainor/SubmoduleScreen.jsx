@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import fetchUser from "../../../hooks/get/fetchUser";
 import NavSidebar from "../../../components/NavSidebar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import CourseSidebar from "../../../components/CourseSidebar";
 import fetchSubmodule from "../../../hooks/get/fetchSubmodule";
@@ -9,6 +9,11 @@ import updateSubmodule from "../../../hooks/update/updateSubmodule";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { ToastContainer } from "react-toastify";
+import { toast, Bounce } from "react-toastify";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
 
 const TSubmoduleScreen = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -20,6 +25,10 @@ const TSubmoduleScreen = ({ getUser }) => {
   const [newContent, setNewContent] = useState("");
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
+  const [submodules, setSubmodules] = useState([]); // Store all submodules
+  const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,16 +44,48 @@ const TSubmoduleScreen = ({ getUser }) => {
           moduleId,
           submoduleId
         );
+
+        const fetchedSubmodules = await fetchSubmodules(courseId, moduleId);
+        setSubmodules(fetchedSubmodules);
+
         setSubmodule(submoduleData);
         setNewTitle(submoduleData?.SubmoduleTitle || "");
         setNewContent(submoduleData?.SubmoduleContent || "");
         setFileUrl(submoduleData?.fileUrl || "");
+
+        // Find the current submodule index
+        const index = fetchedSubmodules.findIndex(
+          (sub) => sub.id === submoduleId
+        );
+        if (index !== -1) {
+          setCurrentIndex(index);
+        }
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, [courseId, moduleId, submoduleId]);
+
+  // Navigate to the next submodule
+  const handleNext = () => {
+    if (currentIndex < submodules.length - 1) {
+      const nextSubmoduleId = submodules[currentIndex + 1].id;
+      navigate(
+        `/tcourse/${courseId}/modules/${moduleId}/submodules/${nextSubmoduleId}`
+      );
+    }
+  };
+
+  // Navigate to the previous submodule
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      const prevSubmoduleId = submodules[currentIndex - 1].id;
+      navigate(
+        `/tcourse/${courseId}/modules/${moduleId}/submodules/${prevSubmoduleId}`
+      );
+    }
+  };
 
   // 🔹 Upload to Cloudinary
   const handleFileUpload = async () => {
@@ -83,8 +124,35 @@ const TSubmoduleScreen = ({ getUser }) => {
       fileUrl: uploadedFileUrl,
     };
 
-    await updateSubmodule(courseId, moduleId, submoduleId, updatedData);
-    setSubmodule({ ...submodule, ...updatedData });
+    try {
+      await updateSubmodule(courseId, moduleId, submoduleId, updatedData);
+      setSubmodule({ ...submodule, ...updatedData });
+      setIsEditing(false);
+      toast.success("Submodule Updated Successfully!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+
     setIsEditing(false);
   };
 
@@ -217,7 +285,34 @@ const TSubmoduleScreen = ({ getUser }) => {
             </div>
           )}
         </div>
+        {/* Navigation Buttons */}
+        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4">
+          <button
+            onClick={handlePrevious}
+            disabled={currentIndex === 0}
+            className={`px-4 py-2 rounded-md ${
+              currentIndex === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={handleNext}
+            disabled={currentIndex === submodules.length - 1}
+            className={`px-4 py-2 rounded-md ${
+              currentIndex === submodules.length - 1
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            Next
+          </button>
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
