@@ -225,13 +225,13 @@ const TSubmoduleScreen = ({ getUser }) => {
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
-                  className="bg-[#152852] px-4 py-2 text-white rounded"
+                  className="bg-green-600 px-4 py-2 text-white rounded"
                   onClick={handleUpdate}
                 >
                   Save
                 </button>
                 <button
-                  className="bg-gray-400 px-4 py-2 text-white rounded"
+                  className="bg-red-500 px-4 py-2 text-white rounded"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancel
@@ -290,25 +290,27 @@ const TSubmoduleScreen = ({ getUser }) => {
           <button
             onClick={handlePrevious}
             disabled={currentIndex === 0}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-md flex flex-row items-center ${
               currentIndex === 0
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 text-white"
+                : "bg-[#152852] text-white cursor-pointer"
             }`}
           >
+            <MdKeyboardArrowLeft />
             Previous
           </button>
 
           <button
             onClick={handleNext}
             disabled={currentIndex === submodules.length - 1}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-md flex flex-row items-center ${
               currentIndex === submodules.length - 1
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 text-white"
+                ? "bg-gray-400 cursor-not-allowed "
+                : "bg-[#152852] text-white cursor-pointer"
             }`}
           >
             Next
+            <MdKeyboardArrowRight />
           </button>
         </div>
       </div>
