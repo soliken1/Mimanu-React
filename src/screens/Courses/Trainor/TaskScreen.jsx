@@ -102,7 +102,7 @@ const TTaskScreen = ({ getUser }) => {
                   </Link>
                 ))
               ) : (
-                <p className="text-gray-500">No available tasks.</p>
+                <p className="text-gray-500 p-4">No available tasks.</p>
               )}
             </div>
 
@@ -142,7 +142,7 @@ const TTaskScreen = ({ getUser }) => {
                   </Link>
                 ))
               ) : (
-                <p className="text-gray-500">No upcoming tasks.</p>
+                <p className="text-gray-500 p-4">No upcoming tasks.</p>
               )}
             </div>
 
@@ -181,7 +181,7 @@ const TTaskScreen = ({ getUser }) => {
                   </Link>
                 ))
               ) : (
-                <p className="text-gray-500">No past tasks.</p>
+                <p className="text-gray-500 p-4">No past tasks.</p>
               )}
             </div>
           </div>

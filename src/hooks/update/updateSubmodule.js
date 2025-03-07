@@ -8,12 +8,7 @@ import { doc, updateDoc } from "firebase/firestore";
  * @param {string} submoduleId - The ID of the submodule.
  * @param {object} updatedData - The new submodule data.
  */
-const updateSubmodule = async (
-  courseId,
-  moduleId,
-  submoduleId,
-  updatedData
-) => {
+const updateTask = async (courseId, moduleId, submoduleId, updatedData) => {
   try {
     const submoduleRef = doc(
       db,
@@ -30,4 +25,4 @@ const updateSubmodule = async (
   }
 };
 
-export default updateSubmodule;
+export default updateTask;
