@@ -1,123 +1,126 @@
 import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { ToastContainer, toast, Bounce } from "react-toastify";
-import addTask from "../hooks/post/addTask";
-import { Timestamp } from "firebase/firestore"; // Import Firestore Timestamp
-
+import AddQuestions from "./AddQuestion";
+import { ToastContainer } from "react-toastify";
+import { toast, Bounce } from "react-toastify";
 const AddTaskModal = ({ isOpen, onClose, courseId }) => {
-  const [taskTitle, setTaskTitle] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [step, setStep] = useState(1);
+  const [taskData, setTaskData] = useState({
+    TaskTitle: "",
+    StartDate: "",
+    EndDate: "",
+    Description: "",
+    Enabled: true,
+  });
 
-  if (!isOpen) return null;
-
-  const handleAddTask = async () => {
-    if (!taskTitle.trim()) {
-      toast.error("Task title cannot be empty!", { position: "bottom-right" });
-      return;
-    }
-    if (!startDate) {
-      toast.error("Please select a start date!", { position: "bottom-right" });
-      return;
-    }
-    if (!endDate) {
-      toast.error("Please select an end date!", { position: "bottom-right" });
-      return;
-    }
-    if (new Date(startDate) > new Date(endDate)) {
-      toast.error("Start date cannot be after the end date!", {
+  const handleNext = () => {
+    if (
+      !taskData.TaskTitle.trim() ||
+      !taskData.StartDate ||
+      !taskData.EndDate
+    ) {
+      toast.error("Please Fill Out The Task Details!", {
         position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
       });
       return;
     }
-
-    const newTask = {
-      TaskTitle: taskTitle,
-      StartDate: Timestamp.fromDate(new Date(startDate)),
-      EndDate: Timestamp.fromDate(new Date(endDate)),
-      createdAt: Timestamp.now(),
-    };
-
-    try {
-      const taskId = await addTask(courseId, newTask);
-      if (taskId) {
-        toast.success("Task Added Successfully!", {
-          position: "bottom-right",
-          autoClose: 3000,
-          theme: "colored",
-          transition: Bounce,
-        });
-
-        // Reset fields after successful task creation
-        setTaskTitle("");
-        setStartDate("");
-        setEndDate("");
-
-        setTimeout(() => {
-          window.location.reload();
-          onClose();
-        }, 3000);
-      }
-    } catch (error) {
-      toast.error("Failed To Add Task!", { position: "bottom-right" });
-      console.error("Error adding task:", error);
-    }
+    setStep(2);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] relative">
+      <div
+        className={`bg-white p-6 rounded-lg shadow-lg duration-200 ${
+          step === 2 ? "w-[1000px]" : "w-[500px]"
+        } relative`}
+      >
         <IoMdClose
           className="absolute top-3 right-3 text-xl cursor-pointer text-gray-600 hover:text-gray-800"
           onClick={onClose}
         />
-        <h2 className="text-lg font-bold mb-4">Add Task</h2>
-
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Task Title
-        </label>
-        <input
-          type="text"
-          placeholder="Enter Task Title"
-          value={taskTitle}
-          onChange={(e) => setTaskTitle(e.target.value)}
-          className="w-full p-2 border rounded mb-3"
-        />
-
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Start Date
-        </label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="w-full p-2 border rounded mb-3"
-        />
-
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Deadline
-        </label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="w-full p-2 border rounded mb-3"
-        />
-
-        <div className="flex justify-end gap-2 mt-4">
-          <button
-            className="px-4 py-2 bg-[#152852] text-white rounded"
-            onClick={handleAddTask}
-          >
-            Add
-          </button>
-          <button
-            className="px-4 py-2 bg-gray-400 text-white rounded"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-        </div>
+        {step === 1 ? (
+          <>
+            <label className="text-lg font-bold mb-4">Add Task</label>
+            <label className="block text-sm font-medium text-gray-700 mt-5 mb-1">
+              Task Title
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Task Title"
+              value={taskData.TaskTitle}
+              onChange={(e) =>
+                setTaskData({ ...taskData, TaskTitle: e.target.value })
+              }
+              className="w-full p-2 border rounded mb-3"
+            />
+            <label className="block text-sm font-medium text-gray-700 mt-5 mb-1">
+              Task Title
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Task Description"
+              value={taskData.TaskTitle}
+              onChange={(e) =>
+                setTaskData({ ...taskData, TaskTitle: e.target.value })
+              }
+              className="w-full p-2 border rounded mb-3"
+            />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Start Date
+            </label>
+            <input
+              type="date"
+              value={taskData.StartDate}
+              onChange={(e) =>
+                setTaskData({ ...taskData, StartDate: e.target.value })
+              }
+              className="w-full p-2 border rounded mb-3"
+            />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Deadline
+            </label>
+            <input
+              type="date"
+              value={taskData.EndDate}
+              onChange={(e) =>
+                setTaskData({ ...taskData, EndDate: e.target.value })
+              }
+              className="w-full p-2 border rounded mb-3"
+            />
+            <div className="flex justify-end gap-2 text-white mt-4">
+              <button
+                className="bg-[#152852] px-4 cursor-pointer rounded-md"
+                onClick={handleNext}
+              >
+                Next →
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-400 text-white rounded"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        ) : (
+          <AddQuestions
+            step={step}
+            setStep={setStep}
+            taskData={taskData}
+            onClose={onClose}
+            courseId={courseId}
+          />
+        )}
       </div>
       <ToastContainer />
     </div>

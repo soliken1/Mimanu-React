@@ -22,6 +22,7 @@ const TSubmoduleScreen = ({ getUser }) => {
   const [submodule, setSubmodule] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [embed, setEmbed] = useState("");
   const [newContent, setNewContent] = useState("");
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
@@ -29,6 +30,23 @@ const TSubmoduleScreen = ({ getUser }) => {
   const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
 
   const navigate = useNavigate();
+
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+
+    // If it's already an embed URL, return as is
+    if (url.includes("youtube.com/embed/")) {
+      return url;
+    }
+
+    // Convert standard YouTube URL to embed format
+    const videoIdMatch = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/
+    );
+    return videoIdMatch
+      ? `https://www.youtube.com/embed/${videoIdMatch[1]}`
+      : url;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,6 +130,7 @@ const TSubmoduleScreen = ({ getUser }) => {
   // 🔹 Save Updated Submodule Data
   const handleUpdate = async () => {
     if (!newTitle.trim()) return;
+    if (!embed.trim()) return;
 
     let uploadedFileUrl = fileUrl; // Keep existing file if no new upload
     if (file) {
@@ -122,6 +141,7 @@ const TSubmoduleScreen = ({ getUser }) => {
       SubmoduleTitle: newTitle,
       SubmoduleContent: newContent,
       fileUrl: uploadedFileUrl,
+      EmbedURL: embed,
     };
 
     try {
@@ -176,12 +196,15 @@ const TSubmoduleScreen = ({ getUser }) => {
           {isEditing ? (
             <div className="flex flex-col gap-4">
               {/* Title Input */}
-              <input
-                type="text"
-                className="text-2xl rounded w-full"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-              />
+              <div>
+                <label className=" text-sm">Edit Title:</label>
+                <input
+                  type="text"
+                  className="text-2xl rounded w-full mb-4"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                />
+              </div>
 
               {/* Show uploaded file if exists */}
               {fileUrl && (
@@ -209,18 +232,45 @@ const TSubmoduleScreen = ({ getUser }) => {
               )}
 
               {/* File Upload */}
-              <input
-                type="file"
-                className="w-68 px-4 py-2 rounded-lg shadow-y bg-white"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
+              <div className="flex flex-col gap-2">
+                <label className="text-sm">Add A File or Image:</label>
+                <input
+                  type="file"
+                  className="w-68 px-4 py-2 rounded-lg shadow-y bg-white"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+              </div>
 
               {/* Rich Text Editor */}
-              <ReactQuill
-                value={newContent}
-                onChange={setNewContent}
-                className="bg-white"
-              />
+              <div className="flex flex-col mt-5 gap-2">
+                <label className="text-sm">Add Body Content</label>
+                <ReactQuill
+                  value={newContent}
+                  onChange={setNewContent}
+                  className="bg-white"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                {submodule?.EmbedURL && (
+                  <iframe
+                    className="w-1/2 h-96"
+                    src={getEmbedUrl(submodule?.EmbedURL)}
+                    title={submodule.SubmoduleTitle}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  ></iframe>
+                )}
+                <label>Embed A Video:</label>
+                <input
+                  type="text"
+                  className="text-sm px-4 py-2 border border-gray-400 w-1/2 rounded"
+                  value={embed}
+                  onChange={(e) => setEmbed(e.target.value)}
+                />
+              </div>
 
               {/* Buttons */}
               <div className="flex gap-3">
@@ -282,6 +332,18 @@ const TSubmoduleScreen = ({ getUser }) => {
                 }}
                 className="text-gray-800"
               />
+
+              {submodule?.EmbedURL && (
+                <iframe
+                  className="w-1/2 h-96"
+                  src={getEmbedUrl(submodule?.EmbedURL)}
+                  title={submodule.SubmoduleTitle}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+              )}
             </div>
           )}
         </div>
