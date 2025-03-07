@@ -6,27 +6,27 @@ import { toast, Bounce } from "react-toastify";
 const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState({
-    type: "Multiple Choice",
-    text: "",
-    options: ["", ""], // Default 2 empty options
-    answer: "",
+    Type: "Multiple Choice",
+    Text: "",
+    Options: ["", ""], // Default 2 empty options
+    Answer: "",
   });
 
   // Add a new option for multiple-choice
   const handleAddOption = () => {
-    setNewQuestion({ ...newQuestion, options: [...newQuestion.options, ""] });
+    setNewQuestion({ ...newQuestion, Options: [...newQuestion.Options, ""] });
   };
 
   // Update an option's value
   const handleOptionChange = (index, value) => {
-    const updatedOptions = [...newQuestion.options];
+    const updatedOptions = [...newQuestion.Options];
     updatedOptions[index] = value;
-    setNewQuestion({ ...newQuestion, options: updatedOptions });
+    setNewQuestion({ ...newQuestion, Options: updatedOptions });
   };
 
   // Add question to list
   const addNewQuestion = () => {
-    if (!newQuestion.text.trim()) {
+    if (!newQuestion.Text.trim()) {
       toast.error("Enter Question Text!", {
         position: "bottom-right",
         autoClose: 5000,
@@ -40,7 +40,7 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
       });
       return;
     }
-    if (newQuestion.type === "Multiple Choice" && !newQuestion.answer) {
+    if (newQuestion.Type === "Multiple Choice" && !newQuestion.Answer) {
       toast.error("Select A Correct Answer!", {
         position: "bottom-right",
         autoClose: 5000,
@@ -127,13 +127,13 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
             <label className="text-sm text-gray-600 mb-2">Question Type:</label>
             <select
               className="border rounded-lg px-4 py-2"
-              value={newQuestion.type}
+              value={newQuestion.Type}
               onChange={(e) =>
                 setNewQuestion({
                   ...newQuestion,
-                  type: e.target.value,
-                  options: ["", ""],
-                  answer: "",
+                  Type: e.target.value,
+                  Options: ["", ""],
+                  Answer: "",
                 })
               }
             >
@@ -150,18 +150,18 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
               type="text"
               placeholder="Question Text"
               className="border rounded-lg px-4 py-2"
-              value={newQuestion.text}
+              value={newQuestion.Text}
               onChange={(e) =>
-                setNewQuestion({ ...newQuestion, text: e.target.value })
+                setNewQuestion({ ...newQuestion, Text: e.target.value })
               }
             />
           </div>
 
           {/* Multiple Choice Options */}
-          {newQuestion.type === "Multiple Choice" && (
+          {newQuestion.Type === "Multiple Choice" && (
             <>
               <div className="flex flex-col gap-2 max-h-48  overflow-y-auto">
-                {newQuestion.options.map((option, index) => (
+                {newQuestion.Options.map((option, index) => (
                   <div
                     className="flex flex-row gap-5 items-center text-sm"
                     key={index}
@@ -179,10 +179,15 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
                       <input
                         type="radio"
                         name="correctAnswer"
-                        value={option}
-                        checked={newQuestion.answer === option}
+                        value={index} // Store the index instead of value
+                        checked={
+                          newQuestion.Answer === newQuestion.Options[index]
+                        }
                         onChange={() =>
-                          setNewQuestion({ ...newQuestion, answer: option })
+                          setNewQuestion({
+                            ...newQuestion,
+                            Answer: newQuestion.Options[index],
+                          })
                         }
                       />
                       <label>Correct Answer</label>
@@ -199,16 +204,16 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
             </>
           )}
           {/* True/False Question */}
-          {newQuestion.type === "True or False" && (
+          {newQuestion.Type === "True or False" && (
             <div className=" flex justify-evenly">
               <label className="flex flex-row justify-center gap-2">
                 <input
                   type="radio"
                   name="trueFalseAnswer"
                   value="True"
-                  checked={newQuestion.answer === "True"}
+                  checked={newQuestion.Answer === "True"}
                   onChange={() =>
-                    setNewQuestion({ ...newQuestion, answer: "True" })
+                    setNewQuestion({ ...newQuestion, Answer: "True" })
                   }
                 />
                 True
@@ -218,9 +223,9 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
                   type="radio"
                   name="trueFalseAnswer"
                   value="False"
-                  checked={newQuestion.answer === "False"}
+                  checked={newQuestion.Answer === "False"}
                   onChange={() =>
-                    setNewQuestion({ ...newQuestion, answer: "False" })
+                    setNewQuestion({ ...newQuestion, Answer: "False" })
                   }
                 />
                 False
@@ -228,16 +233,16 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
             </div>
           )}
           {/* Identification Question */}
-          {newQuestion.type === "Identification" && (
+          {newQuestion.Type === "Identification" && (
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600">Correct Answer:</label>
               <input
                 type="text"
                 className="border rounded-lg px-4 py-2"
                 placeholder="Correct Answer"
-                value={newQuestion.answer}
+                value={newQuestion.Answer}
                 onChange={(e) =>
-                  setNewQuestion({ ...newQuestion, answer: e.target.value })
+                  setNewQuestion({ ...newQuestion, Answer: e.target.value })
                 }
               />
             </div>
@@ -254,10 +259,10 @@ const AddQuestions = ({ step, setStep, taskData, onClose, courseId }) => {
                 key={index}
               >
                 <label>
-                  {index + 1}. {q.text}{" "}
+                  {index + 1}. {q.Text}{" "}
                 </label>
                 <label className="text-gray-600">
-                  {q.answer && `Answer: ${q.answer}`} ({q.type})
+                  {q.Answer && `Answer: ${q.Answer}`} ({q.Type})
                 </label>
               </div>
             ))}

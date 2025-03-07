@@ -54,16 +54,21 @@ const SpecificTask = ({ getUser }) => {
 
         const taskData = await fetchTask(courseId, taskId);
         setTask(taskData);
-
-        setNewTitle(task?.TaskTitle || "");
-        setNewContent(task?.TaskContent || "");
-        setFileUrl(task?.fileUrl || "");
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (task) {
+      setNewTitle(task.TaskTitle || "");
+      setNewContent(task.TaskContent || "");
+      setFileUrl(task.fileUrl || "");
+      setEmbed(task.EmbedURL || "");
+    }
+  }, [task]);
 
   // 🔹 Upload to Cloudinary
   const handleFileUpload = async () => {
@@ -154,11 +159,11 @@ const SpecificTask = ({ getUser }) => {
           {isEditing ? (
             <div className="flex flex-col gap-4">
               {/* Title Input */}
-              <div>
-                <label className=" text-sm">Edit Title:</label>
+              <div className="flex flex-col gap-1">
+                <label className=" text-lg font-semibold">Edit Title:</label>
                 <input
                   type="text"
-                  className="text-2xl rounded w-full mb-4"
+                  className="text-sm border border-gray-400 py-2 px-4 rounded w-full mb-4 "
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                 />
@@ -166,8 +171,8 @@ const SpecificTask = ({ getUser }) => {
 
               {/* Show uploaded file if exists */}
               {fileUrl && (
-                <div className="flex flex-col gap-4">
-                  <p>Uploaded File:</p>
+                <div className="flex flex-col">
+                  <p className=" text-lg font-semibold">Uploaded File:</p>
                   {fileUrl.includes(".png") ||
                   fileUrl.includes(".jpg") ||
                   fileUrl.includes(".jpeg") ? (
@@ -190,18 +195,22 @@ const SpecificTask = ({ getUser }) => {
               )}
 
               {/* File Upload */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm">Add A File or Image:</label>
+              <div className="flex flex-col gap-2 mt-5">
+                <label className=" text-lg font-semibold">
+                  Add A File or Image:
+                </label>
                 <input
                   type="file"
-                  className="w-68 px-4 py-2 rounded-lg shadow-y bg-white"
+                  className="w-68 px-4 py-2 text-sm rounded-lg shadow-y bg-white"
                   onChange={(e) => setFile(e.target.files[0])}
                 />
               </div>
 
               {/* Rich Text Editor */}
               <div className="flex flex-col mt-5 gap-2">
-                <label className="text-sm">Add Body Content</label>
+                <label className=" text-lg font-semibold">
+                  Add Body Content:
+                </label>
                 <ReactQuill
                   value={newContent}
                   onChange={setNewContent}
@@ -221,7 +230,9 @@ const SpecificTask = ({ getUser }) => {
                     allowFullScreen
                   ></iframe>
                 )}
-                <label className="mt-5">Embed A Video:</label>
+                <label className=" text-lg font-semibold mt-5">
+                  Embed A Video:
+                </label>
                 <input
                   type="text"
                   className="text-sm px-4 py-2 border border-gray-400 w-1/2 rounded"
@@ -304,10 +315,10 @@ const SpecificTask = ({ getUser }) => {
               )}
               <div className="flex mt-5 justify-end">
                 <Link
-                  to="/"
+                  to={`/tcourse/${courseId}/tasks/${taskId}/0`}
                   className="bg-[#152852] flex items-center px-4 py-2 rounded-md text-white"
                 >
-                  <label className="cursor-pointer">Take Assignment</label>
+                  <label className="cursor-pointer">View Assignment</label>
                   <MdKeyboardArrowRight />
                 </Link>
               </div>

@@ -9,7 +9,7 @@ const AddTaskModal = ({ isOpen, onClose, courseId }) => {
     TaskTitle: "",
     StartDate: "",
     EndDate: "",
-    Description: "",
+    TaskDescription: "",
     Enabled: true,
   });
 
@@ -63,15 +63,15 @@ const AddTaskModal = ({ isOpen, onClose, courseId }) => {
               }
               className="w-full p-2 border rounded mb-3"
             />
-            <label className="block text-sm font-medium text-gray-700 mt-5 mb-1">
-              Task Title
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Task Description
             </label>
             <input
               type="text"
               placeholder="Enter Task Description"
-              value={taskData.TaskTitle}
+              value={taskData.TaskDescription}
               onChange={(e) =>
-                setTaskData({ ...taskData, TaskTitle: e.target.value })
+                setTaskData({ ...taskData, TaskDescription: e.target.value })
               }
               className="w-full p-2 border rounded mb-3"
             />
