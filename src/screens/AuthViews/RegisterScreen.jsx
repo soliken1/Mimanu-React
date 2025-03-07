@@ -110,6 +110,7 @@ const RegisterScreen = ({ getUser }) => {
         formData.email,
         formData.password
       );
+
       const user = userCredential.user;
 
       const userDoc = {

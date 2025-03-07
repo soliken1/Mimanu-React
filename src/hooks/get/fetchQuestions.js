@@ -1,13 +1,20 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../../firebase"; // Adjust path
+import { db, auth } from "../../config/firebaseConfigs"; // Adjust path
 
 const fetchQuestions = async (courseId, taskId) => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error("User is not authenticated");
+    return [];
+  }
+
   try {
     const questionsRef = collection(
       db,
       "Course",
       courseId,
-      "Tasks",
+      "Task",
       taskId,
       "Questions"
     );
@@ -18,6 +25,7 @@ const fetchQuestions = async (courseId, taskId) => {
       questions.push({ id: doc.id, ...doc.data() });
     });
 
+    console.log(questions);
     return questions;
   } catch (error) {
     console.error("Error fetching questions:", error);
