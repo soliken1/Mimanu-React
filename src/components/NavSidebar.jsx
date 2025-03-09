@@ -52,6 +52,10 @@ const NavSidebar = ({ userData }) => {
                 <MdOutlineSpaceDashboard className="w-6 h-6" />
                 <label className="cursor-pointer">Dashboard</label>
               </Link>
+              <Link className="flex flex-row gap-2 w-full " to="/acourse">
+                <FaBook className="w-6 h-6" />
+                <label className="cursor-pointer">Courses</label>
+              </Link>
               <Link className="flex flex-row gap-2 w-full" to="/register">
                 <FaUsers className="w-6 h-6" />
                 <label className="cursor-pointer">Users</label>
@@ -94,7 +98,7 @@ const NavSidebar = ({ userData }) => {
             <label className="cursor-pointer">Logout</label>
           </button>
           <Link
-            to="/profile"
+            to={`/profile/${userData.UID}`}
             className=" min-w-full w-auto px-1 flex flex-row hover:bg-[#152852] rounded-xl duration-100 items-center gap-4  h-16"
           >
             <img
