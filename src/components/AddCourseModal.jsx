@@ -72,6 +72,7 @@ const AddCourseModal = ({ isOpen, onClose }) => {
       setCourseTags([]);
 
       setTimeout(() => {
+        window.location.reload();
         onClose();
       }, 3000);
     } else {

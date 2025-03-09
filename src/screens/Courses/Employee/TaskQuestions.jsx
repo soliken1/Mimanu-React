@@ -90,7 +90,7 @@ const EmployeeTaskQuestions = ({ getUser }) => {
           </div>
 
           {/* Main Question Area */}
-          <div className="flex-1 flex-col flex justify-between min-h-96">
+          <div className="flex-1 flex-col flex justify-between">
             <div className="w-full h-auto p-8 bg-white min-h-52 rounded-xl">
               <div className="w-full flex justify-between text-xl mb-4">
                 <p className="text-lg">
@@ -176,15 +176,15 @@ const EmployeeTaskQuestions = ({ getUser }) => {
                 </button>
               </div>
             </div>
-            <div className=" flex justify-end pt-4">
-              <Link
-                to={`/course/${courseId}/tasks/${taskId}`}
-                className="px-4 py-2 rounded-md text-white bg-[#152852]"
-              >
-                Go Back
-              </Link>
-            </div>
           </div>
+        </div>
+        <div className="flex pt-4">
+          <Link
+            to={`/course/${courseId}/tasks/${taskId}`}
+            className="px-4 py-2 rounded-md text-white bg-[#152852]"
+          >
+            Go Back
+          </Link>
         </div>
       </div>
     </div>

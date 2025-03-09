@@ -192,10 +192,6 @@ const RegisterScreen = ({ getUser }) => {
     );
   };
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
@@ -265,9 +261,10 @@ const RegisterScreen = ({ getUser }) => {
             <div className="flex flex-col gap-2">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <div
+                  <Link
                     key={user.id}
-                    className="flex justify-between bg-gray-100 p-3 rounded-lg"
+                    to={`/profile/${user.UID}`}
+                    className="flex justify-between bg-gray-100 cursor-pointer p-3 rounded-lg"
                   >
                     <div className="flex flex-row items-center gap-4">
                       <img
@@ -275,10 +272,10 @@ const RegisterScreen = ({ getUser }) => {
                         className="w-12 h-12 object-cover rounded-full"
                       />
                       <div className="flex flex-col">
-                        <label className="text-sm">
+                        <label className="text-sm cursor-pointer ">
                           {user.FirstName} {user.LastName}{" "}
                           <label
-                            className={`px-2  rounded-xs ${
+                            className={`px-2 cursor-pointer  rounded-xs ${
                               user.UserRole === "Admin"
                                 ? "bg-red-200"
                                 : user.UserRole === "Trainor"
@@ -289,7 +286,7 @@ const RegisterScreen = ({ getUser }) => {
                             {user.UserRole}
                           </label>
                         </label>
-                        <label className="text-sm text-gray-500">
+                        <label className="text-sm cursor-pointer text-gray-500">
                           @{user.Username}
                         </label>
                       </div>
@@ -303,7 +300,7 @@ const RegisterScreen = ({ getUser }) => {
                         Disable
                       </button>
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <p className="text-center text-gray-500 mt-3">No users found</p>

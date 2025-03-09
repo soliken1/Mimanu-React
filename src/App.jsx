@@ -37,6 +37,9 @@ import TaskQuestions from "./screens/Courses/Trainor/TaskQuestions.jsx";
 import SubmoduleScreen from "./screens/Courses/Employee/SubmoduleScreen.jsx";
 import EmployeeSpecificTask from "./screens/Courses/Employee/SpecificTask.jsx";
 import EmployeeTaskQuestions from "./screens/Courses/Employee/TaskQuestions.jsx";
+import AdminScreen from "./screens/Courses/Admin/AdminScreen.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -65,10 +68,6 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
@@ -77,6 +76,19 @@ export default function App() {
     return <LoadingScreen />;
   }
 
+  const getDashboardRoute = (userRole) => {
+    switch (userRole) {
+      case "Admin":
+        return "/admindashboard";
+      case "Trainor":
+        return "/tdashboard";
+      case "Employee":
+        return "/dashboard";
+      default:
+        return "/";
+    }
+  };
+
   return (
     <Router>
       <Routes>
@@ -84,30 +96,15 @@ export default function App() {
         <Route
           path="/"
           element={
-            isLoggedIn ? (
-              role === "Employee" ? (
-                <Navigate to="/dashboard" />
-              ) : role === "Admin" ? (
-                <Navigate to="/admindashboard" />
-              ) : role === "Trainor" ? (
-                <Navigate to="/tdashboard" />
-              ) : (
-                <Navigate to="/dashboard" />
-              )
-            ) : (
-              <Login onLogin={handleLogin} />
-            )
+            isLoggedIn ? <Navigate to={getDashboardRoute(role)} /> : <Login />
           }
         />
+
         {/*Unprotected Routes but /forgotpassword route has a condition if user is logged in redirect to editprofile*/}
         <Route
           path="/forgotpassword"
           element={
-            isLoggedIn ? (
-              <Navigate to="/editprofile" />
-            ) : (
-              <ForgotPassword onLogin={handleLogin} />
-            )
+            isLoggedIn ? <Navigate to="/editprofile" /> : <ForgotPassword />
           }
         />
 
@@ -118,143 +115,294 @@ export default function App() {
         <Route path="/peer-form" element={<PeerFormScreen />} />
 
         {/*Protected Routes*/}
-        {isLoggedIn ? (
-          <>
-            <Route
-              path="/register"
-              element={<Register getUser={getUser} onLogout={handleLogout} />}
-            />
-            <Route
-              path="/profile"
-              element={<Profile getUser={getUser} onLogout={handleLogout} />}
-            />
-            <Route
-              path="/editprofile"
-              element={
-                <EditProfile getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <EmployeeDashboard getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tdashboard"
-              element={
-                <TrainorDashboard getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course"
-              element={
-                <EmployeeScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse"
-              element={
-                <TrainorScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId"
-              element={
-                <TCourseInfo getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/users"
-              element={
-                <CourseUsers getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/modules"
-              element={
-                <TCourseModules getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/tasks"
-              element={
-                <TTaskScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course/:courseId/tasks/:taskId"
-              element={
-                <EmployeeSpecificTask
-                  getUser={getUser}
-                  onLogout={handleLogout}
-                />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/tasks/:taskId"
-              element={
-                <SpecificTask getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course/:courseId/tasks/:taskId/questions"
-              element={
-                <EmployeeTaskQuestions
-                  getUser={getUser}
-                  onLogout={handleLogout}
-                />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/tasks/:taskId/questions"
-              element={
-                <TaskQuestions getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course/:courseId/modules/:moduleId/submodules/:submoduleId"
-              element={
-                <SubmoduleScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/tcourse/:courseId/modules/:moduleId/submodules/:submoduleId"
-              element={
-                <TSubmoduleScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course/:courseId"
-              element={<CourseInfo getUser={getUser} onLogout={handleLogout} />}
-            />
-            <Route
-              path="/course/:courseId/modules"
-              element={
-                <CourseModules getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/course/:courseId/tasks"
-              element={<TaskScreen getUser={getUser} onLogout={handleLogout} />}
-            />
-            <Route
-              path="/course/:courseId/results"
-              element={
-                <ResultScreen getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-            <Route
-              path="/admindashboard"
-              element={
-                <AdminDashboard getUser={getUser} onLogout={handleLogout} />
-              }
-            />
-          </>
-        ) : (
-          //Fallback when if user is already logged in and when accessing "/" reroute back to their appropriate dashboard
-          <Route path="*" element={<Navigate to="/" />} />
-        )}
+
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <Register getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminScreen getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admindashboard"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminDashboard getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tdashboard"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TrainorDashboard getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TrainorScreen getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TCourseInfo getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/users"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <CourseUsers getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/modules"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TCourseModules getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/tasks"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TTaskScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/tasks/:taskId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <SpecificTask getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/tasks/:taskId/questions"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TaskQuestions getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/modules/:moduleId/submodules/:submoduleId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TSubmoduleScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/modules/:moduleId/submodules/:submoduleId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <SubmoduleScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <CourseInfo getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/modules"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <CourseModules getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/tasks"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TaskScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/results"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <ResultScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <EmployeeDashboard getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <EmployeeScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/tasks/:taskId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <EmployeeSpecificTask getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:courseId/tasks/:taskId/questions"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <EmployeeTaskQuestions
+                getUser={getUser}
+                onLogout={handleLogout}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/:uid"
+          element={<Profile getUser={getUser} onLogout={handleLogout} />}
+        />
+
+        <Route
+          path="/editprofile"
+          element={<EditProfile getUser={getUser} onLogout={handleLogout} />}
+        />
+
+        <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
       </Routes>
     </Router>
   );

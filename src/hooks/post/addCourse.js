@@ -25,7 +25,7 @@ const addCourse = async (
       CourseColor: courseColor,
       CourseDescription: courseDescription || "",
       CourseTags: courseTags || [],
-      TrainorUID: user.uid,
+      UID: user.uid,
     });
 
     return { success: true, message: "Course added successfully" };
