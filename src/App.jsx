@@ -34,6 +34,9 @@ import TSubmoduleScreen from "./screens/Courses/Trainor/SubmoduleScreen.jsx";
 import TTaskScreen from "./screens/Courses/Trainor/TaskScreen.jsx";
 import SpecificTask from "./screens/Courses/Trainor/SpecificTask.jsx";
 import TaskQuestions from "./screens/Courses/Trainor/TaskQuestions.jsx";
+import SubmoduleScreen from "./screens/Courses/Employee/SubmoduleScreen.jsx";
+import EmployeeSpecificTask from "./screens/Courses/Employee/SpecificTask.jsx";
+import EmployeeTaskQuestions from "./screens/Courses/Employee/TaskQuestions.jsx";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
@@ -180,15 +183,39 @@ export default function App() {
               }
             />
             <Route
+              path="/course/:courseId/tasks/:taskId"
+              element={
+                <EmployeeSpecificTask
+                  getUser={getUser}
+                  onLogout={handleLogout}
+                />
+              }
+            />
+            <Route
               path="/tcourse/:courseId/tasks/:taskId"
               element={
                 <SpecificTask getUser={getUser} onLogout={handleLogout} />
               }
             />
             <Route
-              path="/tcourse/:courseId/tasks/:taskId/0"
+              path="/course/:courseId/tasks/:taskId/questions"
+              element={
+                <EmployeeTaskQuestions
+                  getUser={getUser}
+                  onLogout={handleLogout}
+                />
+              }
+            />
+            <Route
+              path="/tcourse/:courseId/tasks/:taskId/questions"
               element={
                 <TaskQuestions getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+            <Route
+              path="/course/:courseId/modules/:moduleId/submodules/:submoduleId"
+              element={
+                <SubmoduleScreen getUser={getUser} onLogout={handleLogout} />
               }
             />
             <Route

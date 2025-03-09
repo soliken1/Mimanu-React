@@ -259,7 +259,7 @@ const SpecificTask = ({ getUser }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center border-b border-gray-400 pb-4">
                 <label className="text-2xl">{task?.TaskTitle}</label>
                 <button
                   className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
@@ -313,9 +313,9 @@ const SpecificTask = ({ getUser }) => {
                   allowFullScreen
                 ></iframe>
               )}
-              <div className="flex mt-5 justify-end">
+              <div className="flex mt-5 justify-end border-t border-gray-400 pt-4">
                 <Link
-                  to={`/tcourse/${courseId}/tasks/${taskId}/0`}
+                  to={`/tcourse/${courseId}/tasks/${taskId}/questions`}
                   className="bg-[#152852] flex items-center px-4 py-2 rounded-md text-white"
                 >
                   <label className="cursor-pointer">View Assignment</label>

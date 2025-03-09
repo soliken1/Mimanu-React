@@ -28,18 +28,18 @@ const CourseInfo = ({ getUser }) => {
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
-        <div className="flex flex-col">
-          <label className="text-xl font-semibold">
-            {courseData?.CourseTitle}
-          </label>
-          <label className="text-sm text-gray-600">
-            {courseData?.CourseDescription}
-          </label>
-        </div>
-        <div className="w-full h-full flex-flex-row mt-6">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col">
+            <label className="text-xl font-semibold">
+              {courseData?.CourseTitle}
+            </label>
+            <label className="text-sm text-gray-600">
+              {courseData?.CourseDescription}
+            </label>
+          </div>
           <CourseSidebar userData={userData} />
-          <div className="flex-1 flex flex-col"></div>
         </div>
+        <div className="w-full h-full flex-flex-row mt-6"></div>
       </div>
     </div>
   );

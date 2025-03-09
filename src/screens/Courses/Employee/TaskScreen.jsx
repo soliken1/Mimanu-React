@@ -1,86 +1,180 @@
-import React from "react";
-import CourseSidebar from "../../../components/CourseSidebar";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import fetchUser from "../../../hooks/get/fetchUser";
-import LoadingScreen from "../../../components/LoadingScreen";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../../components/Navbar";
+import fetchTasks from "../../../hooks/get/fetchTasks"; // Updated import
+import fetchCourse from "../../../hooks/get/fetchCourse";
+import NavSidebar from "../../../components/NavSidebar";
+import { useParams } from "react-router-dom";
+import CourseSidebar from "../../../components/CourseSidebar";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { MdTask } from "react-icons/md";
+import { Link } from "react-router-dom";
 const TaskScreen = ({ getUser, onLogout }) => {
-  const navigate = useNavigate();
+  const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [courseData, setCourseData] = useState(null);
+  const [tasks, setTasks] = useState({
+    pastTasks: [],
+    availableTasks: [],
+    upcomingTasks: [],
+  });
+
   useEffect(() => {
-    const fetchAndSetUserData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
-        setLoading(false);
-        setUserData(data);
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
+        const course = await fetchCourse(courseId);
+        setCourseData(course);
+
+        const tasksData = await fetchTasks(courseId); // Fetch tasks from subcollection
+        setTasks(tasksData);
       } catch (error) {
         console.error("Error:", error);
       }
     };
+    fetchData();
+  }, [courseId]);
 
-    fetchAndSetUserData();
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
   return (
-    <div className="w-auto h-auto relative">
-      <Navbar userData={userData} />
-      <div class="flex h-full w-full flex-col gap-5 overflow-y-auto px-8 py-8 md:px-24 md:py-16 md:mt-20">
-        <div class="shadow-xy relative flex h-full w-full flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-8 md:py-4 md:h-56">
-          <label class="max-w-[400px] text-xl text-white">
-            Leading at the Speed of Trust 4.0
-          </label>
-          <label class="max-w-[800px] text-sm text-white">
-            Involves essential strategies like setting a clear vision,
-            encouraging open communication, fostering collaboration, and
-            empowering team members to achieve goals effectively.
-          </label>
-          <label class="text-xs font-extralight text-gray-300">
-            August 30 2024 - December 30 2024
-          </label>
-          <div class="mt-2 flex flex-row gap-4">
-            <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">
-              Leadership
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+      <NavSidebar userData={userData} />
+      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col">
+            <label className="text-xl font-semibold">
+              {courseData?.CourseTitle}
             </label>
-            <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">
-              Trust
+            <label className="text-sm text-gray-600">
+              {courseData?.CourseDescription}
             </label>
           </div>
-          <img class="-z-0 absolute bottom-4 right-4" src="/People.png" />
+          <CourseSidebar userData={userData} />
         </div>
 
-        <div class="flex h-full w-full flex-col gap-8 md:flex-row">
-          <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
-            <div class="shadow-xy flex h-64 w-full flex-col rounded-xl py-6">
-              <div class="px-8 font-semibold">
-                <label class="text-[#152852]">Quick Actions</label>
-              </div>
-              <CourseSidebar />
-            </div>
-            <div className="pt-4 rounded-xl shadow-md bg-white">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar />
-              </LocalizationProvider>
-            </div>
+        <div className="w-full h-full flex-flex-row mt-6">
+          <div className="flex justify-between">
+            <label className="text-xl font-semibold">Course Tasks</label>
           </div>
 
-          <div class="flex h-full w-full flex-col gap-8 md:w-9/12">
-            <label class="text-lg font-semibold text-[#152852]">
-              Your Tasks This Topic
-            </label>
+          {/* Task Sections */}
+          <div className="w-9/12 h-auto flex flex-col gap-12 mt-5">
+            {/* Available Tasks */}
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200">
+                <IoMdArrowDropdown />
+                <label>Available Tasks</label>
+              </div>
+              {tasks.availableTasks.length > 0 ? (
+                tasks.availableTasks.map((task) => (
+                  <Link
+                    to={`/course/${courseId}/tasks/${task.id}`}
+                    key={task.id}
+                    className="p-4 shadow flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                  >
+                    <MdTask />
+                    <div className="flex flex-col text-sm">
+                      <label className="cursor-pointer">{task.TaskTitle}</label>
+                      <div className="flex flex-row gap-5 text-xs text-gray-600">
+                        <label className="cursor-pointer">
+                          Available On:{" "}
+                          {new Date(
+                            task.StartDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                        |
+                        <label className="cursor-pointer">
+                          Due On:{" "}
+                          {new Date(
+                            task.EndDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-gray-500 p-4">No available tasks.</p>
+              )}
+            </div>
 
-            <div class="shadow-xy flex h-80 w-full flex-col items-center justify-center gap-5 rounded-xl">
-              <img src="/confetti.png" />
-              <label class="text-lg font-semibold text-[#152852]">
-                You Have No Tasks Currently
-              </label>
+            {/* Upcoming Tasks */}
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200">
+                <IoMdArrowDropdown />
+                <label>Upcoming Tasks</label>
+              </div>
+
+              {tasks.upcomingTasks.length > 0 ? (
+                tasks.upcomingTasks.map((task) => (
+                  <Link
+                    to={`/course/${courseId}/tasks/${task.id}`}
+                    key={task.id}
+                    className="p-4 shadow  flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                  >
+                    <MdTask />
+                    <div className="flex flex-col text-sm">
+                      <label className="cursor-pointer">{task.TaskTitle}</label>
+                      <div className="flex flex-row gap-5 text-xs text-gray-600">
+                        <label className="cursor-pointer">
+                          Available On:{" "}
+                          {new Date(
+                            task.StartDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                        |
+                        <label className="cursor-pointer">
+                          Due On:{" "}
+                          {new Date(
+                            task.EndDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-gray-500 p-4">No upcoming tasks.</p>
+              )}
+            </div>
+
+            {/* Past Tasks */}
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200">
+                <IoMdArrowDropdown />
+                <label>Past Tasks</label>
+              </div>
+              {tasks.pastTasks.length > 0 ? (
+                tasks.pastTasks.map((task) => (
+                  <Link
+                    key={task.id}
+                    to={`/course/${courseId}/tasks/${task.id}`}
+                    className="p-4 shadow flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                  >
+                    <MdTask />
+                    <div className="flex flex-col text-sm">
+                      <label className="cursor-pointer">{task.TaskTitle}</label>
+                      <div className="flex flex-row gap-5 text-xs text-gray-600">
+                        <label className="cursor-pointer">
+                          Available On:{" "}
+                          {new Date(
+                            task.StartDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                        |
+                        <label className="cursor-pointer">
+                          Due On:{" "}
+                          {new Date(
+                            task.EndDate.seconds * 1000
+                          ).toLocaleDateString()}
+                        </label>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-gray-500 p-4">No past tasks.</p>
+              )}
             </div>
           </div>
         </div>
