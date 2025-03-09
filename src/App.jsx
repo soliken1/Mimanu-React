@@ -39,6 +39,13 @@ import EmployeeSpecificTask from "./screens/Courses/Employee/SpecificTask.jsx";
 import EmployeeTaskQuestions from "./screens/Courses/Employee/TaskQuestions.jsx";
 import AdminScreen from "./screens/Courses/Admin/AdminScreen.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AdminCourseInfo from "./screens/Courses/Admin/AdminCourseInfo.jsx";
+import AdminCourseUsers from "./screens/Courses/Admin/AdminCourseUsers.jsx";
+import AdminCourseModules from "./screens/Courses/Admin/AdminCourseModulesScreen.jsx";
+import AdminTask from "./screens/Courses/Admin/AdminTask.jsx";
+import AdminTaskQuestions from "./screens/Courses/Admin/AdminTaskQuestions.jsx";
+import AdminSubmodule from "./screens/Courses/Admin/AdminSubmodule.jsx";
+import AdminSpecificTask from "./screens/Courses/Admin/AdminSpecificTask.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -138,6 +145,97 @@ export default function App() {
               redirectTo={getDashboardRoute(role)}
             >
               <AdminScreen getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminCourseInfo getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/users"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminCourseUsers getUser={getUser} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/modules"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminCourseModules getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/tasks"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminTask getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/tasks/:taskId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminSpecificTask getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/modules/:moduleId/submodules/:submoduleId"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminSubmodule getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/tasks/:taskId/questions"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminTaskQuestions getUser={getUser} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />

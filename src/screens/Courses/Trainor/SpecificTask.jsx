@@ -94,7 +94,6 @@ const SpecificTask = ({ getUser }) => {
 
   const handleUpdate = async () => {
     if (!newTitle.trim()) return;
-    if (!embed.trim()) return;
 
     let uploadedFileUrl = fileUrl; // Keep existing file if no new upload
     if (file) {
@@ -105,7 +104,7 @@ const SpecificTask = ({ getUser }) => {
       TaskTitle: newTitle,
       TaskContent: newContent,
       fileUrl: uploadedFileUrl,
-      EmbedURL: embed,
+      EmbedURL: embed.trim() ? embed : task?.EmbedURL || "",
     };
 
     try {
