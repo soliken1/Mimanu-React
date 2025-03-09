@@ -15,7 +15,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
 
-const TSubmoduleScreen = ({ getUser }) => {
+const AdminSubmodule = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -380,4 +380,4 @@ const TSubmoduleScreen = ({ getUser }) => {
   );
 };
 
-export default TSubmoduleScreen;
+export default AdminSubmodule;

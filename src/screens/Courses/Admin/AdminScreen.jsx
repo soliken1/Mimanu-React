@@ -119,7 +119,7 @@ const AdminScreen = ({ getUser }) => {
                             {course.CourseEnd.toDate().toLocaleDateString()}
                           </label>
                           <Link
-                            to={`/tcourse/${course.id}`}
+                            to={`/acourse/${course.id}`}
                             className="text-sm flex flex-row gap-1 items-center"
                           >
                             View Course{" "}

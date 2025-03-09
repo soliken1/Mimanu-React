@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebaseConfigs";
-const LoginScreen = ({ onLogin }) => {
+const LoginScreen = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +13,6 @@ const LoginScreen = ({ onLogin }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
-      onLogin();
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(null);

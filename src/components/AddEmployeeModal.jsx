@@ -69,6 +69,7 @@ const AddEmployeeModal = ({ isOpen, onClose }) => {
     }
 
     setTimeout(() => {
+      window.location.reload();
       onClose();
     }, 3000);
   };

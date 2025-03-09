@@ -89,6 +89,49 @@ const CourseSidebar = ({ userData }) => {
               </Link>
             </div>
           </>
+        ) : userData?.UserRole === "Admin" ? (
+          <>
+            <div className=" flex flex-row items-center">
+              <Link
+                to={`/acourse/${courseId}`}
+                className="cursor-pointer text-sm text-[#152852] underline"
+              >
+                Home
+              </Link>
+            </div>
+            <div className="flex flex-row items-center">
+              <Link
+                to={`/acourse/${courseId}/users`}
+                className="cursor-pointer text-sm text-[#152852] underline"
+              >
+                Employees
+              </Link>
+            </div>
+            <div className=" flex flex-row items-center">
+              <Link
+                to={`/acourse/${courseId}/modules`}
+                className="cursor-pointer text-sm text-[#152852] underline"
+              >
+                Modules
+              </Link>
+            </div>
+            <div className=" flex flex-row items-center">
+              <Link
+                to={`/acourse/${courseId}/tasks`}
+                className="cursor-pointer text-sm text-[#152852] underline"
+              >
+                Tasks
+              </Link>
+            </div>
+            <div className=" flex flex-row items-center">
+              <Link
+                to={`/acourse/${courseId}/results`}
+                className="cursor-pointer text-sm text-[#152852] underline"
+              >
+                Result
+              </Link>
+            </div>
+          </>
         ) : null}
       </div>
     </>

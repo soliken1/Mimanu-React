@@ -26,7 +26,7 @@ const AddSubmoduleModal = ({ isOpen, onClose, courseId, moduleId }) => {
     );
 
     if (submoduleId) {
-      toast.success("Module Added Successfully!", {
+      toast.success("Submodule Added Successfully!", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -43,7 +43,7 @@ const AddSubmoduleModal = ({ isOpen, onClose, courseId, moduleId }) => {
         onClose();
       }, 3000);
     } else {
-      toast.error("Failed to add module", {
+      toast.error("Failed To Add Submodule", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,

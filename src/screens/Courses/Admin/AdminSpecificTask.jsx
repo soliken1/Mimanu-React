@@ -1,35 +1,30 @@
 import React, { useEffect, useState } from "react";
 import fetchUser from "../../../hooks/get/fetchUser";
 import NavSidebar from "../../../components/NavSidebar";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
+import { Link } from "react-router-dom";
 import CourseSidebar from "../../../components/CourseSidebar";
-import fetchSubmodule from "../../../hooks/get/fetchSubmodule";
-import updateSubmodule from "../../../hooks/update/updateSubmodule";
-import axios from "axios";
+import fetchTask from "../../../hooks/get/fetchTask";
+import { ToastContainer } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { ToastContainer } from "react-toastify";
+import updateTask from "../../../hooks/update/updateTask";
 import { toast, Bounce } from "react-toastify";
-import { MdKeyboardArrowLeft } from "react-icons/md";
+import axios from "axios";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
 
-const TSubmoduleScreen = ({ getUser }) => {
-  const { courseId, moduleId, submoduleId } = useParams();
+const AdminSpecificTask = ({ getUser }) => {
+  const { courseId, taskId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [submodule, setSubmodule] = useState(null);
+  const [task, setTask] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [embed, setEmbed] = useState("");
   const [newContent, setNewContent] = useState("");
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
-  const [submodules, setSubmodules] = useState([]); // Store all submodules
-  const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
-
-  const navigate = useNavigate();
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
@@ -57,53 +52,23 @@ const TSubmoduleScreen = ({ getUser }) => {
         const course = await fetchCourse(courseId);
         setCourseData(course);
 
-        const submoduleData = await fetchSubmodule(
-          courseId,
-          moduleId,
-          submoduleId
-        );
-
-        const fetchedSubmodules = await fetchSubmodules(courseId, moduleId);
-        setSubmodules(fetchedSubmodules);
-
-        setSubmodule(submoduleData);
-        setNewTitle(submoduleData?.SubmoduleTitle || "");
-        setNewContent(submoduleData?.SubmoduleContent || "");
-        setFileUrl(submoduleData?.fileUrl || "");
-
-        // Find the current submodule index
-        const index = fetchedSubmodules.findIndex(
-          (sub) => sub.id === submoduleId
-        );
-        if (index !== -1) {
-          setCurrentIndex(index);
-        }
+        const taskData = await fetchTask(courseId, taskId);
+        setTask(taskData);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
-  }, [courseId, moduleId, submoduleId]);
+  }, []);
 
-  // Navigate to the next submodule
-  const handleNext = () => {
-    if (currentIndex < submodules.length - 1) {
-      const nextSubmoduleId = submodules[currentIndex + 1].id;
-      navigate(
-        `/tcourse/${courseId}/modules/${moduleId}/submodules/${nextSubmoduleId}`
-      );
+  useEffect(() => {
+    if (task) {
+      setNewTitle(task.TaskTitle || "");
+      setNewContent(task.TaskContent || "");
+      setFileUrl(task.fileUrl || "");
+      setEmbed(task.EmbedURL || "");
     }
-  };
-
-  // Navigate to the previous submodule
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      const prevSubmoduleId = submodules[currentIndex - 1].id;
-      navigate(
-        `/tcourse/${courseId}/modules/${moduleId}/submodules/${prevSubmoduleId}`
-      );
-    }
-  };
+  }, [task]);
 
   // 🔹 Upload to Cloudinary
   const handleFileUpload = async () => {
@@ -111,8 +76,8 @@ const TSubmoduleScreen = ({ getUser }) => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "mimanuSubmodules"); // Cloudinary upload preset
-    formData.append("folder", "mimanuSubmodules"); // Folder name
+    formData.append("upload_preset", "mimanuTask");
+    formData.append("folder", "mimanuTask");
 
     try {
       const response = await axios.post(
@@ -127,27 +92,24 @@ const TSubmoduleScreen = ({ getUser }) => {
     }
   };
 
-  // 🔹 Save Updated Submodule Data
   const handleUpdate = async () => {
-    if (!newTitle.trim()) return;
-
     let uploadedFileUrl = fileUrl; // Keep existing file if no new upload
     if (file) {
       uploadedFileUrl = await handleFileUpload(); // Upload file if selected
     }
 
     const updatedData = {
-      SubmoduleTitle: newTitle,
-      SubmoduleContent: newContent,
+      TaskTitle: newTitle,
+      TaskContent: newContent,
       fileUrl: uploadedFileUrl,
       EmbedURL: embed.trim() ? embed : task?.EmbedURL || "",
     };
 
     try {
-      await updateSubmodule(courseId, moduleId, submoduleId, updatedData);
-      setSubmodule({ ...submodule, ...updatedData });
+      await updateTask(courseId, taskId, updatedData);
+      setTask({ ...task, ...updatedData });
       setIsEditing(false);
-      toast.success("Submodule Updated Successfully!", {
+      toast.success("Task Updated Successfully!", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -176,7 +138,7 @@ const TSubmoduleScreen = ({ getUser }) => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
@@ -190,16 +152,15 @@ const TSubmoduleScreen = ({ getUser }) => {
           </div>
           <CourseSidebar userData={userData} />
         </div>
-
         <div className="w-full h-full flex-flex-row mt-6">
           {isEditing ? (
             <div className="flex flex-col gap-4">
               {/* Title Input */}
-              <div>
-                <label className=" text-sm">Edit Title:</label>
+              <div className="flex flex-col gap-1">
+                <label className=" text-lg font-semibold">Edit Title:</label>
                 <input
                   type="text"
-                  className="text-2xl rounded w-full mb-4"
+                  className="text-sm border border-gray-400 py-2 px-4 rounded w-full mb-4 "
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                 />
@@ -207,8 +168,8 @@ const TSubmoduleScreen = ({ getUser }) => {
 
               {/* Show uploaded file if exists */}
               {fileUrl && (
-                <div className="flex flex-col gap-4">
-                  <p>Uploaded File:</p>
+                <div className="flex flex-col">
+                  <p className=" text-lg font-semibold">Uploaded File:</p>
                   {fileUrl.includes(".png") ||
                   fileUrl.includes(".jpg") ||
                   fileUrl.includes(".jpeg") ? (
@@ -231,18 +192,22 @@ const TSubmoduleScreen = ({ getUser }) => {
               )}
 
               {/* File Upload */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm">Add A File or Image:</label>
+              <div className="flex flex-col gap-2 mt-5">
+                <label className=" text-lg font-semibold">
+                  Add A File or Image:
+                </label>
                 <input
                   type="file"
-                  className="w-68 px-4 py-2 rounded-lg shadow-y bg-white"
+                  className="w-68 px-4 py-2 text-sm rounded-lg shadow-y bg-white"
                   onChange={(e) => setFile(e.target.files[0])}
                 />
               </div>
 
               {/* Rich Text Editor */}
               <div className="flex flex-col mt-5 gap-2">
-                <label className="text-sm">Add Body Content</label>
+                <label className=" text-lg font-semibold">
+                  Add Body Content:
+                </label>
                 <ReactQuill
                   value={newContent}
                   onChange={setNewContent}
@@ -251,18 +216,20 @@ const TSubmoduleScreen = ({ getUser }) => {
               </div>
 
               <div className="flex flex-col">
-                {submodule?.EmbedURL && (
+                {task?.EmbedURL && (
                   <iframe
                     className="w-1/2 h-96"
-                    src={getEmbedUrl(submodule?.EmbedURL)}
-                    title={submodule.SubmoduleTitle}
+                    src={getEmbedUrl(task?.EmbedURL)}
+                    title={task.SubmoduleTitle}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allowFullScreen
                   ></iframe>
                 )}
-                <label>Embed A Video:</label>
+                <label className=" text-lg font-semibold mt-5">
+                  Embed A Video:
+                </label>
                 <input
                   type="text"
                   className="text-sm px-4 py-2 border border-gray-400 w-1/2 rounded"
@@ -289,8 +256,8 @@ const TSubmoduleScreen = ({ getUser }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <label className="text-2xl">{submodule?.SubmoduleTitle}</label>
+              <div className="flex justify-between items-center border-b border-gray-400 pb-4">
+                <label className="text-2xl">{task?.TaskTitle}</label>
                 <button
                   className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
                   onClick={() => setIsEditing(true)}
@@ -300,20 +267,20 @@ const TSubmoduleScreen = ({ getUser }) => {
               </div>
 
               {/* Display File if Available */}
-              {submodule?.fileUrl && (
+              {task?.fileUrl && (
                 <div>
-                  {submodule.fileUrl.includes(".png") ||
-                  submodule.fileUrl.includes(".jpg") ||
-                  submodule.fileUrl.includes(".webp") ||
-                  submodule.fileUrl.includes(".jpeg") ? (
+                  {task.fileUrl.includes(".png") ||
+                  task.fileUrl.includes(".jpg") ||
+                  task.fileUrl.includes(".webp") ||
+                  task.fileUrl.includes(".jpeg") ? (
                     <img
-                      src={submodule.fileUrl}
+                      src={task.fileUrl}
                       alt="Uploaded"
                       className="w-full h-98 object-cover shadow-y rounded-xl"
                     />
                   ) : (
                     <a
-                      href={submodule.fileUrl}
+                      href={task.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"
@@ -327,52 +294,33 @@ const TSubmoduleScreen = ({ getUser }) => {
               {/* Rich Text Display */}
               <div
                 dangerouslySetInnerHTML={{
-                  __html: submodule?.SubmoduleContent,
+                  __html: task?.TaskContent,
                 }}
                 className="text-gray-800"
               />
 
-              {submodule?.EmbedURL && (
+              {task?.EmbedURL && (
                 <iframe
                   className="w-1/2 h-96"
-                  src={getEmbedUrl(submodule?.EmbedURL)}
-                  title={submodule.SubmoduleTitle}
+                  src={getEmbedUrl(task?.EmbedURL)}
+                  title={task.SubmoduleTitle}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 ></iframe>
               )}
+              <div className="flex mt-5 justify-end border-t border-gray-400 pt-4">
+                <Link
+                  to={`/acourse/${courseId}/tasks/${taskId}/questions`}
+                  className="bg-[#152852] flex items-center px-4 py-2 rounded-md text-white"
+                >
+                  <label className="cursor-pointer">View Assignment</label>
+                  <MdKeyboardArrowRight />
+                </Link>
+              </div>
             </div>
           )}
-        </div>
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4">
-          <button
-            onClick={handlePrevious}
-            disabled={currentIndex === 0}
-            className={`px-4 py-2 rounded-md flex flex-row items-center ${
-              currentIndex === 0
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#152852] text-white cursor-pointer"
-            }`}
-          >
-            <MdKeyboardArrowLeft />
-            Previous
-          </button>
-
-          <button
-            onClick={handleNext}
-            disabled={currentIndex === submodules.length - 1}
-            className={`px-4 py-2 rounded-md flex flex-row items-center ${
-              currentIndex === submodules.length - 1
-                ? "bg-gray-400 cursor-not-allowed "
-                : "bg-[#152852] text-white cursor-pointer"
-            }`}
-          >
-            Next
-            <MdKeyboardArrowRight />
-          </button>
         </div>
       </div>
       <ToastContainer />
@@ -380,4 +328,4 @@ const TSubmoduleScreen = ({ getUser }) => {
   );
 };
 
-export default TSubmoduleScreen;
+export default AdminSpecificTask;

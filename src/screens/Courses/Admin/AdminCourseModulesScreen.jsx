@@ -15,7 +15,7 @@ import AddSubmoduleModal from "../../../components/AddSubmoduleModal";
 import deleteSubmodule from "../../../hooks/delete/removeSubmodule";
 import { MdLibraryBooks } from "react-icons/md";
 
-const TCourseModules = ({ getUser }) => {
+const AdminCourseModules = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -141,7 +141,7 @@ const TCourseModules = ({ getUser }) => {
                           className="flex justify-between items-center bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
                         >
                           <Link
-                            to={`/tcourse/${courseId}/modules/${module.id}/submodules/${submodule.id}`}
+                            to={`/acourse/${courseId}/modules/${module.id}/submodules/${submodule.id}`}
                             className="w-full p-4 flex flex-row gap-2 items-center"
                           >
                             <MdLibraryBooks />
@@ -164,7 +164,7 @@ const TCourseModules = ({ getUser }) => {
                 </div>
               ))
             ) : (
-              <div className="text-gray-500 w-full text-center ">
+              <div className="text-gray-500 w-full text-center">
                 No Modules Yet, Add A Module!
               </div>
             )}
@@ -187,4 +187,4 @@ const TCourseModules = ({ getUser }) => {
   );
 };
 
-export default TCourseModules;
+export default AdminCourseModules;
