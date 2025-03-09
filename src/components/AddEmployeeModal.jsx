@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fetchEmployees from "../hooks/get/fetchEmployees";
+import fetchNotEnrolledEmployees from "../hooks/get/fetchNotEnrolledEmployees";
 import addEnrolledEmployee from "../hooks/post/addEnrolledEmployee";
 import { useParams } from "react-router-dom"; // To get CourseID from URL
 import { ToastContainer } from "react-toastify";
@@ -12,7 +12,7 @@ const AddEmployeeModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const getEmployees = async () => {
-      const data = await fetchEmployees();
+      const data = await fetchNotEnrolledEmployees(courseId);
       setEmployees(data);
     };
     if (isOpen) getEmployees();
