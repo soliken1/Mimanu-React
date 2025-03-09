@@ -4,14 +4,15 @@ import fetchQuestions from "../../../hooks/get/fetchQuestions";
 import NavSidebar from "../../../components/NavSidebar";
 import fetchUser from "../../../hooks/get/fetchUser";
 import fetchTask from "../../../hooks/get/fetchTask";
+import { Link } from "react-router-dom";
 
-const TaskQuestions = ({ getUser }) => {
+const EmployeeTaskQuestions = ({ getUser }) => {
   const { courseId, taskId } = useParams();
   const [questionsData, setQuestionsData] = useState([]);
   const [userData, setUserData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [taskData, setTaskData] = useState(null);
-  const [answers, setAnswers] = useState({}); // Stores user answers temporarily
+  const [answers, setAnswers] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +70,7 @@ const TaskQuestions = ({ getUser }) => {
         <label className="text-xl font-semibold">{taskData?.TaskTitle}</label>
         <div className="w-full flex-row flex gap-5 mt-5">
           {/* Sidebar */}
-          <div className="min-w-1/12 bg-white rounded-lg min-h-52 overflow-y-auto p-4 h-full">
+          <div className="min-w-[70px] bg-white rounded-lg min-h-52 overflow-y-auto p-4 h-full">
             <ul className="space-y-2">
               {questionsData.map((question, index) => (
                 <li key={index}>
@@ -89,7 +90,7 @@ const TaskQuestions = ({ getUser }) => {
           </div>
 
           {/* Main Question Area */}
-          <div className="flex-1">
+          <div className="flex-1 flex-col flex justify-between min-h-96">
             <div className="w-full h-auto p-8 bg-white min-h-52 rounded-xl">
               <div className="w-full flex justify-between text-xl mb-4">
                 <p className="text-lg">
@@ -175,6 +176,14 @@ const TaskQuestions = ({ getUser }) => {
                 </button>
               </div>
             </div>
+            <div className=" flex justify-end pt-4">
+              <Link
+                to={`/course/${courseId}/tasks/${taskId}`}
+                className="px-4 py-2 rounded-md text-white bg-[#152852]"
+              >
+                Go Back
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -182,4 +191,4 @@ const TaskQuestions = ({ getUser }) => {
   );
 };
 
-export default TaskQuestions;
+export default EmployeeTaskQuestions;
