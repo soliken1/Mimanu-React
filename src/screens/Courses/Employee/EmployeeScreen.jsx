@@ -40,9 +40,6 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
   const filteredEmployeeCourses = employeeCourses.filter((courses) =>
     `${courses.CourseTitle}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
