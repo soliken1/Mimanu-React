@@ -23,9 +23,6 @@ const ResultScreen = ({ getUser, onLogout }) => {
     fetchAndSetUserData();
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
   return (
     <div className="w-auto h-auto relative">
       <Navbar userData={userData} />

@@ -5,8 +5,14 @@ import NavSidebar from "../../../components/NavSidebar";
 import fetchUser from "../../../hooks/get/fetchUser";
 import fetchTask from "../../../hooks/get/fetchTask";
 import { Link } from "react-router-dom";
+import submitAnswers from "../../../hooks/post/addAnswers";
+import fetchEnrolledId from "../../../hooks/get/fetchEnrolled";
+import { toast, Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeTaskQuestions = ({ getUser }) => {
+  const navigate = useNavigate();
   const { courseId, taskId } = useParams();
   const [questionsData, setQuestionsData] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -28,6 +34,71 @@ const EmployeeTaskQuestions = ({ getUser }) => {
 
     fetchData();
   }, [courseId, taskId]);
+
+  const handleSubmit = async () => {
+    if (!userData || !userData.UID) {
+      console.error("User not found.");
+      return;
+    }
+
+    // Fetch EnrolledId
+    const enrolledId = await fetchEnrolledId(userData.UID, courseId);
+    if (!enrolledId) {
+      toast.error("You Are Not Enrolled In This Course!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+      return;
+    }
+
+    // Ensure questionsData is an array before passing it
+    if (!Array.isArray(questionsData)) {
+      console.error("questionsData is not an array!", questionsData);
+      return;
+    }
+
+    // Submit answers
+    const result = await submitAnswers(enrolledId, answers, questionsData);
+
+    if (result.success) {
+      toast.success(
+        `Submission Successful! Score: ${result.Score}/${result.TotalQuestions}`,
+        {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        }
+      );
+      setTimeout(() => {
+        navigate(`/course/${courseId}/tasks/${taskId}`);
+      }, 2000);
+    } else {
+      toast.error("Something Went Wrong!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+  };
 
   const handleAnswerChange = (questionId, selectedAnswer) => {
     setAnswers((prevAnswers) => ({
@@ -178,15 +249,22 @@ const EmployeeTaskQuestions = ({ getUser }) => {
             </div>
           </div>
         </div>
-        <div className="flex pt-4">
+        <div className="flex pt-4 justify-between">
           <Link
             to={`/course/${courseId}/tasks/${taskId}`}
-            className="px-4 py-2 rounded-md text-white bg-[#152852]"
+            className="px-4 py-2 rounded-md text-white bg-gray-400 "
           >
             Go Back
           </Link>
+          <button
+            onClick={handleSubmit}
+            className="bg-[#152852] px-4 py-2 rounded-md text-white"
+          >
+            Submit
+          </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
