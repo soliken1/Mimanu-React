@@ -10,6 +10,8 @@ import formatTimestamp from "../../../helper/formatTimestamp";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import calculateTotalScreenTime from "../../../helper/calculateTotalScreenTime"; // Import the function
 import ScreenTimeBar from "../../../components/ScreenTimeBar";
+import SkillRadarChart from "../../../components/SkillRadarChart";
+import CourseProgress from "../../../components/CourseProgress";
 const Progress = ({ getUser, onLogout }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -72,7 +74,7 @@ const Progress = ({ getUser, onLogout }) => {
         </div>
         <div className="w-full h-full flex flex-col mt-6">
           <div className="w-full flex flex-row gap-5">
-            <div className="flex w-2/3 flex-col">
+            <div className="flex w-7/12 flex-col">
               <div className="flex flex-row justify-between border-b border-gray-400 pb-2">
                 <div className="flex flex-col">
                   <label className="text-gray-500">Total Time on Course:</label>
@@ -90,8 +92,12 @@ const Progress = ({ getUser, onLogout }) => {
                 </div>
               </div>
               <ScreenTimeBar screenTimeData={enrollData?.ScreenTime || []} />
+              <div className="flex flex-row mt-8"></div>
             </div>
-            <div className="flex-1 debug"></div>
+            <div className="flex-1 flex-col gap-5 flex">
+              <SkillRadarChart />
+              <CourseProgress />
+            </div>
           </div>
         </div>
       </div>

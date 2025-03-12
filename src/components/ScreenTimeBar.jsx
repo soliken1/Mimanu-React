@@ -19,7 +19,12 @@ const ScreenTimeBar = ({ screenTimeData }) => {
     (sum, entry) => sum + entry.totalDuration,
     0
   );
-  if (topTotalTime === 0) return null; // Avoid division by zero
+  if (topTotalTime === 0)
+    return (
+      <p className="text-center text-gray-600">
+        No screen time data available.
+      </p>
+    ); // Avoid division by zero
 
   // Define colors for screens
   const screenColors = ["#4188ff", "#e23636", "#edb95e"]; // Blue, Red, Yellow

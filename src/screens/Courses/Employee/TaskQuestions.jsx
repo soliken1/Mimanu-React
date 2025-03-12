@@ -65,7 +65,12 @@ const EmployeeTaskQuestions = ({ getUser }) => {
     }
 
     // Submit answers
-    const result = await submitAnswers(enrolled.id, answers, questionsData);
+    const result = await submitAnswers(
+      enrolled.id,
+      answers,
+      questionsData,
+      taskId
+    );
 
     if (result.success) {
       toast.success(
@@ -83,7 +88,7 @@ const EmployeeTaskQuestions = ({ getUser }) => {
         }
       );
       setTimeout(() => {
-        navigate(`/course/${courseId}/tasks/${taskId}`);
+        navigate(`/course/${courseId}/tasks`);
       }, 2000);
     } else {
       toast.error("Something Went Wrong!", {
