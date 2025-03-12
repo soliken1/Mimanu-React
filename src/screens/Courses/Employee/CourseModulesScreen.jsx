@@ -10,11 +10,15 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { MdLibraryBooks } from "react-icons/md";
+import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+import { trackUserScreenTime } from "../../../helper/userScreenTime";
+
 const CourseModules = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [modules, setModules] = useState([]);
+  const [enrollData, setEnrollData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +31,21 @@ const CourseModules = ({ getUser }) => {
 
         const modules = await fetchModules(courseId);
         setModules(modules);
+
+        const enroll = await fetchEnrolled(getUser.uid, courseId);
+        setEnrollData(enroll);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!enrollData) return;
+
+    trackUserScreenTime(enrollData.id, "Module");
+  }, [enrollData]);
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

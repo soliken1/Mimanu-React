@@ -9,12 +9,15 @@ import fetchTask from "../../../hooks/get/fetchTask";
 import { ToastContainer } from "react-toastify";
 import "react-quill/dist/quill.snow.css";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { trackUserScreenTime } from "../../../helper/userScreenTime";
+import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 
 const EmployeeSpecificTask = ({ getUser }) => {
   const { courseId, taskId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [task, setTask] = useState(null);
+  const [enrollData, setEnrollData] = useState(null);
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
@@ -44,12 +47,21 @@ const EmployeeSpecificTask = ({ getUser }) => {
 
         const taskData = await fetchTask(courseId, taskId);
         setTask(taskData);
+
+        const enroll = await fetchEnrolled(getUser.uid, courseId);
+        setEnrollData(enroll);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!enrollData) return;
+
+    trackUserScreenTime(enrollData.id, "Specific Task");
+  }, [enrollData]);
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
