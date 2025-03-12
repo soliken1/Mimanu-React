@@ -1,7 +1,8 @@
 import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs"; // Adjust the path as needed
 
-const submitAnswers = async (enrolledId, answers, questionsData) => {
+const submitAnswers = async (enrolledId, answers, questionsData, taskId) => {
+  console.log(taskId);
   try {
     // Ensure the user is authenticated
     const user = auth.currentUser;
@@ -12,7 +13,6 @@ const submitAnswers = async (enrolledId, answers, questionsData) => {
     // Step 1: Compare answers and calculate score
     let Score = 0;
     const TotalQuestions = questionsData.length;
-    console.log(questionsData);
     const userAnswers = questionsData.map((question) => {
       const UserAnswer = answers[question.id] || "";
       const CorrectAnswer = question.Answer; // Assuming "Answer" field contains the correct answer
@@ -30,14 +30,16 @@ const submitAnswers = async (enrolledId, answers, questionsData) => {
       };
     });
 
-    // Step 2: Save the score and answers in Firebase under "CompletedTask"
-    const completedTaskRef = collection(
+    // Step 2: Save the score and answers in Firebase under "CompletedTask/{taskId}"
+    const completedTaskRef = doc(
       db,
       "Enrolled",
       enrolledId,
-      "CompletedTask"
+      "CompletedTask",
+      taskId // ✅ Use taskId as the document ID
     );
-    const newTaskDoc = await addDoc(completedTaskRef, {
+
+    await setDoc(completedTaskRef, {
       Score,
       TotalQuestions,
       Answered: true,
@@ -50,7 +52,7 @@ const submitAnswers = async (enrolledId, answers, questionsData) => {
       "Enrolled",
       enrolledId,
       "CompletedTask",
-      newTaskDoc.id,
+      taskId,
       "Answers"
     );
 

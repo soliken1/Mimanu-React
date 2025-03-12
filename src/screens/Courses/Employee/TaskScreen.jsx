@@ -31,9 +31,6 @@ const TaskScreen = ({ getUser, onLogout }) => {
         const course = await fetchCourse(courseId);
         setCourseData(course);
 
-        const tasksData = await fetchTasks(courseId); // Fetch tasks from subcollection
-        setTasks(tasksData);
-
         const enroll = await fetchEnrolled(getUser.uid, courseId);
         setEnrollData(enroll);
       } catch (error) {
@@ -49,6 +46,20 @@ const TaskScreen = ({ getUser, onLogout }) => {
     trackUserScreenTime(enrollData.id, "Task");
   }, [enrollData]);
 
+  useEffect(() => {
+    if (!enrollData || !courseId) return;
+
+    const fetchTasksData = async () => {
+      try {
+        const tasksData = await fetchTasks(courseId, enrollData.id);
+        setTasks(tasksData);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasksData();
+  }, [enrollData, courseId]); // Depend on enrollData
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
@@ -80,31 +91,53 @@ const TaskScreen = ({ getUser, onLogout }) => {
               </div>
               {tasks.availableTasks.length > 0 ? (
                 tasks.availableTasks.map((task) => (
-                  <Link
-                    to={`/course/${courseId}/tasks/${task.id}`}
+                  <div
                     key={task.id}
-                    className="p-4 shadow flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                    className={`p-4 shadow flex flex-row items-center border-b justify-between border-gray-300
+        ${task.isAnswered ? "bg-green-200" : "bg-gray-100 hover:bg-gray-300"}`}
                   >
-                    <MdTask />
-                    <div className="flex flex-col text-sm">
-                      <label className="cursor-pointer">{task.TaskTitle}</label>
-                      <div className="flex flex-row gap-5 text-xs text-gray-600">
+                    <div className="flex flex-row items-center gap-3">
+                      <MdTask />
+                      <div className="flex flex-col text-sm">
                         <label className="cursor-pointer">
-                          Available On:{" "}
-                          {new Date(
-                            task.StartDate.seconds * 1000
-                          ).toLocaleDateString()}
+                          {task.TaskTitle}
                         </label>
-                        |
-                        <label className="cursor-pointer">
-                          Due On:{" "}
-                          {new Date(
-                            task.EndDate.seconds * 1000
-                          ).toLocaleDateString()}
-                        </label>
+                        <div className="flex flex-row gap-5 text-xs text-gray-600">
+                          <label className="cursor-pointer">
+                            Available On:{" "}
+                            {new Date(
+                              task.StartDate.seconds * 1000
+                            ).toLocaleDateString()}
+                          </label>
+                          |
+                          <label className="cursor-pointer">
+                            Due On:{" "}
+                            {new Date(
+                              task.EndDate.seconds * 1000
+                            ).toLocaleDateString()}
+                          </label>
+                        </div>
                       </div>
                     </div>
-                  </Link>
+                    {task.isAnswered ? (
+                      <div className="flex flex-row gap-5">
+                        <label className="text-xs font-semibold text-gray-400">
+                          {task.completedData.Score} /{" "}
+                          {task.completedData.TotalQuestions}
+                        </label>
+                        <span className="text-green-600 text-xs font-semibold">
+                          Completed
+                        </span>
+                      </div>
+                    ) : (
+                      <Link
+                        to={`/course/${courseId}/tasks/${task.id}`}
+                        className="ml-auto text-blue-500 text-xs"
+                      >
+                        Start Task
+                      </Link>
+                    )}
+                  </div>
                 ))
               ) : (
                 <p className="text-gray-500 p-4">No available tasks.</p>
