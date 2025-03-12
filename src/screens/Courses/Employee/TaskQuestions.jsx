@@ -6,7 +6,7 @@ import fetchUser from "../../../hooks/get/fetchUser";
 import fetchTask from "../../../hooks/get/fetchTask";
 import { Link } from "react-router-dom";
 import submitAnswers from "../../../hooks/post/addAnswers";
-import fetchEnrolledId from "../../../hooks/get/fetchEnrolled";
+import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -42,8 +42,8 @@ const EmployeeTaskQuestions = ({ getUser }) => {
     }
 
     // Fetch EnrolledId
-    const enrolledId = await fetchEnrolledId(userData.UID, courseId);
-    if (!enrolledId) {
+    const enrolled = await fetchEnrolled(userData.UID, courseId);
+    if (!enrolled) {
       toast.error("You Are Not Enrolled In This Course!", {
         position: "bottom-right",
         autoClose: 3000,
@@ -65,7 +65,7 @@ const EmployeeTaskQuestions = ({ getUser }) => {
     }
 
     // Submit answers
-    const result = await submitAnswers(enrolledId, answers, questionsData);
+    const result = await submitAnswers(enrolled.id, answers, questionsData);
 
     if (result.success) {
       toast.success(

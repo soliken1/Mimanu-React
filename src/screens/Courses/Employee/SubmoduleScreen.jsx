@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
+import { trackUserScreenTime } from "../../../helper/userScreenTime";
+import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 
 const SubmoduleScreen = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -18,6 +20,7 @@ const SubmoduleScreen = ({ getUser }) => {
   const [submodule, setSubmodule] = useState(null);
   const [submodules, setSubmodules] = useState([]); // Store all submodules
   const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
+  const [enrollData, setEnrollData] = useState(null);
 
   const navigate = useNavigate();
 
@@ -53,6 +56,9 @@ const SubmoduleScreen = ({ getUser }) => {
           submoduleId
         );
 
+        const enroll = await fetchEnrolled(getUser.uid, courseId);
+        setEnrollData(enroll);
+
         const fetchedSubmodules = await fetchSubmodules(courseId, moduleId);
         setSubmodules(fetchedSubmodules);
 
@@ -71,6 +77,12 @@ const SubmoduleScreen = ({ getUser }) => {
     };
     fetchData();
   }, [courseId, moduleId, submoduleId]);
+
+  useEffect(() => {
+    if (!enrollData) return;
+
+    trackUserScreenTime(enrollData.id, "Submodule");
+  }, [enrollData]);
 
   // Navigate to the next submodule
   const handleNext = () => {

@@ -29,8 +29,6 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
         const courses = await fetchEmployeeCourse(getUser.uid);
         setEmployeeCourses(courses);
 
-        console.log(courses);
-
         setLoading(false);
       } catch (error) {
         console.error("Error:", error);

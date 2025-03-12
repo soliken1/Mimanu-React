@@ -8,6 +8,9 @@ import CourseSidebar from "../../../components/CourseSidebar";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { trackUserScreenTime } from "../../../helper/userScreenTime";
+import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+
 const TaskScreen = ({ getUser, onLogout }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -17,6 +20,7 @@ const TaskScreen = ({ getUser, onLogout }) => {
     availableTasks: [],
     upcomingTasks: [],
   });
+  const [enrollData, setEnrollData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,12 +33,21 @@ const TaskScreen = ({ getUser, onLogout }) => {
 
         const tasksData = await fetchTasks(courseId); // Fetch tasks from subcollection
         setTasks(tasksData);
+
+        const enroll = await fetchEnrolled(getUser.uid, courseId);
+        setEnrollData(enroll);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, [courseId]);
+
+  useEffect(() => {
+    if (!enrollData) return;
+
+    trackUserScreenTime(enrollData.id, "Task");
+  }, [enrollData]);
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

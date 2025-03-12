@@ -18,7 +18,6 @@ import CourseInfo from "./screens/Courses/Employee/CourseInfoScreen.jsx";
 import EmployeeScreen from "./screens/Courses/Employee/EmployeeScreen.jsx";
 import CourseModules from "./screens/Courses/Employee/CourseModulesScreen.jsx";
 import TaskScreen from "./screens/Courses/Employee/TaskScreen.jsx";
-import ResultScreen from "./screens/Courses/Employee/ResultScreen.jsx";
 import MBTIScreen from "./screens/Forms/mbti.jsx";
 import SelfFormScreen from "./screens/Forms/self.jsx";
 import SuperiorFormScreen from "./screens/Forms/superior.jsx";
@@ -46,6 +45,7 @@ import AdminTask from "./screens/Courses/Admin/AdminTask.jsx";
 import AdminTaskQuestions from "./screens/Courses/Admin/AdminTaskQuestions.jsx";
 import AdminSubmodule from "./screens/Courses/Admin/AdminSubmodule.jsx";
 import AdminSpecificTask from "./screens/Courses/Admin/AdminSpecificTask.jsx";
+import Progress from "./screens/Courses/Employee/Progress.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -423,14 +423,14 @@ export default function App() {
         />
 
         <Route
-          path="/course/:courseId/results"
+          path="/course/:courseId/progress"
           element={
             <ProtectedRoute
               role={role}
               allowedRoles={["Employee"]}
               redirectTo={getDashboardRoute(role)}
             >
-              <ResultScreen getUser={getUser} onLogout={handleLogout} />
+              <Progress getUser={getUser} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />

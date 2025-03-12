@@ -38,10 +38,10 @@ const CourseSidebar = ({ userData }) => {
                 </label>
               </div>
             </Link>
-            <Link to={`/course/${courseId}/results`}>
+            <Link to={`/course/${courseId}/progress`}>
               <div className=" flex flex-row items-center">
                 <label className="cursor-pointer text-sm text-[#152852] underline">
-                  Result
+                  Progress
                 </label>
               </div>
             </Link>
@@ -82,10 +82,10 @@ const CourseSidebar = ({ userData }) => {
             </div>
             <div className=" flex flex-row items-center">
               <Link
-                to={`/tcourse/${courseId}/results`}
+                to={`/tcourse/${courseId}/progress`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
-                Result
+                Progress
               </Link>
             </div>
           </>
@@ -125,10 +125,10 @@ const CourseSidebar = ({ userData }) => {
             </div>
             <div className=" flex flex-row items-center">
               <Link
-                to={`/acourse/${courseId}/results`}
+                to={`/acourse/${courseId}/progress`}
                 className="cursor-pointer text-sm text-[#152852] underline"
               >
-                Result
+                Progress
               </Link>
             </div>
           </>
