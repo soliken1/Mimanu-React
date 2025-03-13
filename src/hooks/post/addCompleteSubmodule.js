@@ -30,11 +30,11 @@ const CompletedSubmodules = async (
 
     // Mark submodule as read
     await setDoc(submoduleDocRef, {
-      courseId,
-      moduleId,
-      submoduleId,
+      CourseId: courseId,
+      ModuleId: moduleId,
+      SubmoduleId: submoduleId,
       hasRead: true,
-      timestamp: new Date(),
+      CompletedAt: new Date(),
     });
   } catch (error) {
     console.error("Error marking submodule as read:", error);

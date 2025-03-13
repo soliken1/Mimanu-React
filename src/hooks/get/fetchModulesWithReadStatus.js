@@ -6,7 +6,7 @@ import { collection, getDocs, doc, getDoc } from "firebase/firestore";
  * while also checking if the user has read each submodule.
  * @param {string} courseId - The ID of the course.
  * @param {string} enrolledId - The enrolled document ID of the user.
- * @returns {Promise<Array>} - A list of modules with their submodules and read status.
+ * @returns {Promise<Object>} - An object containing modules, read progress, and completion stats.
  */
 export const fetchModulesWithReadStatus = async (courseId, enrolledId) => {
   try {
@@ -15,6 +15,20 @@ export const fetchModulesWithReadStatus = async (courseId, enrolledId) => {
 
     let totalSubmodules = 0;
     let totalReadSubmodules = 0;
+    let totalModules = modulesSnapshot.docs.length;
+    let totalCompletedModules = 0;
+
+    // Fetch completed modules for the user
+    const completedModulesRef = collection(
+      db,
+      "Enrolled",
+      enrolledId,
+      "CompletedModule"
+    );
+    const completedModulesSnapshot = await getDocs(completedModulesRef);
+    const completedModuleIds = new Set(
+      completedModulesSnapshot.docs.map((doc) => doc.id)
+    );
 
     const modules = await Promise.all(
       modulesSnapshot.docs.map(async (moduleDoc) => {
@@ -31,6 +45,7 @@ export const fetchModulesWithReadStatus = async (courseId, enrolledId) => {
         );
         const submodulesSnapshot = await getDocs(submodulesRef);
 
+        let submoduleReadCount = 0;
         const submodules = await Promise.all(
           submodulesSnapshot.docs.map(async (subDoc) => {
             const submoduleData = { id: subDoc.id, ...subDoc.data() };
@@ -46,16 +61,33 @@ export const fetchModulesWithReadStatus = async (courseId, enrolledId) => {
             const submoduleReadSnap = await getDoc(submoduleReadRef);
             const hasRead = submoduleReadSnap.exists();
 
-            if (hasRead) totalReadSubmodules++;
+            if (hasRead) {
+              totalReadSubmodules++;
+              submoduleReadCount++;
+            }
             totalSubmodules++;
 
             return { ...submoduleData, hasRead };
           })
         );
-        return { ...moduleData, submodules }; // Attach submodules with read status
+
+        // Check if the module is completed
+        const isModuleCompleted = submoduleReadCount === submodules.length;
+        if (isModuleCompleted || completedModuleIds.has(moduleDoc.id)) {
+          totalCompletedModules++;
+        }
+
+        return { ...moduleData, submodules, isModuleCompleted };
       })
     );
-    return { modules, totalSubmodules, totalReadSubmodules };
+
+    return {
+      modules,
+      totalSubmodules,
+      totalReadSubmodules,
+      totalModules,
+      totalCompletedModules,
+    };
   } catch (error) {
     console.error("Error fetching modules with read status:", error);
     throw error;
