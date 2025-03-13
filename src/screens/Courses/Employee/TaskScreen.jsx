@@ -94,23 +94,21 @@ const TaskScreen = ({ getUser, onLogout }) => {
                   <div
                     key={task.id}
                     className={`p-4 shadow flex flex-row items-center border-b justify-between border-gray-300
-        ${task.isAnswered ? "bg-green-200" : "bg-gray-100 hover:bg-gray-300"}`}
+        ${task.isAnswered ? "bg-green-100" : "bg-gray-100 hover:bg-gray-300"}`}
                   >
                     <div className="flex flex-row items-center gap-3">
                       <MdTask />
                       <div className="flex flex-col text-sm">
-                        <label className="cursor-pointer">
-                          {task.TaskTitle}
-                        </label>
+                        <label>{task.TaskTitle}</label>
                         <div className="flex flex-row gap-5 text-xs text-gray-600">
-                          <label className="cursor-pointer">
+                          <label>
                             Available On:{" "}
                             {new Date(
                               task.StartDate.seconds * 1000
                             ).toLocaleDateString()}
                           </label>
                           |
-                          <label className="cursor-pointer">
+                          <label>
                             Due On:{" "}
                             {new Date(
                               task.EndDate.seconds * 1000

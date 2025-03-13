@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import fetchUser from "../../../hooks/get/fetchUser";
-import fetchTasks from "../../../hooks/get/fetchTasks"; // Updated import
+import { fetchAllTasks } from "../../../hooks/get/fetchTasks"; // Updated import
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import NavSidebar from "../../../components/NavSidebar";
 import { useParams } from "react-router-dom";
@@ -29,7 +29,7 @@ const TTaskScreen = ({ getUser }) => {
         const course = await fetchCourse(courseId);
         setCourseData(course);
 
-        const tasksData = await fetchTasks(courseId); // Fetch tasks from subcollection
+        const tasksData = await fetchAllTasks(courseId); // Fetch tasks from subcollection
         setTasks(tasksData);
       } catch (error) {
         console.error("Error:", error);

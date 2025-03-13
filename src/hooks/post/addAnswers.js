@@ -2,7 +2,6 @@ import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs"; // Adjust the path as needed
 
 const submitAnswers = async (enrolledId, answers, questionsData, taskId) => {
-  console.log(taskId);
   try {
     // Ensure the user is authenticated
     const user = auth.currentUser;

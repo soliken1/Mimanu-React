@@ -3,7 +3,6 @@ import fetchUser from "../../../hooks/get/fetchUser";
 import NavSidebar from "../../../components/NavSidebar";
 import { useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
-import { Link } from "react-router-dom";
 import CourseSidebar from "../../../components/CourseSidebar";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import formatTimestamp from "../../../helper/formatTimestamp";
@@ -12,13 +11,20 @@ import calculateTotalScreenTime from "../../../helper/calculateTotalScreenTime";
 import ScreenTimeBar from "../../../components/ScreenTimeBar";
 import SkillRadarChart from "../../../components/SkillRadarChart";
 import CourseProgress from "../../../components/CourseProgress";
+import fetchTasks from "../../../hooks/get/fetchTasks";
+import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
+
 const Progress = ({ getUser, onLogout }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [enrollData, setEnrollData] = useState(null);
   const [totalTime, setTotalTime] = useState(0);
-
+  const [tasksData, setTasksData] = useState(null);
+  const [totalAvailableTasks, setTotalAvailableTasks] = useState(0);
+  const [totalCompletedTasks, setTotalCompletedTasks] = useState(0);
+  const [totalReadSubmodules, setTotalReadSubmodules] = useState(0);
+  const [totalSubmodules, setTotalSubmodules] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,6 +55,36 @@ const Progress = ({ getUser, onLogout }) => {
     if (enrollData?.ScreenTime) {
       setTotalTime(calculateTotalScreenTime(enrollData.ScreenTime));
     }
+
+    const fetchData = async () => {
+      try {
+        const tasks = await fetchTasks(courseId, enrollData.id);
+        setTasksData(tasks);
+
+        // Extract available tasks
+        const availableTasks = tasks.availableTasks || [];
+
+        // Count completed tasks from availableTasks
+        const completedTasksCount = availableTasks.filter(
+          (task) => task.completedData?.Answered
+        ).length;
+
+        // Update state
+        setTotalAvailableTasks(availableTasks.length);
+        setTotalCompletedTasks(completedTasksCount);
+
+        const modules = await fetchModulesWithReadStatus(
+          courseId,
+          enrollData.id
+        );
+        setTotalReadSubmodules(modules.totalReadSubmodules);
+        setTotalSubmodules(modules.totalSubmodules);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchData();
   }, [enrollData]);
 
   const formatTime = (seconds) => {
@@ -92,7 +128,27 @@ const Progress = ({ getUser, onLogout }) => {
                 </div>
               </div>
               <ScreenTimeBar screenTimeData={enrollData?.ScreenTime || []} />
-              <div className="flex flex-row mt-8"></div>
+              <div className="flex h-24 text-xs flex-row gap-5 mt-8">
+                <div className="w-1/3 text-gray-600 border-e px-4 border-gray-400">
+                  <label>Modules Completed:</label>
+                </div>
+                <div className="flex gap-4 flex-col w-1/3 text-gray-600 border-s px-4 border-gray-400">
+                  <label>Submodules Completed:</label>
+                  <label className="text-4xl flex flex-row gap-2 items-center">
+                    {totalReadSubmodules}
+                    <label className="text-sm">out of </label>
+                    {totalSubmodules}
+                  </label>
+                </div>
+                <div className="flex gap-4 flex-col w-1/3 text-gray-600 border-s px-4 border-gray-400">
+                  <label>Tasks Completed:</label>
+                  <label className="text-4xl flex flex-row gap-2 items-center">
+                    {totalAvailableTasks}
+                    <label className="text-sm">out of </label>
+                    {totalCompletedTasks}
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="flex-1 flex-col gap-5 flex">
               <SkillRadarChart />
