@@ -13,6 +13,7 @@ import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import CompletedSubmodules from "../../../hooks/post/addCompleteSubmodule";
+import { markModuleAsRead } from "../../../hooks/post/markModuleAsRead";
 
 const SubmoduleScreen = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -83,6 +84,16 @@ const SubmoduleScreen = ({ getUser }) => {
     if (!enrollData) return;
 
     trackUserScreenTime(enrollData.id, "Submodule");
+
+    try {
+      const checkModuleCompletion = async () => {
+        await markModuleAsRead(enrollData.id, courseId, moduleId, submoduleId);
+      };
+
+      checkModuleCompletion();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }, [enrollData]);
 
   useEffect(() => {

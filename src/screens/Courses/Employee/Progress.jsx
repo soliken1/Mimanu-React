@@ -13,6 +13,8 @@ import SkillRadarChart from "../../../components/SkillRadarChart";
 import CourseProgress from "../../../components/CourseProgress";
 import fetchTasks from "../../../hooks/get/fetchTasks";
 import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
+import { fetchCompletedProgress } from "../../../hooks/get/fetchCompletedProgress";
+import ProgressTable from "../../../components/ProgressTable";
 
 const Progress = ({ getUser, onLogout }) => {
   const { courseId } = useParams();
@@ -25,6 +27,10 @@ const Progress = ({ getUser, onLogout }) => {
   const [totalCompletedTasks, setTotalCompletedTasks] = useState(0);
   const [totalReadSubmodules, setTotalReadSubmodules] = useState(0);
   const [totalSubmodules, setTotalSubmodules] = useState(0);
+  const [totalModules, setTotalModules] = useState(0);
+  const [totalCompletedModules, setTotalCompletedModules] = useState(0);
+  const [completedProgress, setCompletedProgress] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,6 +85,15 @@ const Progress = ({ getUser, onLogout }) => {
         );
         setTotalReadSubmodules(modules.totalReadSubmodules);
         setTotalSubmodules(modules.totalSubmodules);
+
+        setTotalCompletedModules(modules.totalCompletedModules);
+        setTotalModules(modules.totalModules);
+
+        const progressData = await fetchCompletedProgress(
+          courseId,
+          enrollData.id
+        );
+        setCompletedProgress(progressData);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -129,8 +144,13 @@ const Progress = ({ getUser, onLogout }) => {
               </div>
               <ScreenTimeBar screenTimeData={enrollData?.ScreenTime || []} />
               <div className="flex h-24 text-xs flex-row gap-5 mt-8">
-                <div className="w-1/3 text-gray-600 border-e px-4 border-gray-400">
+                <div className="flex gap-4 flex-col w-1/3 text-gray-600 border-s px-4 border-gray-400">
                   <label>Modules Completed:</label>
+                  <label className="text-4xl flex flex-row gap-2 items-center">
+                    {totalCompletedModules}
+                    <label className="text-sm">out of </label>
+                    {totalModules}
+                  </label>
                 </div>
                 <div className="flex gap-4 flex-col w-1/3 text-gray-600 border-s px-4 border-gray-400">
                   <label>Submodules Completed:</label>
@@ -143,16 +163,31 @@ const Progress = ({ getUser, onLogout }) => {
                 <div className="flex gap-4 flex-col w-1/3 text-gray-600 border-s px-4 border-gray-400">
                   <label>Tasks Completed:</label>
                   <label className="text-4xl flex flex-row gap-2 items-center">
-                    {totalAvailableTasks}
-                    <label className="text-sm">out of </label>
                     {totalCompletedTasks}
+                    <label className="text-sm">out of </label>
+                    {totalAvailableTasks}
                   </label>
                 </div>
               </div>
+              <div className="w-full h-auto mt-5">
+                <ProgressTable
+                  completedProgress={completedProgress}
+                  tasksData={tasksData}
+                />
+              </div>
             </div>
             <div className="flex-1 flex-col gap-5 flex">
+              <CourseProgress
+                totalCompletion={
+                  totalCompletedModules +
+                  totalCompletedTasks +
+                  totalReadSubmodules
+                }
+                totalCourseProgress={
+                  totalAvailableTasks + totalSubmodules + totalModules
+                }
+              />
               <SkillRadarChart />
-              <CourseProgress />
             </div>
           </div>
         </div>

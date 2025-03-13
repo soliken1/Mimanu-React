@@ -42,7 +42,7 @@ const submitAnswers = async (enrolledId, answers, questionsData, taskId) => {
       Score,
       TotalQuestions,
       Answered: true,
-      SubmittedAt: new Date(),
+      CompletedAt: new Date(),
     });
 
     // Step 3: Save the detailed answers inside "Answers" subcollection
