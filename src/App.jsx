@@ -46,6 +46,10 @@ import AdminTaskQuestions from "./screens/Courses/Admin/AdminTaskQuestions.jsx";
 import AdminSubmodule from "./screens/Courses/Admin/AdminSubmodule.jsx";
 import AdminSpecificTask from "./screens/Courses/Admin/AdminSpecificTask.jsx";
 import Progress from "./screens/Courses/Employee/Progress.jsx";
+import AdminProgressList from "./screens/Courses/Admin/AdminProgressList.jsx";
+import AdminProgress from "./screens/Courses/Admin/AdminProgress.jsx";
+import TrainorProgressList from "./screens/Courses/Trainor/TrainorProgressList.jsx";
+import TrainorProgress from "./screens/Courses/Trainor/TrainorProgress.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -228,6 +232,32 @@ export default function App() {
         />
 
         <Route
+          path="/acourse/:courseId/progress"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminProgressList getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/acourse/:courseId/progress/:userID"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <AdminProgress getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/acourse/:courseId/tasks/:taskId/questions"
           element={
             <ProtectedRoute
@@ -340,6 +370,32 @@ export default function App() {
               redirectTo={getDashboardRoute(role)}
             >
               <SpecificTask getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/progress"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TrainorProgressList getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tcourse/:courseId/progress/:userID"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Trainor"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TrainorProgress getUser={getUser} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
