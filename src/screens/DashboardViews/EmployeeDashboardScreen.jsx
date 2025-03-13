@@ -28,10 +28,6 @@ const EmployeeDashboardScreen = ({ getUser, onLogout }) => {
     fetchAndSetUserData();
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal bg-[#FAF9F6]">
       <NavSidebar userData={userData} />

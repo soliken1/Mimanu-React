@@ -12,6 +12,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+import CompletedSubmodules from "../../../hooks/post/addCompleteSubmodule";
 
 const SubmoduleScreen = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -83,6 +84,16 @@ const SubmoduleScreen = ({ getUser }) => {
 
     trackUserScreenTime(enrollData.id, "Submodule");
   }, [enrollData]);
+
+  useEffect(() => {
+    const markSubmoduleAsRead = async () => {
+      if (!enrollData || !submodule) return;
+
+      await CompletedSubmodules(courseId, moduleId, submoduleId, enrollData.id);
+    };
+
+    markSubmoduleAsRead();
+  }, [submodule]); // Trigger when submodule changes
 
   // Navigate to the next submodule
   const handleNext = () => {

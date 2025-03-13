@@ -12,6 +12,8 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { MdLibraryBooks } from "react-icons/md";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
+import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
+import { FaCheckCircle } from "react-icons/fa";
 
 const CourseModules = ({ getUser }) => {
   const { courseId } = useParams();
@@ -29,9 +31,6 @@ const CourseModules = ({ getUser }) => {
         const course = await fetchCourse(courseId);
         setCourseData(course);
 
-        const modules = await fetchModules(courseId);
-        setModules(modules);
-
         const enroll = await fetchEnrolled(getUser.uid, courseId);
         setEnrollData(enroll);
       } catch (error) {
@@ -45,6 +44,20 @@ const CourseModules = ({ getUser }) => {
     if (!enrollData) return;
 
     trackUserScreenTime(enrollData.id, "Module");
+
+    const fetchModuleData = async () => {
+      try {
+        const modules = await fetchModulesWithReadStatus(
+          courseId,
+          enrollData.id
+        );
+        setModules(modules.modules);
+      } catch (error) {
+        console.error("Error fetching modules and submodules:", error);
+      }
+    };
+
+    fetchModuleData();
   }, [enrollData]);
 
   return (
@@ -89,7 +102,11 @@ const CourseModules = ({ getUser }) => {
                       module.submodules.map((submodule) => (
                         <div
                           key={submodule.id}
-                          className="flex justify-between items-center bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
+                          className={`flex justify-between items-center border-b border-gray-300 pe-4 ps-1 hover:bg-gray-300 ${
+                            submodule.hasRead
+                              ? "bg-gray-200 text-gray-500"
+                              : "bg-gray-100"
+                          }`}
                         >
                           <Link
                             to={`/course/${courseId}/modules/${module.id}/submodules/${submodule.id}`}
@@ -98,6 +115,9 @@ const CourseModules = ({ getUser }) => {
                             <MdLibraryBooks />
                             {submodule.SubmoduleTitle}
                           </Link>
+                          {submodule.hasRead && (
+                            <FaCheckCircle className="text-green-500" />
+                          )}
                         </div>
                       ))
                     ) : (

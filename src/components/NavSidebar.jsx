@@ -32,6 +32,7 @@ const NavSidebar = ({ userData }) => {
       console.error("Error signing out: ", error);
     }
   };
+
   if (isLoading) {
     return <NavLoader />;
   }
