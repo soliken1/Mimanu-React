@@ -25,6 +25,7 @@ const addCourse = async (
       CourseColor: courseColor,
       CourseDescription: courseDescription || "",
       CourseTags: courseTags || [],
+      CreatedAt: Timestamp.now(),
       UID: user.uid,
     });
 

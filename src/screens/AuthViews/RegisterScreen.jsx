@@ -14,6 +14,7 @@ import NavSidebar from "../../components/NavSidebar";
 import { Link } from "react-router-dom";
 import PeerFormModal from "../../components/PeerFormModal";
 import Loader from "../../components/Loader";
+import { Timestamp } from "firebase/firestore";
 const RegisterScreen = ({ getUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -123,6 +124,7 @@ const RegisterScreen = ({ getUser }) => {
         Username: formData.username,
         UserImg:
           "https://res.cloudinary.com/dip5gm9sj/image/upload/v1738510538/profile_images/osnoqwziewk117iq51pw.jpg",
+        CreatedAt: Timestamp.now(),
       };
 
       await setDoc(doc(db, "Users", user.uid), userDoc);
