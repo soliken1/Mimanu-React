@@ -1,5 +1,5 @@
 import { db } from "../../config/firebaseConfigs";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const addEnrolledEmployee = async (userID, courseID) => {
@@ -15,7 +15,7 @@ const addEnrolledEmployee = async (userID, courseID) => {
     await addDoc(enrolledRef, {
       UserID: userID,
       CourseID: courseID,
-      DateEnrolled: serverTimestamp(),
+      DateEnrolled: Timestamp.now(),
     });
     return { success: true, message: "Employee enrolled successfully" };
   } catch (error) {

@@ -4,7 +4,7 @@ import { GoArrowUpRight } from "react-icons/go";
 const TotalEnrollment = ({ enrollmentCountData }) => {
   return (
     <>
-      <label className="tracking-wider text-gray-400">Total Enrollments</label>
+      <label className="tracking-wider text-gray-400">TOTAL ENROLLMENTS</label>
       <div className="flex flex-row text-2xl gap-5 items-center">
         <label className="flex items-center gap-2">
           {enrollmentCountData.totalEnrolled}{" "}
