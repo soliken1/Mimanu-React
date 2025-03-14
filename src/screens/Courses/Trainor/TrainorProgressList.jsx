@@ -6,6 +6,7 @@ import fetchCourse from "../../../hooks/get/fetchCourse";
 import CourseSidebar from "../../../components/CourseSidebar";
 import fetchEnrolledEmployees from "../../../hooks/get/fetchEnrolledEmployees";
 import Loader from "../../../components/Loader";
+import fetchEnrolledUsersSummary from "../../../hooks/get/fetchEnrolledEmployeeSummary";
 const TrainorProgressList = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -23,9 +24,9 @@ const TrainorProgressList = ({ getUser }) => {
         const course = await fetchCourse(courseId);
         setCourseData(course);
 
-        const enrolled = await fetchEnrolledEmployees(courseId);
-        setEnrolledEmployees(enrolled);
+        const enrolled = await fetchEnrolledUsersSummary(courseId);
 
+        setEnrolledEmployees(enrolled);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -102,12 +103,45 @@ const TrainorProgressList = ({ getUser }) => {
                           {employee.FirstName} {employee.LastName}
                         </td>
                         <td className="py-3 px-6 text-gray-800">
-                          {employee.Email}
+                          <label
+                            className={`px-2 py-1 ${
+                              employee.TotalEmployeeProgress ===
+                              employee.TotalCourseProgress
+                                ? "bg-green-200 text-green-600"
+                                : "bg-yellow-100 text-yellow-600"
+                            }`}
+                          >
+                            {" "}
+                            {employee.TotalEmployeeProgress} out of{" "}
+                            {employee.TotalCourseProgress} Course Progress
+                          </label>
                         </td>
                         <td className="py-3 px-6 text-gray-800">
-                          {new Date(
-                            employee.DateEnrolled?.seconds * 1000
-                          ).toLocaleDateString()}
+                          {employee.Score}
+                        </td>
+                        <td className="py-3 px-6">
+                          <label
+                            className={`px-2 py-1 rounded-sm ${
+                              employee.Grade === "Passing"
+                                ? "bg-green-200 text-green-600"
+                                : "bg-red-200 text-red-600"
+                            }`}
+                          >
+                            {employee.Grade}
+                          </label>
+                        </td>
+                        <td className="py-3 px-6">
+                          <label
+                            className={`px-2 py-1 rounded-sm ${
+                              employee.Status === "Passing" ||
+                              employee.Status === "Active"
+                                ? "bg-green-200 text-green-600"
+                                : "bg-yellow-100 text-yellow-600"
+                            }`}
+                          >
+                            {" "}
+                            {employee.Status}
+                          </label>
                         </td>
                         <td className="py-3 px-6 text-gray-800">
                           <Link
