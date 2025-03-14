@@ -25,7 +25,6 @@ const fetchQuestions = async (courseId, taskId) => {
       questions.push({ id: doc.id, ...doc.data() });
     });
 
-    console.log(questions);
     return questions;
   } catch (error) {
     console.error("Error fetching questions:", error);
