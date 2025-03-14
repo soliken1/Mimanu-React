@@ -1,5 +1,11 @@
 import { db } from "../../config/firebaseConfigs";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  Timestamp,
+} from "firebase/firestore";
 
 /**
  * Fetches total enrollments and today's new enrollments count.
@@ -18,13 +24,13 @@ const fetchEnrollmentCountComparison = async () => {
     const startOfToday = new Date(now);
     startOfToday.setHours(0, 0, 0, 0);
 
-    // ✅ Convert to Firestore timestamp
-    const todayTimestamp = Math.floor(startOfToday.getTime() / 1000);
+    // ✅ Convert to Firestore Timestamp
+    const todayTimestamp = Timestamp.fromDate(startOfToday);
 
     // ✅ Query enrollments created *today only*
     const todayQuery = query(
       enrolledRef,
-      where("DateEnrolled.seconds", ">=", todayTimestamp)
+      where("DateEnrolled", ">=", todayTimestamp)
     );
     const todaySnapshot = await getDocs(todayQuery);
     const todayNewEnrollments = todaySnapshot.size; // ✅ Number of new enrollments today
