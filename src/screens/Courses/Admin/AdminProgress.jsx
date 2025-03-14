@@ -14,6 +14,7 @@ import fetchTasks from "../../../hooks/get/fetchTasks";
 import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
 import { fetchCompletedProgress } from "../../../hooks/get/fetchCompletedProgress";
 import ProgressTable from "../../../components/ProgressTable";
+import Loader from "../../../components/Loader";
 
 const AdminProgress = ({ getUser, onLogout }) => {
   const { courseId, userID } = useParams();
@@ -29,6 +30,7 @@ const AdminProgress = ({ getUser, onLogout }) => {
   const [totalModules, setTotalModules] = useState(0);
   const [totalCompletedModules, setTotalCompletedModules] = useState(0);
   const [completedProgress, setCompletedProgress] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +94,8 @@ const AdminProgress = ({ getUser, onLogout }) => {
           enrollData.id
         );
         setCompletedProgress(progressData);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -105,6 +109,10 @@ const AdminProgress = ({ getUser, onLogout }) => {
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${hours} hr ${minutes} mins`;
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

@@ -14,6 +14,7 @@ import deleteModule from "../../../hooks/delete/removeModule";
 import AddSubmoduleModal from "../../../components/AddSubmoduleModal";
 import deleteSubmodule from "../../../hooks/delete/removeSubmodule";
 import { MdLibraryBooks } from "react-icons/md";
+import Loader from "../../../components/Loader";
 
 const TCourseModules = ({ getUser }) => {
   const { courseId } = useParams();
@@ -23,6 +24,7 @@ const TCourseModules = ({ getUser }) => {
   const [modules, setModules] = useState([]);
   const [isSubmoduleModalOpen, setIsSubmoduleModalOpen] = useState(false);
   const [selectedModuleId, setSelectedModuleId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +37,8 @@ const TCourseModules = ({ getUser }) => {
 
         const modules = await fetchModules(courseId);
         setModules(modules);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -76,6 +80,10 @@ const TCourseModules = ({ getUser }) => {
       console.error("Error deleting submodule:", error);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

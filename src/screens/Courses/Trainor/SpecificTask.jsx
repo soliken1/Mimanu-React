@@ -13,6 +13,7 @@ import updateTask from "../../../hooks/update/updateTask";
 import { toast, Bounce } from "react-toastify";
 import axios from "axios";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import Loader from "../../../components/Loader";
 
 const SpecificTask = ({ getUser }) => {
   const { courseId, taskId } = useParams();
@@ -25,6 +26,7 @@ const SpecificTask = ({ getUser }) => {
   const [newContent, setNewContent] = useState("");
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
@@ -54,6 +56,8 @@ const SpecificTask = ({ getUser }) => {
 
         const taskData = await fetchTask(courseId, taskId);
         setTask(taskData);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -139,6 +143,9 @@ const SpecificTask = ({ getUser }) => {
     setIsEditing(false);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />

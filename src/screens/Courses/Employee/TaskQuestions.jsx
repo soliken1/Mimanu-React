@@ -10,6 +10,7 @@ import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader";
 
 const EmployeeTaskQuestions = ({ getUser }) => {
   const navigate = useNavigate();
@@ -19,17 +20,24 @@ const EmployeeTaskQuestions = ({ getUser }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [taskData, setTaskData] = useState(null);
   const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const questions = await fetchQuestions(courseId, taskId);
-      setQuestionsData(questions);
+      try {
+        const questions = await fetchQuestions(courseId, taskId);
+        setQuestionsData(questions);
 
-      const task = await fetchTask(courseId, taskId);
-      setTaskData(task);
+        const task = await fetchTask(courseId, taskId);
+        setTaskData(task);
 
-      const user = await fetchUser(getUser.uid);
-      setUserData(user);
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
+        setLoading(false);
+      } catch (err) {
+        console.log("Error:", err);
+      }
     };
 
     fetchData();
@@ -138,6 +146,10 @@ const EmployeeTaskQuestions = ({ getUser }) => {
   }
 
   const currentQuestion = questionsData[currentIndex];
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

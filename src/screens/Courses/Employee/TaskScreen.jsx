@@ -10,6 +10,7 @@ import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+import Loader from "../../../components/Loader";
 
 const TaskScreen = ({ getUser, onLogout }) => {
   const { courseId } = useParams();
@@ -21,6 +22,7 @@ const TaskScreen = ({ getUser, onLogout }) => {
     upcomingTasks: [],
   });
   const [enrollData, setEnrollData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +55,8 @@ const TaskScreen = ({ getUser, onLogout }) => {
       try {
         const tasksData = await fetchTasks(courseId, enrollData.id);
         setTasks(tasksData);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -60,6 +64,10 @@ const TaskScreen = ({ getUser, onLogout }) => {
 
     fetchTasksData();
   }, [enrollData, courseId]); // Depend on enrollData
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />

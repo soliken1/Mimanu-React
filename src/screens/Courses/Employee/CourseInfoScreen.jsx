@@ -7,11 +7,13 @@ import { Link } from "react-router-dom";
 import CourseSidebar from "../../../components/CourseSidebar";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+import Loader from "../../../components/Loader";
 const CourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [enrollData, setEnrollData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +26,8 @@ const CourseInfo = ({ getUser }) => {
 
         const enroll = await fetchEnrolled(getUser.uid, courseId);
         setEnrollData(enroll);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -36,6 +40,10 @@ const CourseInfo = ({ getUser }) => {
 
     trackUserScreenTime(enrollData.id, "Home");
   }, [enrollData]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

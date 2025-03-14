@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavSidebar from "../../components/NavSidebar";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../../components/LoadingScreen";
 import fetchUser from "../../hooks/get/fetchUser";
 import { doc, updateDoc } from "firebase/firestore"; // Firestore
 import axios from "axios"; // Axios for Cloudinary upload
@@ -15,6 +14,7 @@ import {
 } from "firebase/auth";
 import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
+import Loader from "../../components/Loader";
 const EditProfileScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -148,7 +148,7 @@ const EditProfileScreen = ({ getUser }) => {
   };
 
   if (loading) {
-    return <LoadingScreen />;
+    return <Loader />;
   }
 
   return (

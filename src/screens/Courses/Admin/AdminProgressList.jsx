@@ -5,12 +5,14 @@ import { Link, useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import CourseSidebar from "../../../components/CourseSidebar";
 import fetchEnrolledEmployees from "../../../hooks/get/fetchEnrolledEmployees";
+import Loader from "../../../components/Loader";
 const AdminProgressList = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [enrolledEmployees, setEnrolledEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +25,8 @@ const AdminProgressList = ({ getUser }) => {
 
         const enrolled = await fetchEnrolledEmployees(courseId);
         setEnrolledEmployees(enrolled);
-        console.log(enrolled);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -37,6 +40,10 @@ const AdminProgressList = ({ getUser }) => {
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

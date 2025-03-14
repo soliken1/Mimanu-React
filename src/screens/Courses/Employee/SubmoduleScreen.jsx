@@ -14,6 +14,7 @@ import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import CompletedSubmodules from "../../../hooks/post/addCompleteSubmodule";
 import { markModuleAsRead } from "../../../hooks/post/markModuleAsRead";
+import Loader from "../../../components/Loader";
 
 const SubmoduleScreen = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -23,6 +24,7 @@ const SubmoduleScreen = ({ getUser }) => {
   const [submodules, setSubmodules] = useState([]); // Store all submodules
   const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
   const [enrollData, setEnrollData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -73,6 +75,8 @@ const SubmoduleScreen = ({ getUser }) => {
         if (index !== -1) {
           setCurrentIndex(index);
         }
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -125,6 +129,10 @@ const SubmoduleScreen = ({ getUser }) => {
       );
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

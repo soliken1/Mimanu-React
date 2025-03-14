@@ -154,16 +154,16 @@ const AddEmployeeModal = ({ isOpen, onClose }) => {
         {/* Buttons */}
         <div className="flex justify-end gap-2 mt-4">
           <button
-            className="px-4 py-2 bg-gray-400 text-white rounded"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-          <button
             className="px-4 py-2 bg-[#152852] text-white rounded"
             onClick={handleEnrollEmployees}
           >
             Add
+          </button>
+          <button
+            className="px-4 py-2 bg-gray-400 text-white rounded"
+            onClick={onClose}
+          >
+            Cancel
           </button>
         </div>
       </div>

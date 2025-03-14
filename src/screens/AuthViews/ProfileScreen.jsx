@@ -7,6 +7,7 @@ import { auth } from "../../config/firebaseConfigs";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
+import Loader from "../../components/Loader";
 const ProfileScreen = ({ getUser }) => {
   const { uid } = useParams();
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ const ProfileScreen = ({ getUser }) => {
 
     fetchAndSetUserData();
   }, [uid]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

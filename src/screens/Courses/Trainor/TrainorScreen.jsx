@@ -13,6 +13,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import Loader from "../../../components/Loader";
 
 const TrainorScreen = ({ getUser }) => {
   const navigate = useNavigate();
@@ -22,30 +23,29 @@ const TrainorScreen = ({ getUser }) => {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    const fetchAndSetUserData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
+        const course = await fetchCoursesByTrainor(getUser.uid);
+        setCourses(course);
+
         setLoading(false);
-        setUserData(data);
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
-    const getCourses = async () => {
-      const data = await fetchCoursesByTrainor(getUser.uid);
-      setCourses(data);
-    };
-
-    getCourses();
-    fetchAndSetUserData();
+    fetchData();
   }, []);
 
   if (loading) {
-    return <LoadingScreen />;
+    return <Loader />;
   }
+
   return (
-    <div class="flex h-full w-full flex-col  md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div class="flex h-full w-full flex-col  md:flex-row md:pb-0 duration-300  pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full ps-72 h-auto min-h-screen  flex flex-row p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-col">

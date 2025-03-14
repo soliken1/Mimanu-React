@@ -11,6 +11,7 @@ import "react-quill/dist/quill.snow.css";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
+import Loader from "../../../components/Loader";
 
 const EmployeeSpecificTask = ({ getUser }) => {
   const { courseId, taskId } = useParams();
@@ -18,6 +19,7 @@ const EmployeeSpecificTask = ({ getUser }) => {
   const [courseData, setCourseData] = useState(null);
   const [task, setTask] = useState(null);
   const [enrollData, setEnrollData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
@@ -50,6 +52,8 @@ const EmployeeSpecificTask = ({ getUser }) => {
 
         const enroll = await fetchEnrolled(getUser.uid, courseId);
         setEnrollData(enroll);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -62,6 +66,10 @@ const EmployeeSpecificTask = ({ getUser }) => {
 
     trackUserScreenTime(enrollData.id, "Specific Task");
   }, [enrollData]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

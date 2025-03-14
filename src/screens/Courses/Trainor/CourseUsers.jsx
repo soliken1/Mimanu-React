@@ -7,6 +7,7 @@ import CourseSidebar from "../../../components/CourseSidebar";
 import AddEmployeeModal from "../../../components/AddEmployeeModal";
 import fetchEnrolledEmployees from "../../../hooks/get/fetchEnrolledEmployees";
 import removeEnrolledEmployee from "../../../hooks/delete/removeEnrolledEmployee";
+import Loader from "../../../components/Loader";
 const CourseUsers = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -14,6 +15,7 @@ const CourseUsers = ({ getUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enrolledEmployees, setEnrolledEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +28,7 @@ const CourseUsers = ({ getUser }) => {
 
         const enrolled = await fetchEnrolledEmployees(courseId);
         setEnrolledEmployees(enrolled);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,6 +56,10 @@ const CourseUsers = ({ getUser }) => {
       }
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

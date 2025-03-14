@@ -5,10 +5,12 @@ import { useParams } from "react-router-dom";
 import fetchCourse from "../../../hooks/get/fetchCourse";
 import { Link } from "react-router-dom";
 import CourseSidebar from "../../../components/CourseSidebar";
+import Loader from "../../../components/Loader";
 const AdminCourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,12 +20,18 @@ const AdminCourseInfo = ({ getUser }) => {
 
         const course = await fetchCourse(courseId);
         setCourseData(course);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />

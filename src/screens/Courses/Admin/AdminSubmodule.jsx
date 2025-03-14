@@ -14,6 +14,7 @@ import { toast, Bounce } from "react-toastify";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import fetchSubmodules from "../../../hooks/get/fetchSubmodules";
+import Loader from "../../../components/Loader";
 
 const AdminSubmodule = ({ getUser }) => {
   const { courseId, moduleId, submoduleId } = useParams();
@@ -28,6 +29,7 @@ const AdminSubmodule = ({ getUser }) => {
   const [fileUrl, setFileUrl] = useState("");
   const [submodules, setSubmodules] = useState([]); // Store all submodules
   const [currentIndex, setCurrentIndex] = useState(0); // Track current submodule index
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -78,6 +80,8 @@ const AdminSubmodule = ({ getUser }) => {
         if (index !== -1) {
           setCurrentIndex(index);
         }
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -90,7 +94,7 @@ const AdminSubmodule = ({ getUser }) => {
     if (currentIndex < submodules.length - 1) {
       const nextSubmoduleId = submodules[currentIndex + 1].id;
       navigate(
-        `/tcourse/${courseId}/modules/${moduleId}/submodules/${nextSubmoduleId}`
+        `/acourse/${courseId}/modules/${moduleId}/submodules/${nextSubmoduleId}`
       );
     }
   };
@@ -100,7 +104,7 @@ const AdminSubmodule = ({ getUser }) => {
     if (currentIndex > 0) {
       const prevSubmoduleId = submodules[currentIndex - 1].id;
       navigate(
-        `/tcourse/${courseId}/modules/${moduleId}/submodules/${prevSubmoduleId}`
+        `/acourse/${courseId}/modules/${moduleId}/submodules/${prevSubmoduleId}`
       );
     }
   };
@@ -175,6 +179,9 @@ const AdminSubmodule = ({ getUser }) => {
     setIsEditing(false);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
