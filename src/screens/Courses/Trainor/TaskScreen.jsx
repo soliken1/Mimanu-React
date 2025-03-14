@@ -9,6 +9,7 @@ import AddTaskModal from "../../../components/AddTaskModal";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Loader from "../../../components/Loader";
 const TTaskScreen = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -19,6 +20,7 @@ const TTaskScreen = ({ getUser }) => {
     availableTasks: [],
     upcomingTasks: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,12 +33,18 @@ const TTaskScreen = ({ getUser }) => {
 
         const tasksData = await fetchAllTasks(courseId); // Fetch tasks from subcollection
         setTasks(tasksData);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
   }, [courseId]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

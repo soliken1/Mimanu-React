@@ -26,7 +26,6 @@ const fetchEnrolledEmployees = async (courseID) => {
       enrolledEmployees.map(async (enrolled) => {
         const userRef = doc(db, "Users", enrolled.UserID);
         const userSnap = await getDoc(userRef);
-        console.log(enrolled);
         if (userSnap.exists()) {
           return {
             id: enrolled.id,

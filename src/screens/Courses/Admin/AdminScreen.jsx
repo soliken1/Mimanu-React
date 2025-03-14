@@ -13,31 +13,35 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import fetchAllCourses from "../../../hooks/get/fetchAllCourses";
+import Loader from "../../../components/Loader";
 
 const AdminScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [courses, setCourses] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const fetchAndSetUserData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
-        setUserData(data);
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
+        const courses = await fetchAllCourses();
+        setCourses(courses);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
-    const getCourses = async () => {
-      const data = await fetchAllCourses();
-      setCourses(data);
-    };
-
-    getCourses();
-    fetchAndSetUserData();
+    fetchData();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col  md:flex-row md:pb-0 pb-20 poppins-normal">

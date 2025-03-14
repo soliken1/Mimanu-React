@@ -14,6 +14,7 @@ import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
 import { FaCheckCircle } from "react-icons/fa";
+import Loader from "../../../components/Loader";
 
 const CourseModules = ({ getUser }) => {
   const { courseId } = useParams();
@@ -21,6 +22,7 @@ const CourseModules = ({ getUser }) => {
   const [courseData, setCourseData] = useState(null);
   const [modules, setModules] = useState([]);
   const [enrollData, setEnrollData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +54,8 @@ const CourseModules = ({ getUser }) => {
           enrollData.id
         );
         setModules(modules.modules);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching modules and submodules:", error);
       }
@@ -59,6 +63,10 @@ const CourseModules = ({ getUser }) => {
 
     fetchModuleData();
   }, [enrollData]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">

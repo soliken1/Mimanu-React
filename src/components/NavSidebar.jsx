@@ -7,7 +7,7 @@ import { FaUsers } from "react-icons/fa6";
 import { CiSettings } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaBook } from "react-icons/fa";
-import NavLoader from "../components/NavLoader";
+import NavLoader from "./Loader";
 import { useNavigate } from "react-router-dom";
 const NavSidebar = ({ userData }) => {
   const navigate = useNavigate();
@@ -33,9 +33,6 @@ const NavSidebar = ({ userData }) => {
     }
   };
 
-  if (isLoading) {
-    return <NavLoader />;
-  }
   return (
     <div className="min-w-[28vh] max-w-[28vh] fixed h-screen flex flex-col bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
       <div className="h-32 w-full flex flex-row justify-center items-center gap-2">
@@ -99,27 +96,27 @@ const NavSidebar = ({ userData }) => {
             <label className="cursor-pointer">Logout</label>
           </button>
           <Link
-            to={`/profile/${userData.UID}`}
+            to={`/profile/${userData?.UID}`}
             className=" min-w-full w-auto px-1 flex flex-row hover:bg-[#152852] rounded-xl duration-100 items-center gap-4  h-16"
           >
             <img
-              src={userData.UserImg}
+              src={userData?.UserImg}
               className="w-10 h-10 object-cover rounded-full"
             />
             <div className="flex flex-col">
               <label className="text-sm text-nowrap cursor-pointer">
-                {userData.Username}
+                {userData?.Username}
               </label>
               <label
                 className={`px-2 text-xs text-black rounded-xs cursor-pointer ${
-                  userData.UserRole === "Admin"
+                  userData?.UserRole === "Admin"
                     ? "bg-red-200"
-                    : userData.UserRole === "Trainor"
+                    : userData?.UserRole === "Trainor"
                     ? "bg-amber-200"
                     : "bg-sky-200"
                 }`}
               >
-                {userData.UserRole}
+                {userData?.UserRole}
               </label>
             </div>
           </Link>

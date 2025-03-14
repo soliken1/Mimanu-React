@@ -11,6 +11,7 @@ import HelpButton from "../../../components/HelpButton";
 import fetchEmployeeCourse from "../../../hooks/get/fetchEmployeeCourse";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import Loader from "../../../components/Loader";
 
 const EmployeeScreen = ({ getUser, onLogout }) => {
   const courseId = "1";
@@ -41,6 +42,10 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
   const filteredEmployeeCourses = employeeCourses.filter((courses) =>
     `${courses.CourseTitle}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />

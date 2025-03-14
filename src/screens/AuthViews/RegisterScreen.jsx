@@ -13,6 +13,7 @@ import fetchUsers from "../../hooks/get/fetchUsers";
 import NavSidebar from "../../components/NavSidebar";
 import { Link } from "react-router-dom";
 import PeerFormModal from "../../components/PeerFormModal";
+import Loader from "../../components/Loader";
 const RegisterScreen = ({ getUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -67,22 +68,22 @@ const RegisterScreen = ({ getUser }) => {
   };
 
   useEffect(() => {
-    const fetchAllUsers = async () => {
-      const data = await fetchUsers();
-      setFilteredUsers(data);
-      setUsers(data);
-    };
-    const fetchAndSetUserData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
+        const users = await fetchUsers();
+        setFilteredUsers(users);
+        setUsers(users);
+
+        const user = await fetchUser(getUser.uid);
+        setUserData(user);
+
         setLoading(false);
-        setUserData(data);
-      } catch (error) {
-        console.error("Error:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     };
-    fetchAllUsers();
-    fetchAndSetUserData();
+
+    fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -191,6 +192,10 @@ const RegisterScreen = ({ getUser }) => {
       )
     );
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
