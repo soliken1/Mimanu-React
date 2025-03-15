@@ -61,7 +61,7 @@ const fetchEmployeeActions = async (timeRange) => {
     const previousTotalActions = totalActions - newActions;
     const percentageChange =
       previousTotalActions > 0
-        ? (newActions / previousTotalActions) * 100 + "%"
+        ? (newActions / previousTotalActions).toFixed(2) * 100 + "%"
         : "0%";
 
     return { totalActions, newActions, percentageChange };

@@ -44,7 +44,7 @@ const fetchCourseCountComparison = async (timeRange) => {
     const previousTotalCourses = totalCourses - newCourses;
     const percentageChange =
       previousTotalCourses > 0
-        ? (newCourses / previousTotalCourses) * 100 + "%"
+        ? (newCourses / previousTotalCourses).toFixed(2) * 100 + "%"
         : "0%";
 
     return { totalCourses, newCourses, percentageChange };

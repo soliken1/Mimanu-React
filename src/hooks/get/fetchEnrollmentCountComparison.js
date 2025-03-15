@@ -44,7 +44,7 @@ const fetchEnrollmentCountComparison = async (timeRange) => {
     const previousTotalEnrolled = totalEnrolled - newEnrollments;
     const percentageChange =
       previousTotalEnrolled > 0
-        ? (newEnrollments / previousTotalEnrolled) * 100 + "%"
+        ? (newEnrollments / previousTotalEnrolled).toFixed(2) * 100 + "%"
         : "0%";
 
     return { totalEnrolled, newEnrollments, percentageChange };
