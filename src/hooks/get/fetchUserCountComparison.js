@@ -46,7 +46,6 @@ const fetchUserCountComparison = async (timeRange) => {
       previousTotalUsers > 0
         ? (newUsers / previousTotalUsers) * 100 + "%"
         : "0%";
-    console.log(percentageChange);
     return { totalUsers, newUsers, percentageChange };
   } catch (error) {
     console.error("Error fetching user count comparison:", error);

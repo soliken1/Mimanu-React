@@ -18,7 +18,7 @@ const data = [
 
 const SkillRadarChart = () => {
   return (
-    <div className="w-full flex flex-col justify-center items-center shadow-sm rounded-lg py-8 px-4 ">
+    <div className="w-full flex flex-col justify-center items-center rounded-lg py-8 px-4 ">
       <h2 className="text-lg font-semibold text-gray-700 mb-3">
         Skill Analysis
       </h2>
