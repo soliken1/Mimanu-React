@@ -9,55 +9,70 @@ const ScreenTimeBar = ({ screenTimeData }) => {
   }, {});
 
   // Convert object to array and sort by total duration
-  const aggregatedScreens = Object.entries(screenMap)
+  const sortedScreens = Object.entries(screenMap)
     .map(([screen, totalDuration]) => ({ screen, totalDuration }))
-    .sort((a, b) => b.totalDuration - a.totalDuration)
-    .slice(0, 3); // Get top 3 screens
+    .sort((a, b) => b.totalDuration - a.totalDuration);
 
-  // Calculate total time spent for top 3
-  const topTotalTime = aggregatedScreens.reduce(
+  // Extract top 3 screens
+  const topScreens = sortedScreens.slice(0, 3);
+
+  // Sum up the durations of "Others"
+  const otherScreens = sortedScreens.slice(3);
+  const othersTotalDuration = otherScreens.reduce(
     (sum, entry) => sum + entry.totalDuration,
     0
   );
-  if (topTotalTime === 0)
+
+  // Combine the top 3 and "Others" if there are other screens
+  const finalScreens = [...topScreens];
+  if (othersTotalDuration > 0) {
+    finalScreens.push({ screen: "Others", totalDuration: othersTotalDuration });
+  }
+
+  // Calculate total time spent
+  const totalTimeSpent = finalScreens.reduce(
+    (sum, entry) => sum + entry.totalDuration,
+    0
+  );
+  if (totalTimeSpent === 0)
     return (
       <p className="text-center text-gray-600">
         No screen time data available.
       </p>
-    ); // Avoid division by zero
+    );
 
-  // Define colors for screens
-  const screenColors = ["#4188ff", "#e23636", "#edb95e"]; // Blue, Red, Yellow
+  // Define colors for screens (adding gray for "Others")
+  const screenColors = ["#4188ff", "#e23636", "#edb95e", "#a0aec0"]; // Blue, Red, Yellow, Gray
 
   return (
     <div className="w-full h-auto mt-5">
       <div className="flex flex-row justify-between">
         <label className="text-gray-600">Time Breakdown:</label>
         <div className="flex justify-end gap-5 text-xs text-gray-600">
-          {aggregatedScreens.map((screen, index) => (
+          {finalScreens.map((screen, index) => (
             <div key={screen.screen} className="flex items-center">
               <div
-                className="w-3 rounded-full h-3 mr-1"
-                style={{ backgroundColor: screenColors[index] }}
+                className="w-3 h-3 rounded-full mr-1"
+                style={{ backgroundColor: screenColors[index] || "#a0aec0" }} // Default to gray
               ></div>
               {screen.screen}:{" "}
-              {((screen.totalDuration / topTotalTime) * 100).toFixed(0)}%
+              {((screen.totalDuration / totalTimeSpent) * 100).toFixed(0)}%
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex mt-2 gap-2">
-        {aggregatedScreens.map((screen, index) => {
-          const widthPercent = (screen.totalDuration / topTotalTime) * 100;
+      <div className="flex mt-2">
+        {finalScreens.map((screen, index) => {
+          const widthPercent = (screen.totalDuration / totalTimeSpent) * 100;
           return (
             <div
               key={screen.screen}
               style={{
                 width: `${widthPercent}%`,
-                backgroundColor: screenColors[index],
+                backgroundColor: screenColors[index] || "#a0aec0", // Default to gray
               }}
-              className="rounded-xl h-4"
+              className="h-4 duration-300"
             ></div>
           );
         })}

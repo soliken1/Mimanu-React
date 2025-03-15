@@ -10,20 +10,20 @@ const TotalEmployee = ({ userCountData }) => {
           {userCountData.totalUsers}{" "}
           <label
             className={`text-sm ${
-              userCountData.change > 0 ? " text-green-600" : " text-gray-400"
+              userCountData.newUsers > 0 ? " text-green-600" : " text-gray-400"
             }`}
           >
-            +{userCountData.change}
+            +{userCountData.newUsers}
           </label>
         </label>
         <div
           className={`text-sm px-2 rounded-sm flex items-center gap-2 flex-row ${
-            userCountData.change > 0
+            userCountData.newUsers > 0
               ? "bg-green-200 text-green-600"
               : "bg-gray-200 text-gray-400"
           }`}
         >
-          {userCountData.change > 0 ? (
+          {userCountData.newUsers > 0 ? (
             <>
               <GoArrowUpRight />
               <label>{userCountData.percentageChange}</label>

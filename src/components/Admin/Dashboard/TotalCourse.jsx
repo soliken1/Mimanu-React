@@ -10,20 +10,22 @@ const TotalCourse = ({ courseCountData }) => {
           {courseCountData.totalCourses}{" "}
           <label
             className={`text-sm ${
-              courseCountData.change > 0 ? " text-green-600" : " text-gray-400"
+              courseCountData.newCourses > 0
+                ? " text-green-600"
+                : " text-gray-400"
             }`}
           >
-            +{courseCountData.change}
+            +{courseCountData.newCourses}
           </label>
         </label>
         <div
           className={`text-sm px-2 rounded-sm flex items-center gap-2 flex-row ${
-            courseCountData.change > 0
+            courseCountData.newCourses > 0
               ? "bg-green-200 text-green-600"
               : "bg-gray-200 text-gray-400"
           }`}
         >
-          {courseCountData.change > 0 ? (
+          {courseCountData.newCourses > 0 ? (
             <>
               <GoArrowUpRight />
               <label>{courseCountData.percentageChange}</label>
