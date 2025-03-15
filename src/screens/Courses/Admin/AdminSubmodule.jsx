@@ -144,7 +144,7 @@ const AdminSubmodule = ({ getUser }) => {
       SubmoduleTitle: newTitle,
       SubmoduleContent: newContent,
       fileUrl: uploadedFileUrl,
-      EmbedURL: embed.trim() ? embed : task?.EmbedURL || "",
+      EmbedURL: embed.trim() ? embed : submodule?.EmbedURL || "",
     };
 
     try {

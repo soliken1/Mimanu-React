@@ -44,7 +44,7 @@ const fetchUserCountComparison = async (timeRange) => {
     const previousTotalUsers = totalUsers - newUsers;
     const percentageChange =
       previousTotalUsers > 0
-        ? (newUsers / previousTotalUsers) * 100 + "%"
+        ? (newUsers / previousTotalUsers).toFixed(2) * 100 + "%"
         : "0%";
     return { totalUsers, newUsers, percentageChange };
   } catch (error) {
