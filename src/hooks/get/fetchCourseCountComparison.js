@@ -8,42 +8,49 @@ import {
 } from "firebase/firestore";
 
 /**
- * Fetches total courses and today's new courses count.
- * @returns {Promise<{ totalCourses: number, change: number, percentageChange: string }>}
+ * Fetches total courses and new courses for the past 24 hours or 7 days.
+ * @param {"24h" | "7d"} timeRange - The selected time range.
+ * @returns {Promise<{ totalCourses: number, newCourses: number, percentageChange: string }>}
  */
-const fetchCourseCountComparison = async () => {
+const fetchCourseCountComparison = async (timeRange) => {
   try {
     const coursesRef = collection(db, "Course");
 
-    // ✅ Get total courses in the database (all-time count)
+    // ✅ Get total courses (all-time count)
     const allCoursesSnapshot = await getDocs(coursesRef);
     const totalCourses = allCoursesSnapshot.size;
 
-    // ✅ Get the start of today using Firestore's Timestamp
+    // ✅ Get the timestamp for the selected time range
     const now = new Date();
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
-    const todayTimestamp = Timestamp.fromDate(startOfToday); // ✅ Firestore Timestamp
+    let pastTime = new Date();
 
-    // ✅ Query courses created *today only*
-    const todayQuery = query(
+    if (timeRange === "24h") {
+      pastTime.setHours(now.getHours() - 24); // Past 24 hours
+    } else {
+      pastTime.setDate(now.getDate() - 7); // Past 7 days
+    }
+
+    const pastTimestamp = Timestamp.fromDate(pastTime); // ✅ Firestore Timestamp
+
+    // ✅ Query courses created *within the selected time range*
+    const timeRangeQuery = query(
       coursesRef,
-      where("CreatedAt", ">=", todayTimestamp) // ✅ Direct Firestore Timestamp comparison
+      where("CreatedAt", ">=", pastTimestamp)
     );
-    const todaySnapshot = await getDocs(todayQuery);
-    const todayNewCourses = todaySnapshot.size; // ✅ Number of new courses today
+    const timeRangeSnapshot = await getDocs(timeRangeQuery);
+    const newCourses = timeRangeSnapshot.size; // ✅ Count new courses
 
     // ✅ Calculate percentage change relative to previous total courses
-    const previousTotalCourses = totalCourses - todayNewCourses;
+    const previousTotalCourses = totalCourses - newCourses;
     const percentageChange =
       previousTotalCourses > 0
-        ? ((todayNewCourses / previousTotalCourses) * 100).toFixed(2) + "%"
+        ? (newCourses / previousTotalCourses) * 100 + "%"
         : "0%";
 
-    return { totalCourses, change: todayNewCourses, percentageChange };
+    return { totalCourses, newCourses, percentageChange };
   } catch (error) {
     console.error("Error fetching course count comparison:", error);
-    return { totalCourses: 0, change: 0, percentageChange: "0%" };
+    return { totalCourses: 0, newCourses: 0, percentageChange: "0%" };
   }
 };
 

@@ -11,20 +11,22 @@ const TotalActions = ({ actionCountData }) => {
           {actionCountData.totalActions}{" "}
           <label
             className={`text-sm ${
-              actionCountData.change > 0 ? " text-green-600" : " text-gray-400"
+              actionCountData.newActions > 0
+                ? " text-green-600"
+                : " text-gray-400"
             }`}
           >
-            +{actionCountData.change}
+            +{actionCountData.newActions}
           </label>
         </label>
         <div
           className={`text-sm px-2 rounded-sm flex items-center gap-2 flex-row ${
-            actionCountData.change > 0
+            actionCountData.newActions > 0
               ? "bg-green-200 text-green-600"
               : "bg-gray-200 text-gray-400"
           }`}
         >
-          {actionCountData.change > 0 ? (
+          {actionCountData.newActions > 0 ? (
             <>
               <GoArrowUpRight />
               <label>{actionCountData.percentageChange}</label>

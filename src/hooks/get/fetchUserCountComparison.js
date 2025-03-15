@@ -8,10 +8,11 @@ import {
 } from "firebase/firestore";
 
 /**
- * Fetches total user count and today's new users count.
- * @returns {Promise<{ totalUsers: number, change: number, percentageChange: string }>}
+ * Fetches total user count and new users for a specific time range (past 24 hours or 7 days).
+ * @param {"24h" | "7d"} timeRange - The selected time range.
+ * @returns {Promise<{ totalUsers: number, newUsers: number, percentageChange: string }>}
  */
-const fetchUserCountComparison = async () => {
+const fetchUserCountComparison = async (timeRange) => {
   try {
     const usersRef = collection(db, "Users");
 
@@ -19,31 +20,37 @@ const fetchUserCountComparison = async () => {
     const allUsersSnapshot = await getDocs(usersRef);
     const totalUsers = allUsersSnapshot.size;
 
-    // ✅ Get the start of today as a Firestore Timestamp
+    // ✅ Get the timestamp for the selected range
     const now = new Date();
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
-    const todayTimestamp = Timestamp.fromDate(startOfToday); // ✅ Firestore Timestamp
+    let pastTime = new Date();
 
-    // ✅ Query users created *today only*
-    const todayQuery = query(
+    if (timeRange === "24h") {
+      pastTime.setHours(now.getHours() - 24); // Past 24 hours
+    } else {
+      pastTime.setDate(now.getDate() - 7); // Past 7 days
+    }
+
+    const pastTimestamp = Timestamp.fromDate(pastTime); // ✅ Firestore Timestamp
+
+    // ✅ Query users created *within the selected time range*
+    const timeRangeQuery = query(
       usersRef,
-      where("CreatedAt", ">=", todayTimestamp)
+      where("CreatedAt", ">=", pastTimestamp)
     );
-    const todaySnapshot = await getDocs(todayQuery);
-    const todayNewUsers = todaySnapshot.size; // ✅ Number of new users added today
+    const timeRangeSnapshot = await getDocs(timeRangeQuery);
+    const newUsers = timeRangeSnapshot.size; // ✅ Count new users
 
-    // ✅ Calculate percentage change relative to the total users before today
-    const previousTotalUsers = totalUsers - todayNewUsers;
+    // ✅ Calculate percentage change relative to previous total users
+    const previousTotalUsers = totalUsers - newUsers;
     const percentageChange =
       previousTotalUsers > 0
-        ? ((todayNewUsers / previousTotalUsers) * 100).toFixed(2) + "%"
+        ? (newUsers / previousTotalUsers) * 100 + "%"
         : "0%";
-
-    return { totalUsers, change: todayNewUsers, percentageChange };
+    console.log(percentageChange);
+    return { totalUsers, newUsers, percentageChange };
   } catch (error) {
     console.error("Error fetching user count comparison:", error);
-    return { totalUsers: 0, change: 0, percentageChange: "0%" };
+    return { totalUsers: 0, newUsers: 0, percentageChange: "0%" };
   }
 };
 

@@ -8,10 +8,11 @@ import {
 } from "firebase/firestore";
 
 /**
- * Fetches total Employee Actions (ScreenTime) and today's new actions.
- * @returns {Promise<{ totalActions: number, change: number, percentageChange: string }>}
+ * Fetches total Employee Actions (ScreenTime) and new actions for the past 24 hours or 7 days.
+ * @param {"24h" | "7d"} timeRange - The selected time range.
+ * @returns {Promise<{ totalActions: number, newActions: number, percentageChange: string }>}
  */
-const fetchEmployeeActions = async () => {
+const fetchEmployeeActions = async (timeRange) => {
   try {
     const enrolledRef = collection(db, "Enrolled");
 
@@ -20,13 +21,19 @@ const fetchEmployeeActions = async () => {
     const enrolledDocs = enrolledSnapshot.docs;
 
     let totalActions = 0;
-    let todayActions = 0;
+    let newActions = 0;
 
-    // ✅ Get the start of today
+    // ✅ Get timestamp for selected time range
     const now = new Date();
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
-    const todayTimestamp = Timestamp.fromDate(startOfToday); // Firestore Timestamp
+    let pastTime = new Date();
+
+    if (timeRange === "24h") {
+      pastTime.setHours(now.getHours() - 24); // Past 24 hours
+    } else {
+      pastTime.setDate(now.getDate() - 7); // Past 7 days
+    }
+
+    const pastTimestamp = Timestamp.fromDate(pastTime); // ✅ Firestore Timestamp
 
     // ✅ Loop through each Enrolled document
     for (const enrolledDoc of enrolledDocs) {
@@ -37,30 +44,30 @@ const fetchEmployeeActions = async () => {
         "ScreenTime"
       );
 
-      // ✅ Check if ScreenTime subcollection exists and fetch documents
+      // ✅ Get total actions
       const screenTimeSnapshot = await getDocs(screenTimeRef);
-      totalActions += screenTimeSnapshot.size; // Count all actions
+      totalActions += screenTimeSnapshot.size;
 
-      // ✅ Filter for today's actions
-      const todayQuery = query(
+      // ✅ Get new actions within selected time range
+      const timeRangeQuery = query(
         screenTimeRef,
-        where("Timestamp", ">=", todayTimestamp)
+        where("Timestamp", ">=", pastTimestamp)
       );
-      const todaySnapshot = await getDocs(todayQuery);
-      todayActions += todaySnapshot.size; // Count today's actions
+      const timeRangeSnapshot = await getDocs(timeRangeQuery);
+      newActions += timeRangeSnapshot.size;
     }
 
     // ✅ Calculate percentage change
-    const previousTotalActions = totalActions - todayActions;
+    const previousTotalActions = totalActions - newActions;
     const percentageChange =
       previousTotalActions > 0
-        ? ((todayActions / previousTotalActions) * 100).toFixed(2) + "%"
+        ? (newActions / previousTotalActions) * 100 + "%"
         : "0%";
 
-    return { totalActions, change: todayActions, percentageChange };
+    return { totalActions, newActions, percentageChange };
   } catch (error) {
     console.error("Error fetching employee actions:", error);
-    return { totalActions: 0, change: 0, percentageChange: "0%" };
+    return { totalActions: 0, newActions: 0, percentageChange: "0%" };
   }
 };
 
