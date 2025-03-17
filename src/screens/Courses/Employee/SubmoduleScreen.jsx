@@ -137,9 +137,9 @@ const SubmoduleScreen = ({ getUser }) => {
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -150,7 +150,7 @@ const SubmoduleScreen = ({ getUser }) => {
           <CourseSidebar userData={userData} />
         </div>
 
-        <div className="w-full h-full flex-flex-row mt-6">
+        <div className="w-full h-full flex-flex-row mt-6 px-4 md:px-0 md:pt-0">
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <label className="text-2xl">{submodule?.SubmoduleTitle}</label>
@@ -191,7 +191,7 @@ const SubmoduleScreen = ({ getUser }) => {
 
             {submodule?.EmbedURL && (
               <iframe
-                className="w-1/2 h-96"
+                className="md:w-1/2 w-full h-96"
                 src={getEmbedUrl(submodule?.EmbedURL)}
                 title={submodule.SubmoduleTitle}
                 frameBorder="0"
@@ -203,7 +203,7 @@ const SubmoduleScreen = ({ getUser }) => {
           </div>
         </div>
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4">
+        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4 px-4 md:px-0 md:pt-0">
           <button
             onClick={handlePrevious}
             disabled={currentIndex === 0}

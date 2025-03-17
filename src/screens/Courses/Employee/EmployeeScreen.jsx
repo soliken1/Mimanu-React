@@ -12,14 +12,18 @@ import fetchEmployeeCourse from "../../../hooks/get/fetchEmployeeCourse";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Loader from "../../../components/Loader";
+import fetchAllAvailableTasks from "../../../hooks/get/employee/fetchAllAvailableTasks";
+import { MdTask } from "react-icons/md";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { FaArrowCircleRight } from "react-icons/fa";
 
 const EmployeeScreen = ({ getUser, onLogout }) => {
-  const courseId = "1";
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [employeeCourses, setEmployeeCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [taskData, setTaskData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +33,9 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
 
         const courses = await fetchEmployeeCourse(getUser.uid);
         setEmployeeCourses(courses);
+
+        const task = await fetchAllAvailableTasks();
+        setTaskData(task);
 
         setLoading(false);
       } catch (error) {
@@ -49,10 +56,10 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen flex flex-row p-12 bg-[#FAF9F6]">
-        <div className="w-7/12 flex flex-col">
+      <div className="w-full md:ps-72 h-auto min-h-screen flex flex-col md:flex-row p-12 bg-[#FAF9F6]">
+        <div className="md:w-7/12 w-full flex flex-col ">
           <label className="text-2xl font-semibold poppins-normal">
-            Courses
+            Dashboard
           </label>
           <label className="text-gray-500 poppins-normal">
             Your Assigned Courses Here
@@ -120,14 +127,64 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
             )}
           </div>
         </div>
-        <div className="w-5/12 flex flex-col gap-12 items-end justify-evenly mt-20">
+        <div className="w-5/12 md:flex hidden flex-col gap-12 items-end justify-evenly mt-20">
           <div className="p-2 shadow-y h-88 w-84 rounded-lg">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar />
             </LocalizationProvider>
           </div>
-          <div className="p-8 shadow-y h-88 w-84 rounded-lg">
-            <label>Your Tasks</label>
+          <div className="shadow-y h-auto w-84 rounded-lg">
+            <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200 rounded-tl-lg rounded-tr-lg">
+              <IoMdArrowDropdown />
+              <label className="font-semibold text-gray-600">
+                Available Tasks
+              </label>
+            </div>
+            <div className="flex flex-col ">
+              {taskData.availableTasks.map((task) => (
+                <div
+                  to={`/course/${task.CourseID}/tasks/${task.id}`}
+                  key={task.id}
+                  className={`flex flex-row items-center gap-3 py-3 hover:bg-gray-300 px-4 ${
+                    task.isAnswered
+                      ? "bg-green-100"
+                      : "bg-gray-100 hover:bg-gray-300"
+                  }`}
+                >
+                  <MdTask />
+                  <div className="flex flex-col text-sm">
+                    <label className="cursor-pointer">{task.TaskTitle}</label>
+                    <div className="flex flex-row gap-5 text-xs text-gray-600">
+                      <label className="cursor-pointer">
+                        Available On:{" "}
+                        {new Date(
+                          task.StartDate.seconds * 1000
+                        ).toLocaleDateString()}
+                      </label>
+                      |
+                      <label className="cursor-pointer">
+                        Due On:{" "}
+                        {new Date(
+                          task.EndDate.seconds * 1000
+                        ).toLocaleDateString()}
+                      </label>
+                    </div>
+                  </div>
+                  {task.isAnswered ? (
+                    <div className="flex flex-row justify-end flex-1">
+                      <FaCheckCircle className="text-green-600 " />
+                    </div>
+                  ) : (
+                    <Link
+                      to={`/course/${task.CourseID}/tasks/${task.id}`}
+                      className="flex flex-row justify-end flex-1"
+                    >
+                      <FaArrowCircleRight className="text-blue-500" />
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
