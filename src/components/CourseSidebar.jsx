@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
+import { MdViewModule } from "react-icons/md";
+import { MdAddTask } from "react-icons/md";
+import { GiProgression } from "react-icons/gi";
+
 const CourseSidebar = ({ userData }) => {
   const { courseId } = useParams();
   useEffect(() => {
@@ -14,37 +19,75 @@ const CourseSidebar = ({ userData }) => {
   }, [userData]);
   return (
     <>
-      <div className="flex flex-row gap-4 items-center">
+      <div className="md:flex fixed md:relative bottom-0 md:w-auto w-full flex-row gap-4 items-center">
         {userData?.UserRole === "Employee" ? (
           <>
-            <Link to={`/course/${courseId}`}>
-              <div className=" flex flex-row items-center">
-                <label className="cursor-pointer text-sm text-[#152852] underline">
-                  Home
-                </label>
-              </div>
-            </Link>
-            <Link to={`/course/${courseId}/modules`}>
-              <div className=" flex flex-row items-center">
-                <label className="cursor-pointer text-sm text-[#152852] underline">
-                  Modules
-                </label>
-              </div>
-            </Link>
-            <Link to={`/course/${courseId}/tasks`}>
-              <div className=" flex flex-row items-center">
-                <label className="cursor-pointer text-sm text-[#152852] underline">
-                  Tasks
-                </label>
-              </div>
-            </Link>
-            <Link to={`/course/${courseId}/progress`}>
-              <div className=" flex flex-row items-center">
-                <label className="cursor-pointer text-sm text-[#152852] underline">
-                  Progress
-                </label>
-              </div>
-            </Link>
+            {/*Web Screen Responsive*/}
+            <div className="flex-row gap-4 justify-center md:flex hidden">
+              <Link to={`/course/${courseId}`}>
+                <div className=" flex flex-row items-center">
+                  <label className="cursor-pointer text-sm text-[#152852] underline">
+                    Home
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/modules`}>
+                <div className=" flex flex-row items-center">
+                  <label className="cursor-pointer text-sm text-[#152852] underline">
+                    Modules
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/tasks`}>
+                <div className=" flex flex-row items-center">
+                  <label className="cursor-pointer text-sm text-[#152852] underline">
+                    Tasks
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/progress`}>
+                <div className=" flex flex-row items-center">
+                  <label className="cursor-pointer text-sm text-[#152852] underline">
+                    Progress
+                  </label>
+                </div>
+              </Link>
+            </div>
+            {/*Mobile Screen Responsive*/}
+            <div className="md:hidden flex-row gap-8 justify-center flex z-10 py-2 bg-[#f8f4fc]">
+              <Link to={`/course/${courseId}`}>
+                <div className=" flex flex-col items-center justify-between">
+                  <FaHome className="w-6 h-6 " />
+                  <label className="cursor-pointer text-sm text-[#152852]">
+                    Home
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/modules`}>
+                <div className=" flex flex-col items-center justify-between">
+                  <MdViewModule className="w-6 h-6" />
+                  <label className="cursor-pointer text-sm text-[#152852]">
+                    Modules
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/tasks`}>
+                <div className=" flex flex-col items-center justify-between">
+                  <MdAddTask className="w-6 h-6" />
+                  <label className="cursor-pointer text-sm text-[#152852]">
+                    Tasks
+                  </label>
+                </div>
+              </Link>
+              <Link to={`/course/${courseId}/progress`}>
+                <div className=" flex flex-col items-center justify-between">
+                  <GiProgression className="w-6 h-6" />
+                  <label className="cursor-pointer text-sm text-[#152852]">
+                    Progress
+                  </label>
+                </div>
+              </Link>
+            </div>
           </>
         ) : userData?.UserRole === "Trainor" ? (
           <>

@@ -72,9 +72,9 @@ const CourseInfo = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col md:p-0 px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -84,7 +84,7 @@ const CourseInfo = ({ getUser }) => {
           </div>
           <CourseSidebar userData={userData} />
         </div>
-        <div className="w-full h-full flex-flex-row mt-6">
+        <div className="w-full h-full flex-flex-row mt-6 px-4 md:px-0 ">
           {/* Display File if Available */}
           {courseData?.fileUrl && (
             <div>
@@ -119,7 +119,7 @@ const CourseInfo = ({ getUser }) => {
           />
 
           <div className="w-full mt-12 min-h-60 flex gap-5 flex-row h-auto">
-            <div className="w-2/3 flex flex-col">
+            <div className="md:w-2/3 w-full flex flex-col">
               <div className="flex flex-row items-center gap-2 p-4 bg-gray-200 rounded-tl-lg rounded-tr-lg">
                 <IoMdArrowDropdown />
                 <label className="font-semibold text-gray-600">
@@ -162,7 +162,7 @@ const CourseInfo = ({ getUser }) => {
                 )}
               </div>
             </div>
-            <div className="w-1/3 flex flex-col rounded-lg">
+            <div className="w-1/3 hidden md:relative md:flex flex-col rounded-lg">
               <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200 rounded-tl-lg rounded-tr-lg">
                 <IoMdArrowDropdown />
                 <label className="font-semibold text-gray-600">

@@ -3,7 +3,7 @@ import React from "react";
 const Loader = () => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
-      <div className="min-w-[28vh] max-w-[28vh] fixed h-screen flex flex-col bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
+      <div className="min-w-[28vh] max-w-[28vh] fixed h-screen flex-col md:flex hidden bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
         <div className="h-32 w-full flex flex-row justify-center items-center gap-2">
           <img src="/book.png" className="h-16 w-16 drop-shadow-lg" />
           <label className="font-semibold">MiManuTMS</label>
@@ -42,7 +42,7 @@ const Loader = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-2 ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-2">
             <div className="w-32 h-4 rounded-full animate-pulse bg-[#152852]"></div>

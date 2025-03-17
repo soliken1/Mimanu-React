@@ -499,19 +499,6 @@ export default function App() {
               allowedRoles={["Employee"]}
               redirectTo={getDashboardRoute(role)}
             >
-              <EmployeeDashboard getUser={getUser} onLogout={handleLogout} />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/course"
-          element={
-            <ProtectedRoute
-              role={role}
-              allowedRoles={["Employee"]}
-              redirectTo={getDashboardRoute(role)}
-            >
               <EmployeeScreen getUser={getUser} onLogout={handleLogout} />
             </ProtectedRoute>
           }

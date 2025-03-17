@@ -34,7 +34,7 @@ const NavSidebar = ({ userData }) => {
   };
 
   return (
-    <div className="min-w-[28vh] max-w-[28vh] fixed h-screen flex flex-col bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
+    <div className="min-w-[28vh] md:flex hidden  max-w-[28vh] fixed h-screen flex-col bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
       <div className="h-32 w-full flex flex-row justify-center items-center gap-2">
         <img src="/book.png" className="h-16 w-16 drop-shadow-lg" />
         <label className="font-semibold">MiManuTMS</label>
@@ -75,10 +75,6 @@ const NavSidebar = ({ userData }) => {
               <Link className="flex flex-row gap-2 w-full " to="/dashboard">
                 <MdOutlineSpaceDashboard className="w-6 h-6" />
                 <label className="cursor-pointer">Dashboard</label>
-              </Link>
-              <Link className="flex flex-row gap-2 w-full " to="/course">
-                <FaBook className="w-6 h-6" />
-                <label className="cursor-pointer">Courses</label>
               </Link>
             </>
           )}
