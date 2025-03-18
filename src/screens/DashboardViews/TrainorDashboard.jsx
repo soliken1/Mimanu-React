@@ -8,6 +8,10 @@ import fetchEmployeeActions from "../../hooks/get/trainor/fetchActionCount";
 import TotalActions from "../../components/Trainor/Dashboard/TotalActions";
 import fetchEnrollmentCountComparison from "../../hooks/get/trainor/fetchEnrollmentCountComparison";
 import TotalEnrollment from "../../components/Trainor/Dashboard/TotalEnrollment";
+import ScreenTimeBar from "../../components/ScreenTimeBar";
+import ScreenTimeChart from "../../components/ScreenTimeChart";
+import fetchTrainerScreenTimeData from "../../hooks/get/trainor/fetchTrainorScreenTime";
+import calculateTotalScreenTime from "../../helper/calculateTotalScreenTime";
 const TrainorDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,18 +19,28 @@ const TrainorDashboard = ({ getUser }) => {
   const [actionCountData, setActionCountData] = useState(null);
   const [enrollmentCountData, setEnrollmentCountData] = useState(null);
   const [timeRange, setTimeRange] = useState("24h");
+  const [totalTime, setTotalTime] = useState(0);
+  const [topScreenTimeData, setTopScreenTimeData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const user = await fetchUser(getUser.uid);
         setUserData(user);
+
+        const topScreenTime = await fetchTrainerScreenTimeData();
+        setTopScreenTimeData(topScreenTime);
+
+        if (topScreenTime) {
+          const totalDuration = calculateTotalScreenTime(topScreenTime);
+          setTotalTime(totalDuration);
+        }
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
-  });
+  }, [getUser.uid]);
 
   useEffect(() => {
     const fetchAnalyticsData = async () => {
@@ -57,6 +71,12 @@ const TrainorDashboard = ({ getUser }) => {
   if (loading) {
     return <Loader />;
   }
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours} hr ${minutes} mins`;
+  };
 
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
@@ -120,8 +140,29 @@ const TrainorDashboard = ({ getUser }) => {
           </div>
         </div>
         <div className="w-full flex flex-row gap-5 h-auto mt-5">
-          <div className="w-7/12 flex flex-col gap-5">
-            <div className="h-96 shadow-y rounded-lg">Employee Actions</div>
+          <div className="md:w-7/12 w-full flex flex-col gap-5">
+            <div className=" flex flex-col gap-5">
+              <div className="h-auto min-h-96 p-6 shadow-y rounded-lg bg-white">
+                <div className="flex flex-col">
+                  <label className="text-gray-500">
+                    Accumulated Enrollees' Time Spent:
+                  </label>
+                  <label className="text-2xl text-gray-700 font-semibold">
+                    {formatTime(totalTime)}
+                  </label>
+                </div>
+                <ScreenTimeBar screenTimeData={topScreenTimeData} />
+                <div className="flex flex-row justify-between mt-4 mb-4">
+                  <h2 className="text-lg font-semibold text-gray-700">
+                    Screen Time Usage
+                  </h2>
+                </div>
+                <ScreenTimeChart
+                  timeRange={timeRange}
+                  role={userData.UserRole}
+                />
+              </div>
+            </div>
             <div className="h-96 shadow-y rounded-lg">
               Recent Employee Actions
             </div>

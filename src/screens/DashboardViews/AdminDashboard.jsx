@@ -46,7 +46,6 @@ const AdminDashboard = ({ getUser }) => {
         const enrolleeActions = await fetchUserActions();
         setEnrolleeActionsData(enrolleeActions);
 
-        console.log(enrolleeActions);
         if (topScreenTime) {
           const totalDuration = calculateTotalScreenTime(topScreenTime);
           setTotalTime(totalDuration);
