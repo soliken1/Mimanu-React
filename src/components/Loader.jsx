@@ -42,7 +42,7 @@ const Loader = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-2 md:ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-2">
             <div className="w-32 h-4 rounded-full animate-pulse bg-[#152852]"></div>

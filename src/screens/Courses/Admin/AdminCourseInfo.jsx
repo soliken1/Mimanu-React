@@ -181,11 +181,11 @@ const AdminCourseInfo = ({ getUser }) => {
     return <Loader />;
   }
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-40 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -195,7 +195,7 @@ const AdminCourseInfo = ({ getUser }) => {
           </div>
           <CourseSidebar userData={userData} Screen={Screen} />
         </div>
-        <div className="w-full h-full flex-flex-row mt-6">
+        <div className="w-full h-full flex-flex-row mt-6 px-4 md:px-0 md:pt-0">
           {isEditing ? (
             <div className="flex flex-col gap-4">
               {/* Title Input */}
@@ -282,7 +282,7 @@ const AdminCourseInfo = ({ getUser }) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-4 md:px-0">
               <div className="flex justify-end items-center gap-5">
                 <button
                   onClick={() => setIsModalOpen(true)}
@@ -331,8 +331,8 @@ const AdminCourseInfo = ({ getUser }) => {
                 className="text-gray-800"
               />
 
-              <div className="w-full mt-12 min-h-60 flex gap-5 flex-row h-auto">
-                <div className="w-2/3 flex flex-col">
+              <div className="w-full mt-12 min-h-60 flex gap-5 flex-col md:flex-row h-auto ">
+                <div className="md:w-2/3 w-full flex flex-col">
                   <div className="flex flex-row items-center gap-2 p-4 bg-gray-200 rounded-tl-lg rounded-tr-lg">
                     <IoMdArrowDropdown />
                     <label className="font-semibold">Announcements</label>
@@ -375,7 +375,7 @@ const AdminCourseInfo = ({ getUser }) => {
                     )}
                   </div>
                 </div>
-                <div className="w-1/3 flex flex-col rounded-lg">
+                <div className="md:w-1/3 w-full flex flex-col rounded-lg">
                   <div className="flex flex-row items-center gap-2 py-4 p-4 bg-gray-200 rounded-tl-lg rounded-tr-lg">
                     <IoMdArrowDropdown />
                     <label className="font-semibold text-gray-600">

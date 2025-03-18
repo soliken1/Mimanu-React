@@ -23,9 +23,9 @@ const CourseSidebar = ({ userData }) => {
       <div
         className={`md:flex fixed md:relative ${
           userData?.UserRole === "Admin" || userData.UserRole === "Trainor"
-            ? ""
-            : ""
-        } bottom-0 md:w-auto w-full flex-row gap-4 items-center`}
+            ? "md:bottom-0 bottom-16 md:py-0 p-2"
+            : "bottom-0"
+        }  md:w-auto w-full flex-row gap-4 items-center bg-[#f8f4fc] md:bg-transparent`}
       >
         {userData?.UserRole === "Employee" ? (
           <>
@@ -61,7 +61,7 @@ const CourseSidebar = ({ userData }) => {
               </Link>
             </div>
             {/*Mobile Screen Responsive*/}
-            <div className="md:hidden flex-row gap-8 justify-center flex z-10 py-2 bg-[#f8f4fc]">
+            <div className="md:hidden flex-row gap-8 justify-center flex z-10 py-2 ">
               <Link to={`/course/${courseId}`}>
                 <div className=" flex flex-col items-center justify-between">
                   <FaHome className="w-6 h-6 " />
@@ -141,45 +141,92 @@ const CourseSidebar = ({ userData }) => {
           </>
         ) : userData?.UserRole === "Admin" ? (
           <>
-            <div className=" flex flex-row items-center">
-              <Link
-                to={`/acourse/${courseId}`}
-                className="cursor-pointer text-sm text-[#152852] underline"
-              >
-                Home
-              </Link>
+            {/*Web Screen Responsive*/}
+            <div className="flex-row gap-4 justify-center md:flex hidden">
+              <div className="md:flex hidden flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Home
+                </Link>
+              </div>
+              <div className="flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/users`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Employees
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/modules`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Modules
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/tasks`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Tasks
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/progress`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Progress
+                </Link>
+              </div>
             </div>
-            <div className="flex flex-row items-center">
-              <Link
-                to={`/acourse/${courseId}/users`}
-                className="cursor-pointer text-sm text-[#152852] underline"
-              >
-                Employees
-              </Link>
-            </div>
-            <div className=" flex flex-row items-center">
-              <Link
-                to={`/acourse/${courseId}/modules`}
-                className="cursor-pointer text-sm text-[#152852] underline"
-              >
-                Modules
-              </Link>
-            </div>
-            <div className=" flex flex-row items-center">
-              <Link
-                to={`/acourse/${courseId}/tasks`}
-                className="cursor-pointer text-sm text-[#152852] underline"
-              >
-                Tasks
-              </Link>
-            </div>
-            <div className=" flex flex-row items-center">
-              <Link
-                to={`/acourse/${courseId}/progress`}
-                className="cursor-pointer text-sm text-[#152852] underline"
-              >
-                Progress
-              </Link>
+
+            {/*Mobile Screen Responsive*/}
+            <div className="md:hidden flex-row gap-8 justify-center flex z-10 py-2">
+              <div className="md:flex hidden flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Home
+                </Link>
+              </div>
+              <div className="flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/users`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Employees
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/modules`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Modules
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/tasks`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Tasks
+                </Link>
+              </div>
+              <div className=" flex flex-row items-center">
+                <Link
+                  to={`/acourse/${courseId}/progress`}
+                  className="cursor-pointer text-sm text-[#152852] underline"
+                >
+                  Progress
+                </Link>
+              </div>
             </div>
           </>
         ) : null}

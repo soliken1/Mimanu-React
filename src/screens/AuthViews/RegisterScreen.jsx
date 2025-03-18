@@ -202,8 +202,8 @@ const RegisterScreen = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
-        <div className="h-auto flex flex-row justify-between">
+      <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+        <div className="h-auto flex flex-col md:flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-2xl font-semibold poppins-normal">
               Users
@@ -212,7 +212,7 @@ const RegisterScreen = ({ getUser }) => {
               List of All Users on the Platform
             </label>
           </div>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center mt-5 md:mt-0 md:justify-center">
             <button
               className="bg-[#152852] text-white hover:bg-[#0d1933] poppins-normal duration-300 flex flex-row gap-4 items-center px-6 py-2 rounded-lg shadow-xy-subtle"
               onClick={() => setIsModalOpen(true)}
@@ -222,12 +222,12 @@ const RegisterScreen = ({ getUser }) => {
             </button>
           </div>
         </div>
-        <div className=" w-full flex flex-col gap-4 h-auto mt-5">
+        <div className=" w-full flex flex-col gap-4 h-auto">
           <div className="w-full flex flex-col gap-4 h-auto mt-5">
             <label className="poppins-normal text-lg">
               All Users ({filteredUsers.length})
             </label>
-            <div className="w-full h-auto flex justify-between">
+            <div className="w-full h-auto flex-col md:flex-row flex justify-between">
               {/* Role Filter Buttons */}
               <div className="p-1 flex flex-row gap-2 bg-gray-200 rounded-md">
                 {["All", "Employee", "Trainor", "Admin"].map((role) => (
@@ -245,10 +245,10 @@ const RegisterScreen = ({ getUser }) => {
                 ))}
               </div>
               {/* Search Bar */}
-              <div className="flex flex-row gap-5 items-center">
+              <div className="flex flex-col md:flex-row md:mt-0 mt-5 gap-5 md:items-center">
                 <button
                   onClick={handlePeerFormClick}
-                  className="text-xs bg-[#152852] px-4 py-2 text-white rounded-lg shadow-xy-subtle cursor-pointer"
+                  className="text-xs bg-[#152852] px-4 py-3 text-white rounded-lg shadow-xy-subtle cursor-pointer"
                 >
                   Peer Form
                 </button>
@@ -257,7 +257,7 @@ const RegisterScreen = ({ getUser }) => {
                   <input
                     type="text"
                     placeholder="Search User"
-                    className="bg-white px-10 py-2 rounded-lg"
+                    className="bg-white px-10 py-2 md:w-auto w-full rounded-lg"
                     value={searchQuery}
                     onChange={handleSearch}
                   />

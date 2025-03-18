@@ -94,7 +94,7 @@ const AdminDashboard = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full md:ps-72 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
+      <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-row items-center justify-between md:flex-nowrap flex-wrap md:gap-0 gap-5">
           <div className="flex flex-row gap-5 items-center md:p-0 px-4 pt-12 md:px-0 md:pt-0">
             <img

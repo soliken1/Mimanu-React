@@ -185,9 +185,9 @@ const AdminSubmodule = ({ getUser }) => {
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -198,7 +198,7 @@ const AdminSubmodule = ({ getUser }) => {
           <CourseSidebar userData={userData} />
         </div>
 
-        <div className="w-full h-full flex-flex-row mt-6">
+        <div className="w-full h-full flex-flex-row mt-6 px-4  md:px-0 md:pt-0">
           {isEditing ? (
             <div className="flex flex-col gap-4">
               {/* Title Input */}
@@ -260,7 +260,7 @@ const AdminSubmodule = ({ getUser }) => {
               <div className="flex flex-col">
                 {submodule?.EmbedURL && (
                   <iframe
-                    className="w-1/2 h-96"
+                    className="md:w-1/2 w-full h-96"
                     src={getEmbedUrl(submodule?.EmbedURL)}
                     title={submodule.SubmoduleTitle}
                     frameBorder="0"
@@ -296,10 +296,12 @@ const AdminSubmodule = ({ getUser }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <label className="text-2xl">{submodule?.SubmoduleTitle}</label>
+              <div className="flex flex-col gap-2 md:flex-row justify-between items-center">
+                <label className="text-2xl md:order-1 order-2">
+                  {submodule?.SubmoduleTitle}
+                </label>
                 <button
-                  className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                  className="bg-[#152852] md:order-2 order-1 md:justify-start justify-center px-8 py-2 cursor-pointer text-white rounded"
                   onClick={() => setIsEditing(true)}
                 >
                   Edit Content
@@ -341,7 +343,7 @@ const AdminSubmodule = ({ getUser }) => {
 
               {submodule?.EmbedURL && (
                 <iframe
-                  className="w-1/2 h-96"
+                  className="md:w-1/2 w-full h-96"
                   src={getEmbedUrl(submodule?.EmbedURL)}
                   title={submodule.SubmoduleTitle}
                   frameBorder="0"
@@ -354,7 +356,7 @@ const AdminSubmodule = ({ getUser }) => {
           )}
         </div>
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4">
+        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4 px-4 md:px-0 md:pt-0">
           <button
             onClick={handlePrevious}
             disabled={currentIndex === 0}

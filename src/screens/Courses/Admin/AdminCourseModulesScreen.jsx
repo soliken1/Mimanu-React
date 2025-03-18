@@ -88,9 +88,9 @@ const AdminCourseModules = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -100,7 +100,7 @@ const AdminCourseModules = ({ getUser }) => {
           </div>
           <CourseSidebar userData={userData} />
         </div>
-        <div className="w-full h-full flex flex-col mt-6">
+        <div className="w-full h-full flex flex-col mt-6 px-4  md:px-0 md:pt-0">
           <div className="flex justify-between">
             <label className="text-xl font-semibold">Course Modules</label>
             <button
@@ -110,7 +110,7 @@ const AdminCourseModules = ({ getUser }) => {
               Add Module
             </button>
           </div>
-          <div className="w-9/12 h-auto flex flex-col gap-12 mt-5">
+          <div className="md:w-9/12 w-full h-auto flex flex-col gap-12 mt-5">
             {modules.length > 0 ? (
               modules.map((module) => (
                 <div

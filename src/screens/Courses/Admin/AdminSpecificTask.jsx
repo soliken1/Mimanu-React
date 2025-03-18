@@ -148,9 +148,9 @@ const AdminSpecificTask = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -263,7 +263,7 @@ const AdminSpecificTask = ({ getUser }) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-4 md:px-0 md:pt-0">
               <div className="flex justify-between items-center border-b border-gray-400 pb-4">
                 <label className="text-2xl">{task?.TaskTitle}</label>
                 <button
@@ -309,7 +309,7 @@ const AdminSpecificTask = ({ getUser }) => {
 
               {task?.EmbedURL && (
                 <iframe
-                  className="w-1/2 h-96"
+                  className="md:w-1/2 w-full h-96"
                   src={getEmbedUrl(task?.EmbedURL)}
                   title={task.SubmoduleTitle}
                   frameBorder="0"

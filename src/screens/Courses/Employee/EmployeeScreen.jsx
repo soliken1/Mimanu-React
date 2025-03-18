@@ -57,7 +57,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full md:ps-72 h-auto min-h-screen flex flex-col md:flex-row p-12 bg-[#FAF9F6]">
+      <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen flex flex-col md:flex-row p-12 bg-[#FAF9F6]">
         <div className="md:w-7/12 w-full flex flex-col ">
           <label className="text-2xl font-semibold poppins-normal">
             Dashboard
@@ -179,7 +179,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
         </div>
 
         <div className="w-5/12 md:flex hidden flex-col gap-12 items-end justify-evenly mt-20">
-          <div className="p-2 shadow-y h-88 w-84 rounded-lg">
+          <div className="p-2 shadow-y h-88 w-84 rounded-lg md:block hidden">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar />
             </LocalizationProvider>
