@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import fetchTopScreenTimeActions from "../hooks/get/fetchTopScreenTimeActions";
+import fetchTrainorTopScreenTime from "../hooks/get/trainor/fetchTrainorTopScreenTime";
 
 /**
  * Formats duration (seconds) into `hh:mm` or `2hrs 5mins`
@@ -23,13 +24,18 @@ const formatDuration = (seconds) => {
   return `${minutes}m`;
 };
 
-const ScreenTimeChart = ({ timeRange }) => {
+const ScreenTimeChart = ({ timeRange, role }) => {
   const [screenTimeData, setScreenTimeData] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchTopScreenTimeActions(timeRange);
-      setScreenTimeData(data);
+      if (role === "Trainor") {
+        const data = await fetchTrainorTopScreenTime(timeRange);
+        console.log(data);
+        setScreenTimeData(data);
+      } else {
+        const data = await fetchTopScreenTimeActions(timeRange);
+        setScreenTimeData(data);
+      }
     };
     fetchData();
   }, [timeRange]); // Re-fetch when time range changes
