@@ -17,9 +17,16 @@ const CourseSidebar = ({ userData }) => {
 
     awaitUserData();
   }, [userData]);
+
   return (
     <>
-      <div className="md:flex fixed md:relative bottom-0 md:w-auto w-full flex-row gap-4 items-center">
+      <div
+        className={`md:flex fixed md:relative ${
+          userData?.UserRole === "Admin" || userData.UserRole === "Trainor"
+            ? ""
+            : ""
+        } bottom-0 md:w-auto w-full flex-row gap-4 items-center`}
+      >
         {userData?.UserRole === "Employee" ? (
           <>
             {/*Web Screen Responsive*/}
