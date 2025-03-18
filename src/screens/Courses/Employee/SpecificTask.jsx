@@ -123,7 +123,7 @@ const EmployeeSpecificTask = ({ getUser }) => {
 
           {task?.EmbedURL && (
             <iframe
-              className="w-1/2 h-96 mt-5"
+              className="md:w-1/2 w-full h-96 mt-5"
               src={getEmbedUrl(task?.EmbedURL)}
               title={task.SubmoduleTitle}
               frameBorder="0"

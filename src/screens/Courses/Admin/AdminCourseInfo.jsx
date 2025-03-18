@@ -20,6 +20,7 @@ import { fetchAllTasks } from "../../../hooks/get/fetchTasks";
 import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
 const AdminCourseInfo = ({ getUser }) => {
+  const Screen = "Admin";
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -192,7 +193,7 @@ const AdminCourseInfo = ({ getUser }) => {
               {courseData?.CourseDescription}
             </label>
           </div>
-          <CourseSidebar userData={userData} />
+          <CourseSidebar userData={userData} Screen={Screen} />
         </div>
         <div className="w-full h-full flex-flex-row mt-6">
           {isEditing ? (

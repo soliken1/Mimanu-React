@@ -16,6 +16,7 @@ import fetchAllAvailableTasks from "../../../hooks/get/employee/fetchAllAvailabl
 import { MdTask } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaArrowCircleRight } from "react-icons/fa";
+import MBTI from "../../../assets/MBTI.jpg";
 
 const EmployeeScreen = ({ getUser, onLogout }) => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <div className="w-full h-auto flex flex-col gap-5 mt-5">
+          <div className="w-full min-h-96 flex flex-col gap-5 mt-5">
             {filteredEmployeeCourses.length > 0 ? (
               filteredEmployeeCourses.map((course) => (
                 <div
@@ -126,7 +127,57 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
               </label>
             )}
           </div>
+          <div className="flex flex-col gap-4">
+            <label className="text-2xl font-semibold poppins-normal">
+              Available Forms
+            </label>
+            <div className="flex flex-col gap-5 md:flex-row justify-between">
+              <div className="md:w-84 w-full flex flex-col items-end">
+                <div className="w-full h-28 gap-4 text-sm rounded-lg shadow-y flex">
+                  <img
+                    src="/selfassessment.jpg"
+                    className="h-full w-1/3 object-cover rounded-s-lg"
+                  />
+                  <div className="flex flex-col justify-evenly pe-0 md:pe-4">
+                    <label className="flex items-center">
+                      Take Your Self-Assessment Here!
+                    </label>
+                    <div className="w-full justify-end flex">
+                      <Link
+                        to="/self-form"
+                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+                      >
+                        Get Started
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="md:w-84 w-full flex flex-col items-end">
+                <div className="w-full h-28 gap-4 text-sm rounded-lg shadow-y flex ">
+                  <img
+                    src={MBTI}
+                    className="h-full w-1/3 object-cover rounded-s-lg"
+                  />
+                  <div className="flex flex-col justify-evenly pe-0 md:pe-4">
+                    <label className="flex items-center">
+                      Take Your MBTI Assessment Here!
+                    </label>
+                    <div className="w-full justify-end flex">
+                      <Link
+                        to="/mbti-form"
+                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+                      >
+                        Get Started
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="w-5/12 md:flex hidden flex-col gap-12 items-end justify-evenly mt-20">
           <div className="p-2 shadow-y h-88 w-84 rounded-lg">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -140,7 +191,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                 Available Tasks
               </label>
             </div>
-            <div className="flex flex-col ">
+            <div className="flex flex-col">
               {taskData.availableTasks.map((task) => (
                 <div
                   to={`/course/${task.CourseID}/tasks/${task.id}`}

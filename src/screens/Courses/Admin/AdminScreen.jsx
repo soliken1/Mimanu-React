@@ -44,31 +44,31 @@ const AdminScreen = ({ getUser }) => {
   }
 
   return (
-    <div class="flex h-full w-full flex-col  md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen  flex flex-row p-12 bg-[#FAF9F6]">
-        <div className="w-full flex flex-col">
+      <div className="w-full md:ps-72 h-auto min-h-screen  flex flex-row md:p-12 bg-[#FAF9F6]">
+        <div className="w-full flex flex-col md:p-0 px-4 pt-12 md:px-0 md:pt-0">
           <label className="text-2xl font-semibold poppins-normal">
             Courses
           </label>
           <label className="text-gray-500 poppins-normal">
             All Courses Available on the Platform
           </label>
-          <div className="w-full h-auto flex flex-row justify-between mt-5">
+          <div className="w-full h-10 flex flex-row md:gap-0 gap-5 justify-between mt-5">
             <input
               placeholder="Search Course"
               className="border px-4 rounded-xl w-96 border-black"
             />
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 cursor-pointer bg-[#152852] flex flex-row items-center gap-4 rounded-lg text-white"
+              className="px-4 py-2 cursor-pointer bg-[#152852] md:text-wrap text-nowrap flex flex-row items-center gap-4 rounded-lg text-white"
             >
               <FaPlus />
               <label className="cursor-pointer">Add Course</label>
             </button>
           </div>
-          <div className="flex flex-row gap-5 mt-12 ">
-            <div className=" w-7/12 h-full">
+          <div className="flex flex-col md:flex-row gap-5 mt-12 ">
+            <div className=" md:w-7/12 w-full h-full">
               {courses.length > 0 ? (
                 <div className="flex flex-col gap-5">
                   {courses.map((course) => (
@@ -138,7 +138,7 @@ const AdminScreen = ({ getUser }) => {
                 <p>No courses found.</p>
               )}
             </div>
-            <div className="flex-1 flex justify-end h-88">
+            <div className="flex-1 flex justify-center md:justify-end h-88">
               <div className="shadow-y rounded-lg">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar />

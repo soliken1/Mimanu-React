@@ -94,9 +94,9 @@ const AdminDashboard = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen p-12 bg-[#FAF9F6]">
-        <div className="w-full flex flex-row items-center justify-between">
-          <div className="flex flex-row gap-5 items-center">
+      <div className="w-full md:ps-72 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
+        <div className="w-full flex flex-row items-center justify-between md:flex-nowrap flex-wrap md:gap-0 gap-5">
+          <div className="flex flex-row gap-5 items-center md:p-0 px-4 pt-12 md:px-0 md:pt-0">
             <img
               className="w-12 h-12 rounded-full object-cover"
               src={userData.UserImg}
@@ -122,7 +122,7 @@ const AdminDashboard = ({ getUser }) => {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 md:p-0 px-4 md:px-0 md:pt-0">
             <button
               className={`px-3 py-1 rounded ${
                 timeRange === "24h" ? "bg-blue-500 text-white" : "bg-gray-200"
@@ -141,22 +141,22 @@ const AdminDashboard = ({ getUser }) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-row gap-6 items-center mt-5">
-          <div className="w-1/4 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
+        <div className="flex flex-row md:flex-nowrap md:justify-start justify-evenly flex-wrap md:gap-6 gap-2 items-center mt-5 ">
+          <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
             <TotalEmployee userCountData={userCountData} />
           </div>
-          <div className="w-1/4 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
+          <div className="md:w-1/4 w-52  flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
             <TotalEnrollment enrollmentCountData={enrollmentCountData} />
           </div>
-          <div className="w-1/4 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
+          <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
             <TotalCourse courseCountData={courseCountData} />
           </div>
-          <div className="w-1/4 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
+          <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
             <TotalActions actionCountData={actionCountData} />
           </div>
         </div>
-        <div className="w-full flex flex-row gap-5 h-auto mt-8">
-          <div className="w-7/12 flex flex-col gap-5">
+        <div className="w-full flex flex-col md:flex-row gap-5 h-auto mt-8 md:p-0 px-4 md:px-0 md:pt-0">
+          <div className="md:w-7/12 w-full flex flex-col gap-5">
             <div className="h-auto min-h-96 p-6 shadow-y rounded-lg bg-white">
               <div className="flex flex-col">
                 <label className="text-gray-500">
@@ -181,7 +181,7 @@ const AdminDashboard = ({ getUser }) => {
               <RecentActionTable enrolleeActionsData={enrolleeActionsData} />
             </div>
           </div>
-          <div className="w-5/12 flex flex-col gap-5">
+          <div className="md:w-5/12 w-full flex flex-col gap-5">
             <div className="h-auto px-6 py-8 shadow-y rounded-lg flex flex-col bg-white">
               <label className="text-gray-500">
                 Employees Average Grading:
