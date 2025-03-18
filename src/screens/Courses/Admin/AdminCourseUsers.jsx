@@ -65,9 +65,9 @@ const AdminCourseUsers = ({ getUser }) => {
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 pt-12 md:px-0 md:pt-0">
             <label className="text-xl font-semibold">
               {courseData?.CourseTitle}
             </label>
@@ -77,9 +77,9 @@ const AdminCourseUsers = ({ getUser }) => {
           </div>
           <CourseSidebar userData={userData} />
         </div>
-        <div className="w-full h-full flex flex-row mt-6">
+        <div className="w-full h-full flex flex-row mt-6 px-4 md:px-0 md:pt-0">
           <div className="flex-1 flex flex-col">
-            <div className="flex flex-row justify-between">
+            <div className="flex md:flex-row flex-col md:gap-0 gap-2 justify-between">
               <label className="text-xl font-semibold">Employee List</label>
               <div className="flex flex-row gap-2">
                 <input
@@ -98,8 +98,8 @@ const AdminCourseUsers = ({ getUser }) => {
               </div>
             </div>
             {/* Employees Table */}
-            <div className="w-full mt-5 bg-white shadow-md rounded-lg ">
-              <table className="w-full border-collapse">
+            <div className="w-full mt-5 bg-white shadow-md rounded-lg">
+              <table className="w-full border-collapse overflow-x-auto">
                 <thead>
                   <tr>
                     <th className="py-3 px-6 text-left">Profile</th>

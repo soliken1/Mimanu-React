@@ -47,7 +47,7 @@ const TrainorScreen = ({ getUser }) => {
   return (
     <div class="flex h-full w-full flex-col  md:flex-row md:pb-0 duration-300  pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full ps-72 h-auto min-h-screen  flex flex-row p-12 bg-[#FAF9F6]">
+      <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen flex flex-row p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-col">
           <label className="text-2xl font-semibold poppins-normal">
             Courses

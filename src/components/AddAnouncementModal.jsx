@@ -8,7 +8,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3">
         <h2 className="text-xl font-semibold mb-4">Add Announcement</h2>
 
         {/* Title Input */}

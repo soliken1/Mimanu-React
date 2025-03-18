@@ -60,7 +60,7 @@ const AdminTaskQuestions = ({ getUser }) => {
     return (
       <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
         <NavSidebar userData={userData} />
-        <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]"></div>
+        <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]"></div>
       </div>
     );
   }
@@ -74,14 +74,14 @@ const AdminTaskQuestions = ({ getUser }) => {
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
-      <div className="w-full flex flex-col gap-2 ps-66 h-auto min-h-screen p-12 bg-[#FAF9F6]">
+      <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <label className="text-xl font-semibold">{taskData?.TaskTitle}</label>
-        <div className="w-full flex-row flex gap-5 mt-5">
+        <div className="w-full flex-col md:flex-row flex gap-5 mt-5">
           {/* Sidebar */}
-          <div className="min-w-[70px] bg-white rounded-lg min-h-52 overflow-y-auto p-4 h-full">
-            <ul className="space-y-2">
+          <div className="md:min-w-[70px] bg-white rounded-lg md:min-h-52 overflow-y-auto p-4 h-full">
+            <ul className="space-y-2 md:flex-col flex flex-row gap-2 md:gap-0">
               {questionsData.map((question, index) => (
-                <li key={index}>
+                <li className="w-12" key={index}>
                   <button
                     className={`w-full text-center p-1 rounded-lg cursor-pointer ${
                       currentIndex === index
