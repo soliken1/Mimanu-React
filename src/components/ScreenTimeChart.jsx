@@ -34,6 +34,7 @@ const ScreenTimeChart = ({ timeRange, role }) => {
         setScreenTimeData(data);
       } else {
         const data = await fetchTopScreenTimeActions(timeRange);
+        console.log(data);
         setScreenTimeData(data);
       }
     };
@@ -48,6 +49,13 @@ const ScreenTimeChart = ({ timeRange, role }) => {
     );
   }
 
+  const allKeys = new Set();
+  screenTimeData.forEach((entry) => {
+    Object.keys(entry).forEach((key) => {
+      if (key !== "time") allKeys.add(key);
+    });
+  });
+
   return (
     <ResponsiveContainer width="100%" height={500}>
       <BarChart
@@ -59,25 +67,19 @@ const ScreenTimeChart = ({ timeRange, role }) => {
         {/* ✅ Converts Y-Axis to hh:mm format */}
         <Tooltip formatter={(value) => formatDuration(value)} />
         <Legend />
-        {Object.keys(screenTimeData[0])
-          .filter((key) => key !== "time")
-          .map((screen, index) => (
-            <Bar
-              key={screen}
-              dataKey={screen}
-              stackId="1"
-              stroke={
-                ["#4188ff", "#e23636", "#edb95e", "#4caf50", "#ff9800"][
-                  index % 5
-                ]
-              }
-              fill={
-                ["#4188ff", "#e23636", "#edb95e", "#4caf50", "#ff9800"][
-                  index % 5
-                ]
-              }
-            />
-          ))}
+        {[...allKeys].map((screen, index) => (
+          <Bar
+            key={screen}
+            dataKey={screen}
+            stackId="1"
+            stroke={
+              ["#4188ff", "#e23636", "#edb95e", "#4caf50", "#ff9800"][index % 5]
+            }
+            fill={
+              ["#4188ff", "#e23636", "#edb95e", "#4caf50", "#ff9800"][index % 5]
+            }
+          />
+        ))}
       </BarChart>
     </ResponsiveContainer>
   );
