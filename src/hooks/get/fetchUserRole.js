@@ -9,7 +9,7 @@ const fetchUserRole = async (uid) => {
     if (docSnap.exists()) {
       return docSnap.data().UserRole || null;
     } else {
-      console.warn("No user found for UID:", uid);
+      console.warn("No user found for UID:", UID);
       return null;
     }
   } catch (error) {

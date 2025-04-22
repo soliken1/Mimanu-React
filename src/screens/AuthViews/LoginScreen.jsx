@@ -1,27 +1,110 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
 import { auth } from "../../config/firebaseConfigs";
+import { db } from "../../config/firebaseConfigs";
+import { doc, getDoc, setDoc, deleteDoc, query, where, getDocs, collection } from "firebase/firestore";
+import bcrypt from 'bcryptjs'; // Import bcryptjs
+import { toast, Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
+
 const LoginScreen = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  
 
   const login = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Step 1: Check if the user exists by email as the document ID for silent registration
+      const userDocRef = doc(db, "Users", email);
+      const userDoc = await getDoc(userDocRef);
 
-      navigate("/dashboard");
+      // If the user document exists, it could be a pending registration
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        // Validate if the password field exists
+      if (!userData.Password) {
+        console.log("Password not found in the database.");
+        return;
+      }
+
+      // Check if the entered password matches the stored password hash
+      const passwordMatch = await bcrypt.compare(password, userData.Password);
+
+      if (!passwordMatch) {
+        // If the passwords do not match, show an error message and do not proceed
+        toast.error("Password do not match, please try again!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          theme: "colored",
+          transition: Bounce,
+        });
+        return;
+      }
+
+        
+        // If the user is pending (isPending is true), proceed with registration
+        if (userData.isPending) {
+          // Create the user without logging them in
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+          // Send email verification after the user is created
+          await sendEmailVerification(userCredential.user);
+    
+          // Create a new user document with the uid as the document ID
+          const newUserDocRef = doc(db, "Users", userCredential.user.uid);
+    
+          // Transfer all data from the old document to the new document
+          await setDoc(newUserDocRef, {
+            ...userData, // Transfer all fields from the old document
+            isPending: false,  // Update isPending to false
+            Password: null,  // Remove the password field
+            UID: userCredential.user.uid,  // Store the UID
+            Email: userCredential.user.email,  // Store the email
+          });
+    
+          // Delete the old document with the email as the document ID
+          await deleteDoc(userDocRef);
+          return;
+        }
+      } else {
+        // Step 2: If the document with the email does not exist, search the Users collection for matching email
+        const usersQuery = query(collection(db, "Users"), where("Email", "==", email));
+        const querySnapshot = await getDocs(usersQuery);
+
+        if (querySnapshot.empty) {
+          toast.error("User does not exist, Please contact you Admin.", {
+            position: "bottom-right",
+            autoClose: 5000,
+            theme: "colored",
+            transition: Bounce,
+          });
+          return;
+        }
+
+        const userDoc = querySnapshot.docs[0]; // Get the first matching document
+        const userData = userDoc.data();
+
+        // Step 3: Proceed with login if the user is found in the query result
+        await signInWithEmailAndPassword(auth, email, password);
+        
+        navigate("/dashboard");
+      }
     } catch (error) {
       setErrorMessage(null);
-      if (error.code === "auth/missing-password") {
-        setErrorMessage("Password is Empty");
-      } else if (error.code === "auth/missing-email") {
-        setErrorMessage("Email is Empty");
-      } else {
-        setErrorMessage("Please Input Appropriate Fields");
+      if (error.code === "auth/invalid-credential") {
+        toast.error("Invalid Credentials, Please Try again!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          theme: "colored",
+          transition: Bounce,
+        });
+      } else if (error.code === "auth/invalid-email-verified") {
+        setErrorMessage("Email not Verified! Please check your email.");
       }
       console.log(error);
     }
@@ -91,7 +174,9 @@ const LoginScreen = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
+    
   );
 };
 

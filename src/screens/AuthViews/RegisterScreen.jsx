@@ -4,18 +4,28 @@ import { CiSearch } from "react-icons/ci";
 import fetchUser from "../../hooks/get/fetchUser";
 import LoadingScreen from "../../components/LoadingScreen";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  Timestamp,
+} from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import RegisterModal from "../../components/RegisterModal";
 import fetchUsers from "../../hooks/get/fetchUsers";
 import NavSidebar from "../../components/NavSidebar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import PeerFormModal from "../../components/PeerFormModal";
 import Loader from "../../components/Loader";
-import { Timestamp } from "firebase/firestore";
+import bcrypt from "bcryptjs";
+
 const RegisterScreen = ({ getUser }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
   const [formData, setFormData] = useState({
@@ -90,6 +100,19 @@ const RegisterScreen = ({ getUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Email validation regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    // Password length validation
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -107,38 +130,52 @@ const RegisterScreen = ({ getUser }) => {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
+      // Check if email already exists in Users collection
+      const usersRef = collection(db, "Users");
+      const q = query(usersRef, where("Email", "==", formData.email));
+      const querySnapshot = await getDocs(q);
 
-      const user = userCredential.user;
+      if (!querySnapshot.empty) {
+        toast.error("Email already exists!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          theme: "colored",
+          transition: Bounce,
+        });
+        return;
+      }
 
-      const userDoc = {
-        UID: user.uid,
+      // Hash the password before saving
+      const hashedPassword = await bcrypt.hash(formData.password, 10);
+
+      const newUserData = {
         FirstName: formData.firstName,
         LastName: formData.lastName,
         Email: formData.email,
         UserRole: formData.role,
         Username: formData.username,
+        Password: hashedPassword,
         UserImg:
           "https://res.cloudinary.com/dip5gm9sj/image/upload/v1738510538/profile_images/osnoqwziewk117iq51pw.jpg",
         CreatedAt: Timestamp.now(),
+        isPending: true,
+        Status: "Active",
       };
 
-      await setDoc(doc(db, "Users", user.uid), userDoc);
-      toast.success("Successfully Registered User", {
+      await setDoc(doc(db, "Users", formData.email), newUserData);
+
+      toast.success("User added successfully!", {
         position: "bottom-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
         theme: "colored",
         transition: Bounce,
       });
+
+      // Redirect and refresh to /register screen
+      navigate("/register", { replace: true });
+      window.location.reload(); // Reload to refresh the page
+
+      // Clear form data after submission
       setFormData({
         firstName: "",
         lastName: "",
@@ -147,29 +184,16 @@ const RegisterScreen = ({ getUser }) => {
         confirmPassword: "",
         role: "",
         username: "",
+        Status: "",
       });
     } catch (error) {
-      toast.error(`Something went Wrong! Please Try Again ${error}`, {
+      toast.error(`Failed to save user: ${error.message}`, {
         position: "bottom-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
         theme: "colored",
         transition: Bounce,
       });
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "",
-        username: "",
-      });
-      console.error(error.message);
+      console.error(error);
     }
   };
 
@@ -200,7 +224,7 @@ const RegisterScreen = ({ getUser }) => {
   }
 
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="h-auto flex flex-col md:flex-row justify-between">
