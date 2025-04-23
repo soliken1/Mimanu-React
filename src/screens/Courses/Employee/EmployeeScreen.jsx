@@ -143,12 +143,12 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                       Take Your Self-Assessment Here!
                     </label>
                     <div className="w-full justify-end flex">
-                      <Link
-                        to="/self-form"
-                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
-                      >
-                        Get Started
-                      </Link>
+                    <Link
+  to={`/self-form/${getUser.uid}`}
+  className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+>
+  Get Started
+</Link>
                     </div>
                   </div>
                 </div>
@@ -164,12 +164,13 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                       Take Your MBTI Assessment Here!
                     </label>
                     <div className="w-full justify-end flex">
-                      <Link
-                        to="/mbti-form"
-                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
-                      >
-                        Get Started
-                      </Link>
+                    <Link
+  to={`/mbti-form/${getUser.uid}`}
+  className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+>
+  Get Started
+</Link>
+
                     </div>
                   </div>
                 </div>
