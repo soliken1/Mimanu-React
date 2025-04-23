@@ -119,12 +119,6 @@ export default function App() {
           }
         />
 
-        {/*Unprotected Form Routes*/}
-        <Route path="/mbti-form" element={<MBTIScreen />} />
-        <Route path="/self-form" element={<SelfFormScreen />} />
-        <Route path="/superior-form" element={<SuperiorFormScreen />} />
-        <Route path="/peer-form" element={<PeerFormScreen />} />
-
         {/*Protected Routes*/}
 
         <Route
@@ -544,6 +538,55 @@ export default function App() {
         />
 
         <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
+
+        <Route
+  path="/mbti-form/:uid"
+  element={
+    <ProtectedRoute
+      role={role}
+      allowedRoles={["Admin", "Trainor", "Employee"]}
+      redirectTo={getDashboardRoute(role)}
+    >
+      <MBTIScreen getUser={getUser} onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/self-form/:uid"
+  element={
+    <ProtectedRoute
+      role={role}
+      allowedRoles={["Admin", "Trainor", "Employee"]}
+      redirectTo={getDashboardRoute(role)}
+    >
+      <SelfFormScreen getUser={getUser} onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/superior-form"
+  element={
+    <ProtectedRoute
+      role={role}
+      allowedRoles={["Admin", "Trainor", "Employee"]}
+      redirectTo={getDashboardRoute(role)}
+    >
+      <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/peer-form"
+  element={
+    <ProtectedRoute
+      role={role}
+      allowedRoles={["Admin", "Trainor", "Employee"]}
+      redirectTo={getDashboardRoute(role)}
+    >
+      <PeerFormScreen getUser={getUser} onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </Router>
   );
