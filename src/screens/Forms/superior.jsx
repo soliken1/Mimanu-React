@@ -95,7 +95,7 @@ const SuperiorFormScreen = () => {
     const q = query(
         formAnswersRef,
         where("formType", "==", "SuperiorForm"),
-        where("answeredBy", "==","uid")
+        where("uid", "==",assessedUser.UID),
     );
 
     try {
