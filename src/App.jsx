@@ -564,7 +564,7 @@ export default function App() {
   }
 />
 <Route
-  path="/superior-form"
+  path="/superior-form/:uid"
   element={
     <ProtectedRoute
       role={role}

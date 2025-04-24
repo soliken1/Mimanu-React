@@ -323,17 +323,19 @@ const RegisterScreen = ({ getUser }) => {
                       </div>
                     </div>
                     <div className="flex flex-row gap-5 items-center justify-center">
-                      {/*Add Extra Params on URL Maybe For UserID Referencing e.g /mbti-form?id=user.id*/}
-                      <Link
-                        className="text-xs underline cursor-pointer"
-                        to="/mbti-form"
-                      >
-                        MBTI Form
-                      </Link>
-                      <button className="text-red-500 cursor-pointer text-xs hover:underline">
-                        Disable
-                      </button>
-                    </div>
+  {user.UserRole === "Employee" && (
+    <Link
+      className="text-xs underline cursor-pointer"
+      to={`/superior-form/${user.UID}`}
+    >
+      Assess this User
+    </Link>
+  )}
+  <button className="text-red-500 cursor-pointer text-xs hover:underline">
+    Disable
+  </button>
+</div>
+
                   </Link>
                 ))
               ) : (
