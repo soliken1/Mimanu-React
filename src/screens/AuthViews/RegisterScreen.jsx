@@ -156,7 +156,7 @@ const RegisterScreen = ({ getUser }) => {
         Username: formData.username,
         Password: hashedPassword,
         UserImg:
-          "https://res.cloudinary.com/dip5gm9sj/image/upload/v1738510538/profile_images/osnoqwziewk117iq51pw.jpg",
+          "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
         CreatedAt: Timestamp.now(),
         isPending: true,
         Status: "Active",
