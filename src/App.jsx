@@ -537,7 +537,7 @@ export default function App() {
           element={<EditProfile getUser={getUser} onLogout={handleLogout} />}
         />
 
-        <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
+        {/* <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} /> */}
 
         <Route
           path="/mbti-form/:uid"
