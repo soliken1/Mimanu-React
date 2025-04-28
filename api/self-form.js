@@ -1,6 +1,6 @@
-import { db } from "../config/firebaseConfigs";
+import { db } from "./firebaseConfigs";
 import { collection, query, where, getDocs } from "firebase/firestore";
-
+console.log("Firebase DB:", db);
 export default async function handler(req, res) {
   const { uid } = req.query;
 
