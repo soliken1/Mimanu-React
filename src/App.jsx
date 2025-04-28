@@ -537,7 +537,7 @@ export default function App() {
           element={<EditProfile getUser={getUser} onLogout={handleLogout} />}
         />
 
-        {/* <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} /> */}
+        <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
 
         <Route
           path="/mbti-form/:uid"
@@ -551,18 +551,18 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* <Route
-  path="/self-form/:uid"
-  element={
-    <ProtectedRoute
-      role={role}
-      allowedRoles={["Admin", "Trainor", "Employee"]}
-      redirectTo={getDashboardRoute(role)}
-    >
-      <SelfFormScreen getUser={getUser} onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/> */}
+        <Route
+          path="/self-form/:uid"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <SelfFormScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/superior-form/:uid"
           element={
