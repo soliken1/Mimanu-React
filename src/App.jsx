@@ -540,18 +540,18 @@ export default function App() {
         <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
 
         <Route
-  path="/mbti-form/:uid"
-  element={
-    <ProtectedRoute
-      role={role}
-      allowedRoles={["Admin", "Trainor", "Employee"]}
-      redirectTo={getDashboardRoute(role)}
-    >
-      <MBTIScreen getUser={getUser} onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/>
-<Route
+          path="/mbti-form/:uid"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <MBTIScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        {/* <Route
   path="/self-form/:uid"
   element={
     <ProtectedRoute
@@ -562,31 +562,31 @@ export default function App() {
       <SelfFormScreen getUser={getUser} onLogout={handleLogout} />
     </ProtectedRoute>
   }
-/>
-<Route
-  path="/superior-form/:uid"
-  element={
-    <ProtectedRoute
-      role={role}
-      allowedRoles={["Admin", "Trainor", "Employee"]}
-      redirectTo={getDashboardRoute(role)}
-    >
-      <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/peer-form"
-  element={
-    <ProtectedRoute
-      role={role}
-      allowedRoles={["Admin", "Trainor", "Employee"]}
-      redirectTo={getDashboardRoute(role)}
-    >
-      <PeerFormScreen getUser={getUser} onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/>
+/> */}
+        <Route
+          path="/superior-form/:uid"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/peer-form"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <PeerFormScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
