@@ -1,6 +1,15 @@
-import { db } from "./firebaseConfigs";
-import { collection, query, where, getDocs } from "firebase/firestore";
-console.log("Firebase DB:", db);
+import admin from "firebase-admin";
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+const db = admin.firestore();
+
 export default async function handler(req, res) {
   const { uid } = req.query;
 
@@ -10,14 +19,12 @@ export default async function handler(req, res) {
     }
 
     try {
-      const formAnswersRef = collection(db, "Form-Answers");
-      const q = query(
-        formAnswersRef,
-        where("formType", "==", "SelfForm"),
-        where("answeredBy", "==", uid)
-      );
+      const formAnswersRef = db.collection("Form-Answers");
+      const q = formAnswersRef
+        .where("formType", "==", "SelfForm")
+        .where("answeredBy", "==", uid);
 
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await q.get();
 
       if (querySnapshot.empty) {
         return res
