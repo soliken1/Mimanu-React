@@ -1,12 +1,17 @@
-
 import { db } from "../../../config/firebaseConfigs";
 import { collection, query, where, getDocs } from "firebase/firestore";
+
 export default async function handler(req, res) {
-  const { uid } = req.query;
+  // Extract the uid from the URL path manually
+  const urlParts = req.url.split("/");
+  const uid = urlParts[urlParts.length - 1]; // Gets the last part after /self-form/
 
   if (req.method === "GET") {
-    if (!uid) {
-      return res.status(400).json({ error: "Missing uid in request query" });
+    if (!uid || uid.includes("?")) {
+      // Prevent issues if query params are attached
+      return res
+        .status(400)
+        .json({ error: "Missing or invalid uid in URL path" });
     }
 
     try {
