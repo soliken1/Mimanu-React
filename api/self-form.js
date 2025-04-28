@@ -1,5 +1,6 @@
 import { db } from "../../../config/firebaseConfigs";
 import { collection, query, where, getDocs } from "firebase/firestore";
+
 export default async function handler(req, res) {
   const { uid } = req.query;
 
