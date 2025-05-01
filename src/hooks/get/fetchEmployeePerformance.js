@@ -15,7 +15,7 @@ const fetchEmployeePerformance = async () => {
     let totalScore = 0;
     let totalQuestions = 0;
 
-    // ✅ Loop through each enrolled employee
+    //  Loop through each enrolled employee
     for (const enrolledDoc of enrolledDocs) {
       const completedTaskRef = collection(
         db,
@@ -24,10 +24,10 @@ const fetchEmployeePerformance = async () => {
         "CompletedTask"
       );
 
-      // ✅ Fetch all completed tasks
+      //  Fetch all completed tasks
       const completedTaskSnapshot = await getDocs(completedTaskRef);
 
-      // ✅ Sum scores and total possible questions
+      //  Sum scores and total possible questions
       completedTaskSnapshot.docs.forEach((taskDoc) => {
         const { Score, TotalQuestions } = taskDoc.data();
         if (Score !== undefined && TotalQuestions !== undefined) {
@@ -37,13 +37,13 @@ const fetchEmployeePerformance = async () => {
       });
     }
 
-    // ✅ Calculate the average percentage
+    //  Calculate the average percentage
     const averagePercentage =
       totalQuestions > 0
         ? ((totalScore / totalQuestions) * 100).toFixed(2) + "%"
         : "0%";
 
-    // ✅ Determine pass/fail status
+    // Determine pass/fail status
     const status =
       totalQuestions > 0 && totalScore / totalQuestions >= 0.75
         ? "Passing"

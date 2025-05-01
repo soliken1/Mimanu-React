@@ -12,6 +12,11 @@ import ScreenTimeBar from "../../components/ScreenTimeBar";
 import ScreenTimeChart from "../../components/ScreenTimeChart";
 import fetchTrainerScreenTimeData from "../../hooks/get/trainor/fetchTrainorScreenTime";
 import calculateTotalScreenTime from "../../helper/calculateTotalScreenTime";
+import SkillRadarChart from "../../components/SkillRadarChart";
+import fetchTrainorEmployeePerformance from "../../hooks/get/trainor/fetchTrainorEmployeePerformance";
+import fetchAggregatedScreenTimeByTrainor from "../../hooks/get/trainor/fetchAggregatedScreenTimeByTrainor";
+import RecentActionTable from "../../components/Admin/Dashboard/RecentActionTable.jsx";
+
 const TrainorDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +26,8 @@ const TrainorDashboard = ({ getUser }) => {
   const [timeRange, setTimeRange] = useState("24h");
   const [totalTime, setTotalTime] = useState(0);
   const [topScreenTimeData, setTopScreenTimeData] = useState(null);
+  const [enrolleePerformaceData, setEnrolleePerformaceData] = useState(null);
+  const [enrolleeActionsData, setEnrolleeActionsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +37,16 @@ const TrainorDashboard = ({ getUser }) => {
 
         const topScreenTime = await fetchTrainerScreenTimeData();
         setTopScreenTimeData(topScreenTime);
+
+        const enrolleePerformace = await fetchTrainorEmployeePerformance(
+          getUser.uid
+        );
+        setEnrolleePerformaceData(enrolleePerformace);
+
+        const enrolleeActions = await fetchAggregatedScreenTimeByTrainor(
+          getUser.uid
+        );
+        setEnrolleeActionsData(enrolleeActions);
 
         if (topScreenTime) {
           const totalDuration = calculateTotalScreenTime(topScreenTime);
@@ -163,16 +180,44 @@ const TrainorDashboard = ({ getUser }) => {
                 />
               </div>
             </div>
-            <div className="h-96 shadow-y rounded-lg">
-              Recent Employee Actions
+            <div className="h-auto p-6 shadow-y rounded-lg bg-white">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Recent Employee Actions
+              </h2>
+              <RecentActionTable enrolleeActionsData={enrolleeActionsData} />
             </div>
           </div>
           <div className="w-5/12 flex flex-col gap-5">
-            <div className="h-52 shadow-y rounded-lg">
-              Employee Grading State
+            <div className="h-auto px-6 py-8 shadow-y rounded-lg flex flex-col bg-white">
+              <label className="text-gray-500">
+                Employees Average Grading:
+              </label>
+              <div className="flex flex-col gap-2 mt-1">
+                <label
+                  className={`text-4xl  ${
+                    enrolleePerformaceData.status === "Passing"
+                      ? "text-green-600"
+                      : "text-yellow-600"
+                  }`}
+                >
+                  {enrolleePerformaceData.status}
+                </label>
+                <label
+                  className={`text-xl w-30 items-center justify-center rounded-lg flex ${
+                    enrolleePerformaceData.status === "Passing"
+                      ? "text-green-600 bg-green-200"
+                      : "text-red-600 bg-red-200"
+                  }`}
+                >
+                  {enrolleePerformaceData.averagePercentage}
+                </label>
+              </div>
             </div>
-            <div className="h-80 shadow-y rounded-lg">
-              Average Employee Skill
+            <div className="min-h-96 h-auto p-6 shadow-y flex flex-col rounded-lg bg-white">
+              <label className="text-gray-500">
+                Average Enrolled Employee Skill
+              </label>
+              <SkillRadarChart />
             </div>
           </div>
         </div>
