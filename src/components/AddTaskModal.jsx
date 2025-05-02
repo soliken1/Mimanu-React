@@ -8,7 +8,9 @@ const AddTaskModal = ({ isOpen, onClose, courseId }) => {
   const [taskData, setTaskData] = useState({
     TaskTitle: "",
     StartDate: "",
+    StartTime: "",
     EndDate: "",
+    EndTime: "",
     TaskDescription: "",
     Enabled: true,
   });
@@ -17,7 +19,9 @@ const AddTaskModal = ({ isOpen, onClose, courseId }) => {
     if (
       !taskData.TaskTitle.trim() ||
       !taskData.StartDate ||
-      !taskData.EndDate
+      !taskData.EndDate ||
+      !taskData.StartTime ||
+      !taskData.EndTime
     ) {
       toast.error("Please Fill Out The Task Details!", {
         position: "bottom-right",
@@ -75,28 +79,66 @@ const AddTaskModal = ({ isOpen, onClose, courseId }) => {
               }
               className="w-full p-2 border rounded mb-3"
             />
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Start Date
-            </label>
-            <input
-              type="date"
-              value={taskData.StartDate}
-              onChange={(e) =>
-                setTaskData({ ...taskData, StartDate: e.target.value })
-              }
-              className="w-full p-2 border rounded mb-3"
-            />
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Deadline
-            </label>
-            <input
-              type="date"
-              value={taskData.EndDate}
-              onChange={(e) =>
-                setTaskData({ ...taskData, EndDate: e.target.value })
-              }
-              className="w-full p-2 border rounded mb-3"
-            />
+            <div className="flex flex-row gap-5">
+              <div className="flex flex-col w-1/2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={taskData.StartDate}
+                  onChange={(e) =>
+                    setTaskData({ ...taskData, StartDate: e.target.value })
+                  }
+                  className=" p-2 border rounded mb-3"
+                />
+              </div>
+
+              <div className="flex flex-col w-1/2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Deadline
+                </label>
+                <input
+                  type="date"
+                  value={taskData.EndDate}
+                  onChange={(e) =>
+                    setTaskData({ ...taskData, EndDate: e.target.value })
+                  }
+                  className="p-2 border rounded mb-3"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-row gap-5">
+              <div className="flex flex-col w-1/2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Start Time
+                </label>
+                <input
+                  type="time"
+                  value={taskData.StartTime}
+                  onChange={(e) =>
+                    setTaskData({ ...taskData, StartTime: e.target.value })
+                  }
+                  className=" p-2 border rounded mb-3"
+                />
+              </div>
+
+              <div className="flex flex-col w-1/2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  End Time
+                </label>
+                <input
+                  type="time"
+                  value={taskData.EndTime}
+                  onChange={(e) =>
+                    setTaskData({ ...taskData, EndTime: e.target.value })
+                  }
+                  className="p-2 border rounded mb-3"
+                />
+              </div>
+            </div>
+
             <div className="flex justify-end gap-2 text-white mt-4">
               <button
                 className="bg-[#152852] px-4 cursor-pointer rounded-md"
