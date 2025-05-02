@@ -2,18 +2,24 @@ import React, { useEffect, useState } from "react";
 import NavSidebar from "../../components/NavSidebar";
 import { useNavigate, useParams } from "react-router-dom";
 import fetchUser from "../../hooks/get/fetchUser";
-import LoadingScreen from "../../components/LoadingScreen";
-import { auth } from "../../config/firebaseConfigs";
-import { signOut } from "firebase/auth";
-import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
 import Loader from "../../components/Loader";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+
 const ProfileScreen = ({ getUser }) => {
   const { uid } = useParams();
-  const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [completedCourses, setCompletedCourses] = useState([]);
+
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
@@ -29,6 +35,37 @@ const ProfileScreen = ({ getUser }) => {
       }
     };
 
+    const fetchCompletedCourses = async () => {
+      try {
+        const enrolledRef = collection(db, "Enrolled");
+        const q = query(
+          enrolledRef,
+          where("UserID", "==", uid),
+          where("Status", "==", "Completed")
+        );
+        const querySnapshot = await getDocs(q);
+
+        const coursePromises = querySnapshot.docs.map(async (docSnap) => {
+          const courseID = docSnap.data().CourseID;
+          const courseRef = doc(db, "Course", courseID);
+          const courseSnap = await getDoc(courseRef);
+
+          if (courseSnap.exists()) {
+            return { id: courseID, ...courseSnap.data() };
+          }
+          return null;
+        });
+
+        const courses = (await Promise.all(coursePromises)).filter(
+          (course) => course !== null
+        );
+        setCompletedCourses(courses);
+      } catch (err) {
+        console.error("Error fetching completed courses:", err);
+      }
+    };
+
+    fetchCompletedCourses();
     fetchAndSetUserData();
   }, [uid]);
 
@@ -61,8 +98,30 @@ const ProfileScreen = ({ getUser }) => {
           </div>
         </div>
 
-        <div className="mt-40 h-auto min-h-96 text-gray-500 justify-center items-center flex">
-          Display Maybe Achievements Here
+        <div className="mt-40 h-auto min-h-96 text-gray-500 justify-center items-center flex flex-col gap-5">
+          <h2 className="text-2xl font-semibold text-black">
+            Completed Courses
+          </h2>
+          {completedCourses.length > 0 ? (
+            completedCourses.map((course) => (
+              <div
+                key={course.id}
+                className="w-full max-w-2xl bg-white rounded-lg shadow p-5 flex flex-col gap-2 border-l-4"
+                style={{ borderColor: course.CourseColor }}
+              >
+                <h3 className="text-lg font-bold">{course.CourseTitle}</h3>
+                <p className="text-sm text-gray-600">
+                  {course.CourseDescription}
+                </p>
+                <p className="text-xs text-gray-400">
+                  Completed on:{" "}
+                  {course.CreatedAt?.toDate().toLocaleDateString()}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>No completed courses yet.</p>
+          )}
         </div>
       </div>
       <HelpButton />
