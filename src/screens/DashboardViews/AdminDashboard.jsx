@@ -19,6 +19,7 @@ import SkillRadarChart from "../../components/SkillRadarChart.jsx";
 import fetchUserActions from "../../hooks/get/fetchUserActions.js";
 import RecentActionTable from "../../components/Admin/Dashboard/RecentActionTable.jsx";
 import BreakdownBarChart from "../../components/BreakdownBarChart.jsx";
+import MonthlyEnrolledCountBarChart from "../../components/MonthlyEnrolledCountBarChart.jsx";
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -139,7 +140,15 @@ const AdminDashboard = ({ getUser }) => {
               }`}
               onClick={() => setTimeRange("7d")}
             >
-              Past 7 Days
+              This Week
+            </button>
+            <button
+              className={`px-3 py-1 rounded ${
+                timeRange === "30d" ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+              onClick={() => setTimeRange("30d")}
+            >
+              This Month
             </button>
           </div>
         </div>
@@ -155,6 +164,14 @@ const AdminDashboard = ({ getUser }) => {
           </div>
           <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
             <TotalActions actionCountData={actionCountData} />
+          </div>
+        </div>
+        <div className="w-full flex flex-col md:flex-row gap-5 h-auto mt-8 md:p-0 px-4 md:px-0 md:pt-0">
+          <div className="h-auto w-full min-h-96 p-6 shadow-y rounded-lg bg-white">
+            <h2 className="text-lg font-semibold text-gray-700">
+              Monthly Enrolled Employees
+            </h2>
+            <MonthlyEnrolledCountBarChart />
           </div>
         </div>
         <div className="w-full flex flex-col md:flex-row gap-5 h-auto mt-8 md:p-0 px-4 md:px-0 md:pt-0">
@@ -179,7 +196,7 @@ const AdminDashboard = ({ getUser }) => {
             <div className="h-auto p-6 shadow-y rounded-lg bg-white">
               <div className="flex flex-row justify-between">
                 <h2 className="text-lg font-semibold text-gray-700">
-                  Recent Employee Actions
+                  Recent System Actions
                 </h2>
                 <input
                   placeholder="Search Employee"
