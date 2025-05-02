@@ -180,14 +180,15 @@ const EditProfileScreen = ({ getUser }) => {
 
             <div className="mb-4">
               <label htmlFor="Email" className="block mb-2 font-medium">
-                New Email
+                Email
               </label>
               <input
                 type="email"
                 id="Email"
+                disabled={true}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border px-4 py-2 rounded-lg"
+                className="w-full  px-4 py-2 rounded-lg bg-gray-200"
               />
             </div>
           </div>

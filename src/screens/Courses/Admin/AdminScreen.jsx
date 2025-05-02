@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import LoadingScreen from "../../../components/LoadingScreen";
 import fetchUser from "../../../hooks/get/fetchUser";
 import NavSidebar from "../../../components/NavSidebar";
 import { FaPlus } from "react-icons/fa";
@@ -21,6 +20,12 @@ const AdminScreen = ({ getUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredCourses = courses.filter((course) =>
+    course.CourseTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,6 +63,8 @@ const AdminScreen = ({ getUser }) => {
             <input
               placeholder="Search Course"
               className="border px-4 rounded-xl w-96 border-black"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button
               onClick={() => setIsModalOpen(true)}
@@ -69,9 +76,9 @@ const AdminScreen = ({ getUser }) => {
           </div>
           <div className="flex flex-col md:flex-row gap-5 mt-12 ">
             <div className=" md:w-7/12 w-full h-full">
-              {courses.length > 0 ? (
+              {filteredCourses.length > 0 ? (
                 <div className="flex flex-col gap-5">
-                  {courses.map((course) => (
+                  {filteredCourses.map((course) => (
                     <div
                       key={course.id}
                       className=" h-38 flex flex-row gap-5 shadow-y rounded-xl"

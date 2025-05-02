@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import fetchUser from "../../hooks/get/fetchUser";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../../components/LoadingScreen";
 import NavSidebar from "../../components/NavSidebar";
 import HelpButton from "../../components/HelpButton";
 import { Link } from "react-router-dom";
