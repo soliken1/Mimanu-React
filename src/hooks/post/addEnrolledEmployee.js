@@ -16,6 +16,7 @@ const addEnrolledEmployee = async (userID, courseID) => {
       UserID: userID,
       CourseID: courseID,
       DateEnrolled: Timestamp.now(),
+      Status: "On-Going",
     });
     return { success: true, message: "Employee enrolled successfully" };
   } catch (error) {

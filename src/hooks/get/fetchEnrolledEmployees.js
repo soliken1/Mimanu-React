@@ -30,6 +30,7 @@ const fetchEnrolledEmployees = async (courseID) => {
           return {
             id: enrolled.id,
             UserID: enrolled.UserID,
+            Status: enrolled.Status,
             FirstName: userSnap.data().FirstName,
             LastName: userSnap.data().LastName,
             Email: userSnap.data().Email,

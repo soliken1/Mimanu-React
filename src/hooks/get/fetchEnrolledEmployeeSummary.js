@@ -6,6 +6,7 @@ import {
   getDocs,
   doc,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { fetchModulesWithReadStatus } from "./fetchModulesWithReadStatus";
 import fetchTasks from "./fetchTasks";
@@ -83,7 +84,6 @@ const fetchEnrolledUsersSummary = async (courseID) => {
 
           // Assign Grade
           let grade = scorePercentage >= 75 ? "Passing" : "Failing";
-
           const totalCourseProgress =
             totalModules + totalSubmodules + totalTasks;
           const totalEmployeeProgress =
@@ -92,12 +92,21 @@ const fetchEnrolledUsersSummary = async (courseID) => {
             totalCourseProgress === totalEmployeeProgress
               ? "Completed"
               : "On-Going";
+
           if (totalCourseProgress === totalEmployeeProgress) {
             grade = scorePercentage >= 75 ? "Passed" : "Failed";
+
+            const enrolledDocRef = doc(db, "Enrolled", enrolled.id);
+            await updateDoc(enrolledDocRef, {
+              Status: "Completed",
+            });
           }
+
+          let score = `${totalScore}/${totalPossibleScore} (${scorePercentage}%)`;
 
           if (totalScore === 0 && totalPossibleScore === 0) {
             grade = "Pending";
+            score = "No Scores";
           }
 
           return {
@@ -108,7 +117,7 @@ const fetchEnrolledUsersSummary = async (courseID) => {
             LastName: userData.LastName || "Unknown",
             TotalEmployeeProgress: totalEmployeeProgress,
             TotalCourseProgress: totalCourseProgress,
-            Score: `${totalScore}/${totalPossibleScore} (${scorePercentage}%)`,
+            Score: score,
             Grade: grade,
             Status: status,
           };
