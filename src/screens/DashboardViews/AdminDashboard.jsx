@@ -30,6 +30,7 @@ const AdminDashboard = ({ getUser }) => {
   const [totalTime, setTotalTime] = useState(0);
   const [enrolleePerformaceData, setEnrolleePerformaceData] = useState(null);
   const [enrolleeActionsData, setEnrolleeActionsData] = useState([]);
+  const [searchEmployeeAction, setSearchEmployeeAction] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,10 +175,22 @@ const AdminDashboard = ({ getUser }) => {
               <ScreenTimeChart timeRange={timeRange} />
             </div>
             <div className="h-auto p-6 shadow-y rounded-lg bg-white">
-              <h2 className="text-lg font-semibold text-gray-700">
-                Recent Employee Actions
-              </h2>
-              <RecentActionTable enrolleeActionsData={enrolleeActionsData} />
+              <div className="flex flex-row justify-between">
+                <h2 className="text-lg font-semibold text-gray-700">
+                  Recent Employee Actions
+                </h2>
+                <input
+                  placeholder="Search Employee"
+                  className="text-sm px-4 py-2 rounded-md border border-gray-400"
+                  onChange={(e) => setSearchEmployeeAction(e.target.value)}
+                  value={searchEmployeeAction}
+                />
+              </div>
+
+              <RecentActionTable
+                enrolleeActionsData={enrolleeActionsData}
+                searchEmployeeAction={searchEmployeeAction}
+              />
             </div>
           </div>
           <div className="md:w-5/12 w-full flex flex-col gap-5">

@@ -1,23 +1,37 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+} from "firebase/auth";
 import { auth } from "../../config/firebaseConfigs";
 import { db } from "../../config/firebaseConfigs";
-import { doc, getDoc, setDoc, deleteDoc, query, where, getDocs, collection } from "firebase/firestore";
-import bcrypt from 'bcryptjs'; // Import bcryptjs
+import {
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  collection,
+} from "firebase/firestore";
+import bcrypt from "bcryptjs"; // Import bcryptjs
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-
-
+import { MoonLoader } from "react-spinners";
 const LoginScreen = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  
+  const [loading, setLoading] = useState(false);
 
   const login = async () => {
     try {
+      setLoading(true);
       // Step 1: Check if the user exists by email as the document ID for silent registration
       const userDocRef = doc(db, "Users", email);
       const userDoc = await getDoc(userDocRef);
@@ -27,53 +41,59 @@ const LoginScreen = () => {
         const userData = userDoc.data();
 
         // Validate if the password field exists
-      if (!userData.Password) {
-        console.log("Password not found in the database.");
-        return;
-      }
+        if (!userData.Password) {
+          console.log("Password not found in the database.");
+          return;
+        }
 
-      // Check if the entered password matches the stored password hash
-      const passwordMatch = await bcrypt.compare(password, userData.Password);
+        // Check if the entered password matches the stored password hash
+        const passwordMatch = await bcrypt.compare(password, userData.Password);
 
-      if (!passwordMatch) {
-        // If the passwords do not match, show an error message and do not proceed
-        toast.error("Password do not match, please try again!", {
-          position: "bottom-right",
-          autoClose: 5000,
-          theme: "colored",
-          transition: Bounce,
-        });
-        return;
-      }
+        if (!passwordMatch) {
+          // If the passwords do not match, show an error message and do not proceed
+          toast.error("Password do not match, please try again!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            theme: "colored",
+            transition: Bounce,
+          });
+          return;
+        }
 
-        
         // If the user is pending (isPending is true), proceed with registration
         if (userData.isPending) {
           // Create the user without logging them in
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
           // Send email verification after the user is created
           await sendEmailVerification(userCredential.user);
-    
+
           // Create a new user document with the uid as the document ID
           const newUserDocRef = doc(db, "Users", userCredential.user.uid);
-    
+
           // Transfer all data from the old document to the new document
           await setDoc(newUserDocRef, {
             ...userData, // Transfer all fields from the old document
-            isPending: false,  // Update isPending to false
-            Password: null,  // Remove the password field
-            UID: userCredential.user.uid,  // Store the UID
-            Email: userCredential.user.email,  // Store the email
+            isPending: false, // Update isPending to false
+            Password: null, // Remove the password field
+            UID: userCredential.user.uid, // Store the UID
+            Email: userCredential.user.email, // Store the email
           });
-    
+
           // Delete the old document with the email as the document ID
           await deleteDoc(userDocRef);
           return;
         }
       } else {
         // Step 2: If the document with the email does not exist, search the Users collection for matching email
-        const usersQuery = query(collection(db, "Users"), where("Email", "==", email));
+        const usersQuery = query(
+          collection(db, "Users"),
+          where("Email", "==", email)
+        );
         const querySnapshot = await getDocs(usersQuery);
 
         if (querySnapshot.empty) {
@@ -91,11 +111,12 @@ const LoginScreen = () => {
 
         // Step 3: Proceed with login if the user is found in the query result
         await signInWithEmailAndPassword(auth, email, password);
-        
         navigate("/dashboard");
+        setLoading(false);
       }
     } catch (error) {
       setErrorMessage(null);
+      setLoading(false);
       if (error.code === "auth/invalid-credential") {
         toast.error("Invalid Credentials, Please Try again!", {
           position: "bottom-right",
@@ -107,6 +128,8 @@ const LoginScreen = () => {
         setErrorMessage("Email not Verified! Please check your email.");
       }
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,7 +140,7 @@ const LoginScreen = () => {
           MiManuTMS
         </label>
         <label className="absolute left-32 top-48 w-[550px] text-4xl font-normal text-[#152852]">
-          A Training Management System MinebeaMitsumi Cebu
+          A Training Management System
         </label>
         <div className="opacity-60 absolute -bottom-80 left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
         <div className="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
@@ -164,19 +187,24 @@ const LoginScreen = () => {
             {errorMessage && (
               <label className="text-xs text-red-400">{errorMessage}</label>
             )}
-            <button
-              className="h-12 w-64 rounded-xl bg-[#DC3A3A] cursor-pointer text-white duration-300 hover:bg-[#BC3232]"
-              type="submit"
-              onClick={login}
-            >
-              Login
-            </button>
+            {loading ? (
+              <div className="h-12 w-64 flex justify-center items-center rounded-xl bg-[#DC3A3A]">
+                <MoonLoader size={20} />
+              </div>
+            ) : (
+              <button
+                className="h-12 w-64 rounded-xl bg-[#DC3A3A] cursor-pointer text-white duration-300 hover:bg-[#BC3232]"
+                type="submit"
+                onClick={login}
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </div>
       <ToastContainer />
     </div>
-    
   );
 };
 
