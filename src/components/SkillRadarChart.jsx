@@ -8,12 +8,12 @@ import {
 } from "recharts";
 
 const data = [
-  { skill: "Communication", rating: 8 },
-  { skill: "Time Management", rating: 7 },
-  { skill: "Values Enhancement", rating: 9 },
-  { skill: "Teamwork", rating: 6 },
-  { skill: "Critical Thinking", rating: 7 },
-  { skill: "Leadership", rating: 8 },
+  { skill: "Communication", rating: 80 },
+  { skill: "Time Management", rating: 70 },
+  { skill: "Values Enhancement", rating: 90 },
+  { skill: "Teamwork", rating: 60 },
+  { skill: "Critical Thinking", rating: 70 },
+  { skill: "Leadership", rating: 80 },
 ];
 
 const SkillRadarChart = () => {

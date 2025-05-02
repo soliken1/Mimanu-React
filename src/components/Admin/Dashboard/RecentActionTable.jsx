@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const RecentActionTable = ({ enrolleeActionsData }) => {
+const RecentActionTable = ({ enrolleeActionsData, searchEmployeeAction }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -15,8 +15,13 @@ const RecentActionTable = ({ enrolleeActionsData }) => {
     }))
   );
 
+  // Filter based on searchEmployeeAction (case-insensitive)
+  const filteredData = flattenedData.filter((item) =>
+    item.name.toLowerCase().includes(searchEmployeeAction.toLowerCase())
+  );
+
   // Sort by most recent timestamp (descending)
-  const sortedData = flattenedData.sort(
+  const sortedData = filteredData.sort(
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
   );
 
