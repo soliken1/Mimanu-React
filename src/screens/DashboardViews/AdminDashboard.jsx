@@ -18,6 +18,7 @@ import fetchEmployeePerformance from "../../hooks/get/fetchEmployeePerformance.j
 import SkillRadarChart from "../../components/SkillRadarChart.jsx";
 import fetchUserActions from "../../hooks/get/fetchUserActions.js";
 import RecentActionTable from "../../components/Admin/Dashboard/RecentActionTable.jsx";
+import BreakdownBarChart from "../../components/BreakdownBarChart.jsx";
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,7 +31,7 @@ const AdminDashboard = ({ getUser }) => {
   const [totalTime, setTotalTime] = useState(0);
   const [enrolleePerformaceData, setEnrolleePerformaceData] = useState(null);
   const [enrolleeActionsData, setEnrolleeActionsData] = useState([]);
-  const [searchEmployeeAction, setSearchEmployeeAction] = useState(null);
+  const [searchEmployeeAction, setSearchEmployeeAction] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +43,7 @@ const AdminDashboard = ({ getUser }) => {
         setTopScreenTimeData(topScreenTime);
 
         const enrolleePerformace = await fetchEmployeePerformance();
+        console.log(enrolleePerformace);
         setEnrolleePerformaceData(enrolleePerformace);
 
         const enrolleeActions = await fetchUserActions();
@@ -92,7 +94,7 @@ const AdminDashboard = ({ getUser }) => {
     return <Loader />;
   }
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-row items-center justify-between md:flex-nowrap flex-wrap md:gap-0 gap-5">
@@ -224,6 +226,13 @@ const AdminDashboard = ({ getUser }) => {
                 Average Enrolled Employee Skill
               </label>
               <SkillRadarChart />
+            </div>
+
+            <div className="min-h-96 h-auto p-6 shadow-y flex flex-col rounded-lg bg-white">
+              <label className="text-gray-500">Course Average Breakdown:</label>
+              <BreakdownBarChart
+                enrolleePerformaceData={enrolleePerformaceData.specificCourses}
+              />
             </div>
           </div>
         </div>

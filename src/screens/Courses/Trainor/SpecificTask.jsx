@@ -147,7 +147,7 @@ const SpecificTask = ({ getUser }) => {
     return <Loader />;
   }
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full flex flex-col gap-2 md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen p-12 bg-[#FAF9F6]">
         <div className="flex flex-row justify-between">
