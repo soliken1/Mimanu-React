@@ -152,7 +152,7 @@ const EditProfileScreen = ({ getUser }) => {
   }
 
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <form
         onSubmit={handleUpdateProfile}

@@ -30,11 +30,9 @@ const ScreenTimeChart = ({ timeRange, role }) => {
     const fetchData = async () => {
       if (role === "Trainor") {
         const data = await fetchTrainorTopScreenTime(timeRange);
-        console.log(data);
         setScreenTimeData(data);
       } else {
         const data = await fetchTopScreenTimeActions(timeRange);
-        console.log(data);
         setScreenTimeData(data);
       }
     };

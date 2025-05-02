@@ -55,7 +55,7 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
     return <Loader />;
   }
   return (
-    <div class="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <NavSidebar userData={userData} />
       <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen flex flex-col md:flex-row p-12 bg-[#FAF9F6]">
         <div className="md:w-7/12 w-full flex flex-col ">
@@ -143,12 +143,12 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                       Take Your Self-Assessment Here!
                     </label>
                     <div className="w-full justify-end flex">
-                    <Link
-  to={`/self-form/${getUser.uid}`}
-  className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
->
-  Get Started
-</Link>
+                      <Link
+                        to={`/self-form/${getUser.uid}`}
+                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+                      >
+                        Get Started
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -164,13 +164,12 @@ const EmployeeScreen = ({ getUser, onLogout }) => {
                       Take Your MBTI Assessment Here!
                     </label>
                     <div className="w-full justify-end flex">
-                    <Link
-  to={`/mbti-form/${getUser.uid}`}
-  className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
->
-  Get Started
-</Link>
-
+                      <Link
+                        to={`/mbti-form/${getUser.uid}`}
+                        className="px-2 py-1 flex justify-center text-white rounded-sm bg-[#152852]"
+                      >
+                        Get Started
+                      </Link>
                     </div>
                   </div>
                 </div>
