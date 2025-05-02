@@ -27,10 +27,12 @@ const fetchEmployeeActions = async (timeRange) => {
     const now = new Date();
     let pastTime = new Date();
 
-    if (timeRange === "24h") {
-      pastTime.setHours(now.getHours() - 24); // Past 24 hours
-    } else {
+    if (timeRange === "7d") {
       pastTime.setDate(now.getDate() - 7); // Past 7 days
+    } else if (timeRange === "30d") {
+      pastTime.setDate(now.getDate() - 30); // This Month
+    } else {
+      pastTime.setHours(now.getHours() - 24); // Past 24 hours
     }
 
     const pastTimestamp = Timestamp.fromDate(pastTime); // ✅ Firestore Timestamp

@@ -9,7 +9,7 @@ import {
 
 /**
  * Fetches total user count and new users for a specific time range (past 24 hours or 7 days).
- * @param {"24h" | "7d"} timeRange - The selected time range.
+ * @param {"24h" | "7d" | "30d"} timeRange - The selected time range.
  * @returns {Promise<{ totalUsers: number, newUsers: number, percentageChange: string }>}
  */
 const fetchUserCountComparison = async (timeRange) => {
@@ -24,10 +24,12 @@ const fetchUserCountComparison = async (timeRange) => {
     const now = new Date();
     let pastTime = new Date();
 
-    if (timeRange === "24h") {
-      pastTime.setHours(now.getHours() - 24); // Past 24 hours
-    } else {
+    if (timeRange === "7d") {
       pastTime.setDate(now.getDate() - 7); // Past 7 days
+    } else if (timeRange === "30d") {
+      pastTime.setDate(now.getDate() - 30); // This Month
+    } else {
+      pastTime.setHours(now.getHours() - 24); // Past 24 hours
     }
 
     const pastTimestamp = Timestamp.fromDate(pastTime); // ✅ Firestore Timestamp

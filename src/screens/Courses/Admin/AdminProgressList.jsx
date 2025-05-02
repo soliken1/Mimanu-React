@@ -86,7 +86,7 @@ const AdminProgressList = ({ getUser }) => {
                     <th className="py-3 px-6 text-left">Scores</th>
                     <th className="py-3 px-6 text-left">Grade</th>
                     <th className="py-3 px-6 text-left">Status</th>
-                    <th className="py-3 px-6 text-left">View</th>
+                    <th className="py-3 px-6 text-left"></th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -121,8 +121,11 @@ const AdminProgressList = ({ getUser }) => {
                         <td className="py-3 px-6">
                           <label
                             className={`px-2 py-1 rounded-sm ${
-                              employee.Grade === "Passing"
+                              employee.Grade === "Passing" ||
+                              employee.Grade === "Passed"
                                 ? "bg-green-200 text-green-600"
+                                : employee.Grade === "Pending"
+                                ? "bg-yellow-100 text-yellow-600"
                                 : "bg-red-200 text-red-600"
                             }`}
                           >
@@ -132,8 +135,7 @@ const AdminProgressList = ({ getUser }) => {
                         <td className="py-3 px-6">
                           <label
                             className={`px-2 py-1 rounded-sm ${
-                              employee.Status === "Passing" ||
-                              employee.Status === "Active"
+                              employee.Status === "Completed"
                                 ? "bg-green-200 text-green-600"
                                 : "bg-yellow-100 text-yellow-600"
                             }`}

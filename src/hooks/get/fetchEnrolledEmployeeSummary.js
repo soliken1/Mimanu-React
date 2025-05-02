@@ -82,11 +82,23 @@ const fetchEnrolledUsersSummary = async (courseID) => {
               : "0";
 
           // Assign Grade
-          const grade = scorePercentage >= 75 ? "Passing" : "Failing";
+          let grade = scorePercentage >= 75 ? "Passing" : "Failing";
+
           const totalCourseProgress =
             totalModules + totalSubmodules + totalTasks;
           const totalEmployeeProgress =
             totalCompletedModules + totalReadSubmodules + completedTasks;
+          let status =
+            totalCourseProgress === totalEmployeeProgress
+              ? "Completed"
+              : "On-Going";
+          if (totalCourseProgress === totalEmployeeProgress) {
+            grade = scorePercentage >= 75 ? "Passed" : "Failed";
+          }
+
+          if (totalScore === 0 && totalPossibleScore === 0) {
+            grade = "Pending";
+          }
 
           return {
             id: enrolled.id,
@@ -98,7 +110,7 @@ const fetchEnrolledUsersSummary = async (courseID) => {
             TotalCourseProgress: totalCourseProgress,
             Score: `${totalScore}/${totalPossibleScore} (${scorePercentage}%)`,
             Grade: grade,
-            Status: grade === "Passing" ? "Active" : "Needs Improvement",
+            Status: status,
           };
         } catch (error) {
           console.error(`Error processing user ${enrolled.UserID}:`, error);
