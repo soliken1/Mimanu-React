@@ -95,7 +95,7 @@ const AdminDashboard = ({ getUser }) => {
     return <Loader />;
   }
   return (
-    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
+    <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal md:overflow-x-hidden">
       <NavSidebar userData={userData} />
       <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-row items-center justify-between md:flex-nowrap flex-wrap md:gap-0 gap-5">
