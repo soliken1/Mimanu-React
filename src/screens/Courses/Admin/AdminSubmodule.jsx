@@ -356,7 +356,7 @@ const AdminSubmodule = ({ getUser }) => {
           )}
         </div>
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4 px-4 md:px-0 md:pt-0">
+        <div className="flex justify-between mt-6 border-t border-gray-400 pt-4 px-4 md:px-0 md:pt-4">
           <button
             onClick={handlePrevious}
             disabled={currentIndex === 0}
