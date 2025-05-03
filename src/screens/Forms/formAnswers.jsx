@@ -10,10 +10,10 @@ const FormAnswers = () => {
   const [loading, setLoading] = useState(false);
 
   const getFormEndpoints = (uid) => ({
-    "MBTI-Form": `/api/mbti-form?uid=${uid}`,
-    "Peer Form": `/api/peer-form?uid=${uid}`,
-    "Self Form": `/api/self-form?uid=${uid}`,
-    "Superior Form": `/api/superior-form?uid=${uid}`,
+    MBTIForm: `/api/mbti-form?uid=${uid}`,
+    PeerForm: `/api/peer-form?uid=${uid}`,
+    SelfForm: `/api/self-form?uid=${uid}`,
+    SuperiorForm: `/api/superior-form?uid=${uid}`,
   });
 
   const formEndpoints = getFormEndpoints(uid);
@@ -133,7 +133,7 @@ const FormAnswers = () => {
           <h2 className="text-xl font-bold mb-4 text-blue-700">
             Selected: {selectedForm}
           </h2>
-          {selectedForm === "MBTI-Form"
+          {selectedForm === "MBTIForm"
             ? renderMBTI()
             : Object.entries(groupedQuestions).map(([title, indexes]) =>
                 renderGroup(title, indexes)
