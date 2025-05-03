@@ -23,10 +23,20 @@ const fetchEmployeePerformance = async () => {
       let courseTitle = courseTitleCache[courseId];
       if (!courseTitle) {
         const courseDoc = await getDoc(doc(db, "Course", courseId));
-        courseTitle = courseDoc.exists()
-          ? courseDoc.data().CourseTitle
-          : "Unknown Course";
-        courseTitleCache[courseId] = courseTitle;
+        if (courseDoc.exists()) {
+          const courseData = courseDoc.data();
+          courseTitle = courseData.CourseTitle || "Unknown Course";
+          courseTitleCache[courseId] = {
+            title: courseTitle,
+            color: courseData.CourseColor || "#cccccc", // Default color if missing
+          };
+        } else {
+          courseTitle = "Unknown Course";
+          courseTitleCache[courseId] = {
+            title: courseTitle,
+            color: "#cccccc",
+          };
+        }
       }
 
       // Get completed tasks for this enrolled document
@@ -37,6 +47,10 @@ const fetchEmployeePerformance = async () => {
         "CompletedTask"
       );
       const completedTaskSnapshot = await getDocs(completedTaskRef);
+
+      const courseCache = courseTitleCache[courseId];
+      courseTitle = courseCache.title;
+      const courseColor = courseCache.color;
 
       for (const taskDoc of completedTaskSnapshot.docs) {
         const { Score, TotalQuestions } = taskDoc.data();
@@ -50,6 +64,7 @@ const fetchEmployeePerformance = async () => {
               totalScore: 0,
               totalQuestions: 0,
               averagePercentage: "0%",
+              color: courseColor, // store the course color here
             };
           }
 

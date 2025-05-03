@@ -2,12 +2,13 @@ import React from "react";
 import { AiOutlineDash } from "react-icons/ai";
 import { GoArrowUpRight } from "react-icons/go";
 const TotalEmployee = ({ userCountData }) => {
+  if (!userCountData) return;
   return (
     <>
       <label className="tracking-wider text-gray-400">TOTAL EMPLOYEES</label>
       <div className="flex flex-row text-2xl gap-5 items-center">
         <label className="flex items-center gap-2">
-          {userCountData.totalUsers}{" "}
+          {userCountData?.totalUsers}{" "}
           <label
             className={`text-sm ${
               userCountData.newUsers > 0 ? " text-green-600" : " text-gray-400"
