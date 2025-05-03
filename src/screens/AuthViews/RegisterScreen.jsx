@@ -324,12 +324,20 @@ const RegisterScreen = ({ getUser }) => {
                     </div>
                     <div className="flex flex-row gap-5 items-center justify-center">
                       {user.UserRole === "Employee" && (
-                        <Link
-                          className="text-xs underline cursor-pointer"
-                          to={`/superior-form/${user.UID}`}
-                        >
-                          Assess this User
-                        </Link>
+                        <>
+                          <Link
+                            to={`/form-answers/${user.UID}`}
+                            className="text-xs underline cursor-pointer"
+                          >
+                            View Form Answers
+                          </Link>
+                          <Link
+                            className="text-xs underline cursor-pointer"
+                            to={`/superior-form/${user.UID}`}
+                          >
+                            Assess this User
+                          </Link>
+                        </>
                       )}
                       <button className="text-red-500 cursor-pointer text-xs hover:underline">
                         Disable
