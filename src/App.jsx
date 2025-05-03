@@ -50,6 +50,7 @@ import AdminProgressList from "./screens/Courses/Admin/AdminProgressList.jsx";
 import AdminProgress from "./screens/Courses/Admin/AdminProgress.jsx";
 import TrainorProgressList from "./screens/Courses/Trainor/TrainorProgressList.jsx";
 import TrainorProgress from "./screens/Courses/Trainor/TrainorProgress.jsx";
+import FormAnswers from "./screens/Forms/formAnswers.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -110,7 +111,6 @@ export default function App() {
             isLoggedIn ? <Navigate to={getDashboardRoute(role)} /> : <Login />
           }
         />
-
         {/*Unprotected Routes but /forgotpassword route has a condition if user is logged in redirect to editprofile*/}
         <Route
           path="/forgotpassword"
@@ -118,9 +118,7 @@ export default function App() {
             isLoggedIn ? <Navigate to="/editprofile" /> : <ForgotPassword />
           }
         />
-
         {/*Protected Routes*/}
-
         <Route
           path="/register"
           element={
@@ -133,7 +131,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse"
           element={
@@ -146,7 +143,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId"
           element={
@@ -159,7 +155,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/users"
           element={
@@ -172,7 +167,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/modules"
           element={
@@ -185,7 +179,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/tasks"
           element={
@@ -198,7 +191,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/tasks/:taskId"
           element={
@@ -211,7 +203,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/modules/:moduleId/submodules/:submoduleId"
           element={
@@ -224,7 +215,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/progress"
           element={
@@ -237,7 +227,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/progress/:userID"
           element={
@@ -250,7 +239,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/acourse/:courseId/tasks/:taskId/questions"
           element={
@@ -263,7 +251,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admindashboard"
           element={
@@ -276,7 +263,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tdashboard"
           element={
@@ -289,7 +275,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse"
           element={
@@ -302,7 +287,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId"
           element={
@@ -315,7 +299,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/users"
           element={
@@ -328,7 +311,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/modules"
           element={
@@ -341,7 +323,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/tasks"
           element={
@@ -354,7 +335,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/tasks/:taskId"
           element={
@@ -367,7 +347,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/progress"
           element={
@@ -380,7 +359,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/progress/:userID"
           element={
@@ -393,7 +371,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/tasks/:taskId/questions"
           element={
@@ -406,7 +383,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tcourse/:courseId/modules/:moduleId/submodules/:submoduleId"
           element={
@@ -419,7 +395,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/modules/:moduleId/submodules/:submoduleId"
           element={
@@ -432,7 +407,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId"
           element={
@@ -445,7 +419,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/modules"
           element={
@@ -458,7 +431,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/tasks"
           element={
@@ -471,7 +443,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/progress"
           element={
@@ -484,7 +455,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/dashboard"
           element={
@@ -497,7 +467,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/tasks/:taskId"
           element={
@@ -510,7 +479,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/course/:courseId/tasks/:taskId/questions"
           element={
@@ -526,19 +494,15 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/profile/:uid"
           element={<Profile getUser={getUser} onLogout={handleLogout} />}
         />
-
         <Route
           path="/editprofile"
           element={<EditProfile getUser={getUser} onLogout={handleLogout} />}
         />
-
         <Route path="*" element={<Navigate to={getDashboardRoute(role)} />} />
-
         <Route
           path="/mbti-form/:uid"
           element={
@@ -584,6 +548,18 @@ export default function App() {
               redirectTo={getDashboardRoute(role)}
             >
               <PeerFormScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/form-answers/:uid"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <FormAnswers getUser={getUser} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
