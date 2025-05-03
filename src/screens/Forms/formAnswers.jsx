@@ -27,10 +27,27 @@ const FormAnswers = () => {
   };
 
   const mbtiGroupings = {
-    "Energy (Extraversion/Introversion)": "title1_4",
-    "Information (Sensing/Intuition)": "title5_8",
-    "Decisions (Thinking/Feeling)": "title9_12",
-    "Lifestyle (Judging/Perceiving)": "title13_16",
+    "Energy (Extraversion/Introversion)": [1, 2, 3, 4],
+    "Information (Sensing/Intuition)": [5, 6, 7, 8],
+    "Decisions (Thinking/Feeling)": [9, 10, 11, 12],
+    "Lifestyle (Judging/Perceiving)": [13, 14, 15, 16],
+  };
+
+  const interpretScale = (value) => {
+    switch (Number(value)) {
+      case 1:
+        return "Strongly Disagree";
+      case 2:
+        return "Disagree";
+      case 3:
+        return "Neutral";
+      case 4:
+        return "Agree";
+      case 5:
+        return "Strongly Agree";
+      default:
+        return "No interpretation";
+    }
   };
 
   const handleFormSelect = async (formType) => {
@@ -68,7 +85,8 @@ const FormAnswers = () => {
                 {questionObj.question}
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                Answer: {questionObj.answer}
+                Answer: {questionObj.answer} (
+                {interpretScale(questionObj.answer)})
               </p>
             </div>
           );
@@ -79,12 +97,9 @@ const FormAnswers = () => {
 
   const renderMBTI = () => (
     <div className="space-y-4">
-      {Object.entries(mbtiGroupings).map(([label, key]) => (
-        <div key={key} className="bg-white p-4 rounded shadow-sm border">
-          <h2 className="text-lg font-semibold text-gray-700 mb-2">{label}</h2>
-          <p className="text-gray-600">{response[key]}</p>
-        </div>
-      ))}
+      {Object.entries(mbtiGroupings).map(([title, indexes]) =>
+        renderGroup(title, indexes)
+      )}
     </div>
   );
 
