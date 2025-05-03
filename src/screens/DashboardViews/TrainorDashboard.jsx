@@ -28,6 +28,7 @@ const TrainorDashboard = ({ getUser }) => {
   const [topScreenTimeData, setTopScreenTimeData] = useState(null);
   const [enrolleePerformaceData, setEnrolleePerformaceData] = useState(null);
   const [enrolleeActionsData, setEnrolleeActionsData] = useState([]);
+  const [searchEmployeeAction, setSearchEmployeeAction] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,10 +182,21 @@ const TrainorDashboard = ({ getUser }) => {
               </div>
             </div>
             <div className="h-auto p-6 shadow-y rounded-lg bg-white">
-              <h2 className="text-lg font-semibold text-gray-700">
-                Recent Employee Actions
-              </h2>
-              <RecentActionTable enrolleeActionsData={enrolleeActionsData} />
+              <div className="flex flex-row justify-between">
+                <h2 className="text-lg font-semibold text-gray-700">
+                  Recent System Actions
+                </h2>
+                <input
+                  placeholder="Search Employee"
+                  className="text-sm px-4 py-2 rounded-md border border-gray-400"
+                  onChange={(e) => setSearchEmployeeAction(e.target.value)}
+                  value={searchEmployeeAction}
+                />
+              </div>
+              <RecentActionTable
+                enrolleeActionsData={enrolleeActionsData}
+                searchEmployeeAction={searchEmployeeAction}
+              />
             </div>
           </div>
           <div className="w-5/12 flex flex-col gap-5">
