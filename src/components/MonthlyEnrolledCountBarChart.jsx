@@ -12,13 +12,15 @@ import {
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebaseConfigs";
 import { format, getYear, getMonth } from "date-fns";
-
+import { BarLoader } from "react-spinners";
 const MonthlyEnrolledCountBarChart = () => {
   const [monthlyData, setMonthlyData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchMonthlyEnrolled = async () => {
       try {
+        setLoading(true);
         const enrolledSnapshot = await getDocs(collection(db, "Enrolled"));
         const currentYear = new Date().getFullYear();
 
@@ -38,13 +40,21 @@ const MonthlyEnrolledCountBarChart = () => {
         });
 
         setMonthlyData(monthlyCounts);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching monthly enrolled data:", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchMonthlyEnrolled();
   }, []);
+
+  if (loading) {
+    return <BarLoader className="mt-2" />;
+  }
 
   return (
     <ResponsiveContainer width="100%" height={300}>

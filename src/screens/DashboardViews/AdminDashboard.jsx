@@ -22,7 +22,7 @@ import BreakdownBarChart from "../../components/BreakdownBarChart.jsx";
 import MonthlyEnrolledCountBarChart from "../../components/MonthlyEnrolledCountBarChart.jsx";
 import NavSideLoader from "../../components/Loaders/NavSideLoader.jsx";
 import TopAnalyticsLoader from "../../components/Loaders/TopAnalyticsLoader.jsx";
-import { MoonLoader } from "react-spinners";
+import { BarLoader, MoonLoader } from "react-spinners";
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [userCountData, setUserCountData] = useState(null);
@@ -79,6 +79,12 @@ const AdminDashboard = ({ getUser }) => {
         }
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setUserLoading(false);
+        setScreenTImeLoading(false);
+        setPerformanceLoading(false);
+        setEnrolleeActionsLoading(false);
+        setTotalTimeLoading(false);
       }
     };
     fetchData();
@@ -109,6 +115,11 @@ const AdminDashboard = ({ getUser }) => {
         setActionsLoading(false);
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setEmployeeLoading(false);
+        setEnrollmentsLoading(false);
+        setCoursesLoading(false);
+        setActionsLoading(false);
       }
     };
 
@@ -127,7 +138,7 @@ const AdminDashboard = ({ getUser }) => {
       <div className="w-full md:ps-66 lg:ps-72 xl:ps-80 h-auto min-h-screen md:p-12 bg-[#FAF9F6]">
         <div className="w-full flex flex-row items-center justify-between md:flex-nowrap flex-wrap md:gap-0 gap-5">
           {userLoading ? (
-            <MoonLoader />
+            <BarLoader />
           ) : (
             <div className="flex flex-row gap-5 items-center md:p-0 px-4 pt-12 md:px-0 md:pt-0">
               <img
@@ -185,28 +196,30 @@ const AdminDashboard = ({ getUser }) => {
         </div>
         <div className="flex flex-row md:flex-nowrap md:justify-start justify-evenly flex-wrap md:gap-6 gap-2 items-center mt-5 ">
           {employeeLoading ? (
-            <TopAnalyticsLoader />
+            <>
+              <TopAnalyticsLoader type={"TOTAL EMPLOYEES"} />
+            </>
           ) : (
             <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
               <TotalEmployee userCountData={userCountData} />
             </div>
           )}
           {enrollmentsLoading ? (
-            <TopAnalyticsLoader />
+            <TopAnalyticsLoader type={"TOTAL ENROLLMENTS"} />
           ) : (
             <div className="md:w-1/4 w-52  flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
               <TotalEnrollment enrollmentCountData={enrollmentCountData} />
             </div>
           )}
           {coursesLoading ? (
-            <TopAnalyticsLoader />
+            <TopAnalyticsLoader type={"TOTAL COURSES"} />
           ) : (
             <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
               <TotalCourse courseCountData={courseCountData} />
             </div>
           )}
           {actionsLoading ? (
-            <TopAnalyticsLoader />
+            <TopAnalyticsLoader type={"TOTAL ACTIONS"} />
           ) : (
             <div className="md:w-1/4 w-52 flex flex-col h-32 p-6 shadow-y rounded-lg gap-2 bg-white">
               <TotalActions actionCountData={actionCountData} />
@@ -229,7 +242,7 @@ const AdminDashboard = ({ getUser }) => {
                   Accumulated Enrollees' Time Spent:
                 </label>
                 {totalTimeLoading ? (
-                  <MoonLoader />
+                  <BarLoader className="mt-2" />
                 ) : (
                   <label className="text-2xl text-gray-700 font-semibold">
                     {formatTime(totalTime)}
@@ -237,7 +250,7 @@ const AdminDashboard = ({ getUser }) => {
                 )}
               </div>
               {screenTimeLoading ? (
-                <MoonLoader />
+                <BarLoader className="mt-2" />
               ) : (
                 <>
                   <ScreenTimeBar screenTimeData={topScreenTimeData} />
@@ -263,7 +276,7 @@ const AdminDashboard = ({ getUser }) => {
                 />
               </div>
               {enrolleeActionsLoading ? (
-                <MoonLoader />
+                <BarLoader />
               ) : (
                 <RecentActionTable
                   enrolleeActionsData={enrolleeActionsData}
@@ -278,7 +291,7 @@ const AdminDashboard = ({ getUser }) => {
                 Employees Average Grading:
               </label>
               {performaceLoading ? (
-                <MoonLoader />
+                <BarLoader className="mt-2" />
               ) : (
                 <div className="flex flex-col gap-2 mt-1">
                   <label
@@ -312,7 +325,7 @@ const AdminDashboard = ({ getUser }) => {
             <div className="min-h-96 h-auto p-6 shadow-y flex flex-col rounded-lg bg-white">
               <label className="text-gray-500">Course Average Breakdown:</label>
               {performaceLoading ? (
-                <MoonLoader />
+                <BarLoader className="mt-2" />
               ) : (
                 <BreakdownBarChart
                   enrolleePerformaceData={
