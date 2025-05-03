@@ -2,6 +2,7 @@ import React from "react";
 import { AiOutlineDash } from "react-icons/ai";
 import { GoArrowUpRight } from "react-icons/go";
 const TotalEnrollment = ({ enrollmentCountData }) => {
+  if (!enrollmentCountData) return;
   return (
     <>
       <label className="tracking-wider text-gray-400">TOTAL ENROLLMENTS</label>
