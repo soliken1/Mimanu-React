@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const FormAnswers = () => {
+  const { uid } = useParams();
+
   const [selectedForm, setSelectedForm] = useState(null);
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const formEndpoints = {
-    "MBTI-Form": "/api/mbti-form?uid=KPUrz2KeeHV0FaTb38D1f9fI3dt2",
-    "Peer Form": "/api/peer-form?uid=KPUrz2KeeHV0FaTb38D1f9fI3dt2",
-    "Self Form": "/api/self-form?uid=KPUrz2KeeHV0FaTb38D1f9fI3dt2",
-    "Superior Form": "/api/superior-form?uid=KPUrz2KeeHV0FaTb38D1f9fI3dt2",
-  };
+  const getFormEndpoints = (uid) => ({
+    "MBTI-Form": `/api/mbti-form?uid=${uid}`,
+    "Peer Form": `/api/peer-form?uid=${uid}`,
+    "Self Form": `/api/self-form?uid=${uid}`,
+    "Superior Form": `/api/superior-form?uid=${uid}`,
+  });
+
+  const formEndpoints = getFormEndpoints(uid);
 
   const groupedQuestions = {
     "Critical Thinking": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -19,6 +24,13 @@ const FormAnswers = () => {
     Teamwork: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
     Leadership: [31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
     Communication: [41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+  };
+
+  const mbtiGroupings = {
+    "Energy (Extraversion/Introversion)": "title1_4",
+    "Information (Sensing/Intuition)": "title5_8",
+    "Decisions (Thinking/Feeling)": "title9_12",
+    "Lifestyle (Judging/Perceiving)": "title13_16",
   };
 
   const handleFormSelect = async (formType) => {
@@ -65,6 +77,17 @@ const FormAnswers = () => {
     </div>
   );
 
+  const renderMBTI = () => (
+    <div className="space-y-4">
+      {Object.entries(mbtiGroupings).map(([label, key]) => (
+        <div key={key} className="bg-white p-4 rounded shadow-sm border">
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">{label}</h2>
+          <p className="text-gray-600">{response[key]}</p>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Form Responses</h1>
@@ -95,9 +118,11 @@ const FormAnswers = () => {
           <h2 className="text-xl font-bold mb-4 text-blue-700">
             Selected: {selectedForm}
           </h2>
-          {Object.entries(groupedQuestions).map(([title, indexes]) =>
-            renderGroup(title, indexes)
-          )}
+          {selectedForm === "MBTI-Form"
+            ? renderMBTI()
+            : Object.entries(groupedQuestions).map(([title, indexes]) =>
+                renderGroup(title, indexes)
+              )}
         </div>
       )}
     </div>
