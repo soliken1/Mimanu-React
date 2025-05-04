@@ -170,15 +170,7 @@ const LoginScreen = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="flex h-auto w-full flex-row items-center justify-between md:px-12">
-            <div className="flex items-center justify-center gap-3">
-              <input
-                type="checkbox"
-                id="tosInput"
-                className="border-2 rounded-md border-black"
-              />
-              <label className="text-sm font-medium">Remember Me</label>
-            </div>
+          <div className="flex h-auto w-full flex-row justify-center">
             <label className="text-sm font-semibold text-[#DC3A3A] underline">
               <Link to="/forgotpassword">Forgot Password?</Link>
             </label>
