@@ -10,9 +10,6 @@ import AddCourseModal from "../../../components/AddCourseModal";
 import { ToastContainer } from "react-toastify";
 import fetchCoursesByTrainor from "../../../hooks/get/fetchCoursesByTrainor";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Loader from "../../../components/Loader";
 
 const TrainorScreen = ({ getUser }) => {
@@ -127,13 +124,6 @@ const TrainorScreen = ({ getUser }) => {
               ) : (
                 <p>No courses found.</p>
               )}
-            </div>
-            <div className="flex-1 flex justify-end h-88">
-              <div className="shadow-y rounded-lg">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar />
-                </LocalizationProvider>
-              </div>
             </div>
           </div>
         </div>

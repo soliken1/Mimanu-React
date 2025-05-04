@@ -19,6 +19,8 @@ import { GrAnnounce } from "react-icons/gr";
 import { fetchAllTasks } from "../../../hooks/get/fetchTasks";
 import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../config/firebaseConfigs";
 const AdminCourseInfo = ({ getUser }) => {
   const Screen = "Admin";
   const { courseId } = useParams();
@@ -177,6 +179,40 @@ const AdminCourseInfo = ({ getUser }) => {
     }
   };
 
+  const handleDisableCourse = async () => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to disable this course?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Course", courseId);
+      await updateDoc(userDocRef, { Status: "Disabled" });
+      alert("Course has been disabled.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disabling course:", error);
+      alert("Failed to disable course.");
+    }
+  };
+
+  const handleEnableCourse = async () => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to enable this course?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Course", courseId);
+      await updateDoc(userDocRef, { Status: "Enabled" });
+      alert("Course has been enabled.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error enabling course:", error);
+      alert("Failed to enabled course.");
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -283,19 +319,37 @@ const AdminCourseInfo = ({ getUser }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4 px-4 md:px-0">
-              <div className="flex justify-end items-center gap-5">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-[#152852] px-4 py-2 cursor-pointer text-white rounded"
-                >
-                  Create Announcement
-                </button>
-                <button
-                  className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit Content
-                </button>
+              <div className="w-full flex justify-between">
+                {courseData.Status != "Disabled" ? (
+                  <button
+                    onClick={() => handleDisableCourse()}
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                  >
+                    Disable Course
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEnableCourse()}
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                  >
+                    Enable Course
+                  </button>
+                )}
+
+                <div className="flex justify-end items-center gap-5">
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-[#152852] px-4 py-2 cursor-pointer text-white rounded"
+                  >
+                    Create Announcement
+                  </button>
+                  <button
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit Content
+                  </button>
+                </div>
               </div>
 
               {/* Display File if Available */}

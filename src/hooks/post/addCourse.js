@@ -26,6 +26,7 @@ const addCourse = async (
       CourseDescription: courseDescription || "",
       CourseTags: courseTags || [],
       CreatedAt: Timestamp.now(),
+      Status: "Enabled",
       UID: user.uid,
     });
 

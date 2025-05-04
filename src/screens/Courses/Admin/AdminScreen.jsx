@@ -125,10 +125,21 @@ const AdminScreen = ({ getUser }) => {
                           </div>
                         </div>
                         <div className="mt-5 flex flex-row justify-between pe-8">
-                          <label className="text-sm text-gray-500">
-                            Ends on:{" "}
-                            {course.CourseEnd.toDate().toLocaleDateString()}
-                          </label>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-gray-500">
+                              Ends on:{" "}
+                              {course.CourseEnd.toDate().toLocaleDateString()}
+                            </label>
+                            <label
+                              className={`text-sm p-1 rounded-sm ${
+                                course.Status === "Enabled"
+                                  ? "bg-green-200"
+                                  : "bg-red-200"
+                              } text-gray-500`}
+                            >
+                              {course.Status || "Enabled"}
+                            </label>
+                          </div>
                           <Link
                             to={`/acourse/${course.id}`}
                             className="text-sm flex flex-row gap-1 items-center"
@@ -144,13 +155,6 @@ const AdminScreen = ({ getUser }) => {
               ) : (
                 <p>No courses found.</p>
               )}
-            </div>
-            <div className="flex-1 md:flex hidden justify-center md:justify-end h-88">
-              <div className="shadow-y rounded-lg">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar />
-                </LocalizationProvider>
-              </div>
             </div>
           </div>
         </div>
