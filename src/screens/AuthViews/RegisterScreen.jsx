@@ -23,6 +23,8 @@ import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import PeerFormModal from "../../components/PeerFormModal";
 import Loader from "../../components/Loader";
 import bcrypt from "bcryptjs";
+import sendCredentials from "../../utils/sendCredentials";
+
 
 const RegisterScreen = ({ getUser }) => {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -163,6 +165,14 @@ const RegisterScreen = ({ getUser }) => {
       };
 
       await setDoc(doc(db, "Users", formData.email), newUserData);
+
+      await sendCredentials({
+        email: formData.email,
+        name: `${formData.firstName} ${formData.lastName}`,
+        username: formData.username,
+        password: formData.password,
+      });
+      
 
       toast.success("User added successfully!", {
         position: "bottom-right",
