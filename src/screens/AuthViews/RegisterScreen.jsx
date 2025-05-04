@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import fetchUser from "../../hooks/get/fetchUser";
-import LoadingScreen from "../../components/LoadingScreen";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   doc,
   setDoc,
@@ -12,8 +10,9 @@ import {
   query,
   where,
   Timestamp,
+  updateDoc,
 } from "firebase/firestore";
-import { db, auth } from "../../config/firebaseConfigs";
+import { db } from "../../config/firebaseConfigs";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import RegisterModal from "../../components/RegisterModal";
@@ -24,7 +23,6 @@ import PeerFormModal from "../../components/PeerFormModal";
 import Loader from "../../components/Loader";
 import bcrypt from "bcryptjs";
 import sendCredentials from "../../utils/sendCredentials";
-
 
 const RegisterScreen = ({ getUser }) => {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -172,7 +170,6 @@ const RegisterScreen = ({ getUser }) => {
         username: formData.username,
         password: formData.password,
       });
-      
 
       toast.success("User added successfully!", {
         position: "bottom-right",
@@ -227,6 +224,40 @@ const RegisterScreen = ({ getUser }) => {
           user.LastName.toLowerCase().includes(query)
       )
     );
+  };
+
+  const handleDisableUser = async (uid) => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to disable this user?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Users", uid);
+      await updateDoc(userDocRef, { Status: "Disabled" });
+      alert("User has been disabled.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disabling user:", error);
+      alert("Failed to disable user.");
+    }
+  };
+
+  const handleReactivateUser = async (uid) => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to reactivate this user?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Users", uid);
+      await updateDoc(userDocRef, { Status: "Active" });
+      alert("User has been reactivated.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error reactivating user:", error);
+      alert("Failed to reactivate user.");
+    }
   };
 
   if (loading) {
@@ -341,17 +372,34 @@ const RegisterScreen = ({ getUser }) => {
                           >
                             View Form Answers
                           </Link>
-                          <Link
-                            className="text-xs underline cursor-pointer"
-                            to={`/superior-form/${user.UID}`}
-                          >
-                            Assess this User
-                          </Link>
                         </>
                       )}
-                      <button className="text-red-500 cursor-pointer text-xs hover:underline">
-                        Disable
-                      </button>
+                      {user.Status != "Disabled" ||
+                      user.Status === null ||
+                      user.Status === undefined ||
+                      !user.Status ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleDisableUser(user.UID);
+                          }}
+                          className="text-red-500 cursor-pointer text-xs hover:underline"
+                        >
+                          Disable
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleReactivateUser(user.UID);
+                          }}
+                          className="text-green-500 cursor-pointer text-xs hover:underline"
+                        >
+                          Reactivate
+                        </button>
+                      )}
                     </div>
                   </Link>
                 ))

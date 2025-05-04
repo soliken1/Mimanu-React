@@ -4,8 +4,8 @@ const Loader = () => {
   return (
     <div className="flex h-full w-full flex-col md:flex-row md:pb-0 pb-20 poppins-normal">
       <div className="min-w-[28vh] max-w-[28vh] fixed h-screen flex-col md:flex hidden bg-gradient-to-b from-[#234faf] text-white to-[#152852]">
-        <div className="h-32 w-full flex flex-row justify-center items-center gap-2">
-          <img src="/book.png" className="h-16 w-16 drop-shadow-lg" />
+        <div className="h-32 w-full flex flex-col justify-center items-center gap-2">
+          <img src="/mimanusingle.png" className="w-8 me-3" />
           <label className="font-semibold">MiManuTMS</label>
         </div>
         <div className="flex-1 flex flex-col justify-between px-6">
