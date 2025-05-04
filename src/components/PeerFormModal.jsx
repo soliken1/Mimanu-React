@@ -10,6 +10,7 @@ const PeerFormModal = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState("");
+  const [formType, setFormType] = useState("Peer Form");
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
@@ -26,6 +27,13 @@ const PeerFormModal = ({
 
   const handleRemoveUser = (userId) => {
     setSelectedPeers(selectedPeers.filter((user) => user.UID !== userId));
+  };
+
+  const handleSendEmail = () => {
+    console.log("Sending email with:");
+    console.log("Email:", email);
+    console.log("Form Type:", formType);
+    setShowEmailModal(false);
   };
 
   const filteredUsers = users.filter(
@@ -45,7 +53,19 @@ const PeerFormModal = ({
         } bg-gray-900 bg-opacity-50 z-40`}
       >
         <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] relative z-50">
-          <h2 className="text-lg font-bold mb-4">Select Peer Users</h2>
+          <h2 className="text-lg font-bold mb-4">Send Form</h2>
+
+          <div className="mb-4">
+            <label className="font-semibold block mb-1">Form Type:</label>
+            <select
+              value={formType}
+              onChange={(e) => setFormType(e.target.value)}
+              className="w-full p-2 border rounded"
+            >
+              <option value="Peer Form">Peer Form</option>
+              <option value="Superior Form">Superior Form</option>
+            </select>
+          </div>
 
           <div className="mb-4 p-2 border rounded bg-gray-100 flex flex-col gap-2 h-32">
             {selectedPeers.length > 0 ? (
@@ -143,6 +163,17 @@ const PeerFormModal = ({
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md w-[400px]">
             <h3 className="text-lg font-bold mb-2">Send to Email</h3>
+
+            <label className="block mb-1 font-medium">Form Type</label>
+            <select
+              value={formType}
+              onChange={(e) => setFormType(e.target.value)}
+              className="w-full p-2 border rounded mb-4"
+            >
+              <option value="Peer Form">Peer Form</option>
+              <option value="Superior Form">Superior Form</option>
+            </select>
+
             <input
               type="email"
               placeholder="Enter email address"
@@ -159,9 +190,7 @@ const PeerFormModal = ({
               </button>
               <button
                 className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={() => {
-                  setShowEmailModal(false);
-                }}
+                onClick={handleSendEmail}
               >
                 Send
               </button>

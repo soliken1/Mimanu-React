@@ -40,6 +40,7 @@ const RegisterScreen = ({ getUser }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [employeeUsers, setEmployeeUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRole, setSelectedRole] = useState("All");
@@ -82,6 +83,10 @@ const RegisterScreen = ({ getUser }) => {
     const fetchData = async () => {
       try {
         const users = await fetchUsers();
+
+        const employees = users.filter((user) => user.UserRole === "Employee");
+        setEmployeeUsers(employees);
+
         setFilteredUsers(users);
         setUsers(users);
 
@@ -315,7 +320,7 @@ const RegisterScreen = ({ getUser }) => {
                   onClick={handlePeerFormClick}
                   className="text-xs bg-[#152852] px-4 py-3 text-white rounded-lg shadow-xy-subtle cursor-pointer"
                 >
-                  Peer Form
+                  Send Forms
                 </button>
                 <div className="relative flex items-center p-1 bg-gray-200 rounded-xl">
                   <CiSearch className="absolute w-6 h-6 transform translate-x-2" />
@@ -414,7 +419,7 @@ const RegisterScreen = ({ getUser }) => {
       <PeerFormModal
         isOpen={isPeerModalOpen}
         onClose={() => setIsPeerModalOpen(false)}
-        users={users}
+        users={employeeUsers}
         selectedPeers={selectedPeers}
         setSelectedPeers={setSelectedPeers}
       />
