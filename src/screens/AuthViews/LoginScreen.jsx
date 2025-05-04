@@ -60,6 +60,16 @@ const LoginScreen = () => {
           return;
         }
 
+        if (userData.Status === "Disabled") {
+          toast.error("Your Account Is Currently Disabled", {
+            position: "bottom-right",
+            autoClose: 5000,
+            theme: "colored",
+            transition: Bounce,
+          });
+          return;
+        }
+
         // If the user is pending (isPending is true), proceed with registration
         if (userData.isPending) {
           // Create the user without logging them in
@@ -109,6 +119,16 @@ const LoginScreen = () => {
         const userDoc = querySnapshot.docs[0]; // Get the first matching document
         const userData = userDoc.data();
 
+        if (userData.Status === "Disabled") {
+          toast.error("Your Account Is Currently Disabled", {
+            position: "bottom-right",
+            autoClose: 5000,
+            theme: "colored",
+            transition: Bounce,
+          });
+          return;
+        }
+
         // Step 3: Proceed with login if the user is found in the query result
         await signInWithEmailAndPassword(auth, email, password);
         navigate("/dashboard");
@@ -136,17 +156,15 @@ const LoginScreen = () => {
   return (
     <div className="flex h-screen w-screen flex-row overflow-hidden">
       <div className="-z-0 relative hidden h-full w-7/12 flex-col bg-[#FAF9F6] md:flex">
-        <label className="absolute left-32 top-28 text-6xl font-bold text-[#152852]">
-          MiManuTMS
-        </label>
-        <label className="absolute left-32 top-48 w-[550px] text-4xl font-normal text-[#152852]">
+        <img src="/mimanu.png" className="w-[400px] absolute left-28 top-28 " />
+        <label className="absolute left-52 top-52 w-[550px] text-4xl font-normal text-[#152852]">
           A Training Management System
         </label>
         <div className="opacity-60 absolute -bottom-80 left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
         <div className="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
       </div>
       <div className="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
-        <img className="h-48 w-48" src="/book.png" />
+        <img className="h-24" src="/mimanusingle.png" />
         <label className="text-3xl">Welcome Back!</label>
         <label className="text-sm font-medium">
           Enter Your Credentials To Login
@@ -170,15 +188,7 @@ const LoginScreen = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="flex h-auto w-full flex-row items-center justify-between md:px-12">
-            <div className="flex items-center justify-center gap-3">
-              <input
-                type="checkbox"
-                id="tosInput"
-                className="border-2 rounded-md border-black"
-              />
-              <label className="text-sm font-medium">Remember Me</label>
-            </div>
+          <div className="flex h-auto w-full flex-row justify-center">
             <label className="text-sm font-semibold text-[#DC3A3A] underline">
               <Link to="/forgotpassword">Forgot Password?</Link>
             </label>
