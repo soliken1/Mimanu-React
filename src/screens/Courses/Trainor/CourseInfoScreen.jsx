@@ -19,6 +19,9 @@ import { GrAnnounce } from "react-icons/gr";
 import { fetchAllTasks } from "../../../hooks/get/fetchTasks";
 import { MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../config/firebaseConfigs";
+
 const TCourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -176,6 +179,40 @@ const TCourseInfo = ({ getUser }) => {
     }
   };
 
+  const handleDisableCourse = async () => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to disable this course?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Course", courseId);
+      await updateDoc(userDocRef, { Status: "Disabled" });
+      alert("Course has been disabled.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disabling course:", error);
+      alert("Failed to disable course.");
+    }
+  };
+
+  const handleEnableCourse = async () => {
+    const confirmDisable = window.confirm(
+      "Are you sure you want to enable this course?"
+    );
+    if (!confirmDisable) return;
+
+    try {
+      const userDocRef = doc(db, "Course", courseId);
+      await updateDoc(userDocRef, { Status: "Enabled" });
+      alert("Course has been enabled.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error enabling course:", error);
+      alert("Failed to enabled course.");
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -283,9 +320,21 @@ const TCourseInfo = ({ getUser }) => {
           ) : (
             <div className="flex flex-col gap-4">
               <div className="w-full flex justify-between">
-                <button className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded">
-                  Disable Course
-                </button>
+                {courseData.Status != "Disabled" ? (
+                  <button
+                    onClick={() => handleDisableCourse()}
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                  >
+                    Disable Course
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEnableCourse()}
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                  >
+                    Enable Course
+                  </button>
+                )}
                 <div className="flex justify-end items-center gap-5">
                   <button
                     onClick={() => setIsModalOpen(true)}

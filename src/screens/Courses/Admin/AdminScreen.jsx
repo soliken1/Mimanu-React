@@ -156,13 +156,6 @@ const AdminScreen = ({ getUser }) => {
                 <p>No courses found.</p>
               )}
             </div>
-            <div className="flex-1 md:flex hidden justify-center md:justify-end h-88">
-              <div className="shadow-y rounded-lg">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar />
-                </LocalizationProvider>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -119,6 +119,7 @@ const fetchEnrolledUsersSummary = async (courseID) => {
             TotalCourseProgress: totalCourseProgress,
             Score: score,
             Grade: grade,
+            DateEnrolled: enrolled.DateEnrolled,
             Status: status,
           };
         } catch (error) {

@@ -6,6 +6,17 @@ import fetchCourse from "../../../hooks/get/fetchCourse";
 import CourseSidebar from "../../../components/CourseSidebar";
 import fetchEnrolledUsersSummary from "../../../hooks/get/fetchEnrolledEmployeeSummary";
 import Loader from "../../../components/Loader";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import dayjs from "dayjs";
+
 const AdminProgressList = ({ getUser }) => {
   const { courseId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -14,6 +25,21 @@ const AdminProgressList = ({ getUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [gradeFilter, setGradeFilter] = useState(null);
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +82,30 @@ const AdminProgressList = ({ getUser }) => {
       };
       return gradePriority[a.Grade] - gradePriority[b.Grade];
     });
+
+  const enrollmentCountsByMonth = Array(12).fill(0);
+  enrolledEmployees.forEach((employee) => {
+    if (employee.DateEnrolled) {
+      const month = dayjs(employee.DateEnrolled.toDate()).month(); // 0-indexed
+      enrollmentCountsByMonth[month]++;
+    }
+  });
+  const monthlyCounts = monthNames.map((month, index) => ({
+    month,
+    count: enrollmentCountsByMonth[index] || 0,
+  }));
+  const enrollmentDataByMonth = enrolledEmployees
+    .reduce((acc, employee) => {
+      const month = dayjs(employee.DateEnrolled.toDate()).format("MMM YYYY");
+      const existing = acc.find((item) => item.month === month);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        acc.push({ month, count: 1 });
+      }
+      return acc;
+    }, [])
+    .sort((a, b) => (dayjs(a.month).isAfter(dayjs(b.month)) ? 1 : -1));
 
   if (loading) {
     return <Loader />;
@@ -204,6 +254,22 @@ const AdminProgressList = ({ getUser }) => {
                 </tbody>
               </table>
             </div>
+            <h2 className="text-lg font-semibold mb-4  mt-8">
+              Monthly Enrollments
+            </h2>
+            {enrollmentDataByMonth.length > 0 && (
+              <div className="w-full bg-white shadow-md rounded-lg p-4">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={monthlyCounts}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#152852" radius={[5, 5, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
         </div>
       </div>
