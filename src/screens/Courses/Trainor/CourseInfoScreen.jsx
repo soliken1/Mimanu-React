@@ -282,19 +282,24 @@ const TCourseInfo = ({ getUser }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <div className="flex justify-end items-center gap-5">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-[#152852] px-4 py-2 cursor-pointer text-white rounded"
-                >
-                  Create Announcement
+              <div className="w-full flex justify-between">
+                <button className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded">
+                  Disable Course
                 </button>
-                <button
-                  className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit Content
-                </button>
+                <div className="flex justify-end items-center gap-5">
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-[#152852] px-4 py-2 cursor-pointer text-white rounded"
+                  >
+                    Create Announcement
+                  </button>
+                  <button
+                    className="bg-[#152852] px-8 py-2 cursor-pointer text-white rounded"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit Content
+                  </button>
+                </div>
               </div>
 
               {/* Display File if Available */}

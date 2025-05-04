@@ -13,6 +13,7 @@ const AdminProgressList = ({ getUser }) => {
   const [enrolledEmployees, setEnrolledEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [gradeFilter, setGradeFilter] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,11 +36,26 @@ const AdminProgressList = ({ getUser }) => {
     fetchData();
   }, [courseId]);
 
-  const filteredEmployees = enrolledEmployees.filter((employee) =>
-    `${employee.FirstName} ${employee.LastName} ${employee.Email}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+  const filteredEmployees = enrolledEmployees
+    .filter((employee) =>
+      `${employee.FirstName} ${employee.LastName} ${employee.Email}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    )
+    .filter((employee) => {
+      if (!gradeFilter) return true;
+      return employee.Grade === gradeFilter;
+    })
+    .sort((a, b) => {
+      const gradePriority = {
+        Passing: 0,
+        Passed: 0,
+        Failing: 1,
+        Failed: 1,
+        Pending: 2,
+      };
+      return gradePriority[a.Grade] - gradePriority[b.Grade];
+    });
 
   if (loading) {
     return <Loader />;
@@ -67,6 +83,28 @@ const AdminProgressList = ({ getUser }) => {
                 Employee Progress List
               </label>
               <div className="flex flex-row gap-2">
+                <div className="flex gap-2">
+                  {["Passed", "Passing", "Failed", "Failing", "Pending"].map(
+                    (status) => (
+                      <button
+                        key={status}
+                        className={`px-4 py-1 rounded-lg text-sm ${
+                          gradeFilter === status
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-gray-800"
+                        }`}
+                        onClick={() =>
+                          setGradeFilter((prev) =>
+                            prev === status ? null : status
+                          )
+                        }
+                      >
+                        {status}
+                      </button>
+                    )
+                  )}
+                </div>
+
                 <input
                   type="text"
                   placeholder="Search employee..."

@@ -125,10 +125,21 @@ const AdminScreen = ({ getUser }) => {
                           </div>
                         </div>
                         <div className="mt-5 flex flex-row justify-between pe-8">
-                          <label className="text-sm text-gray-500">
-                            Ends on:{" "}
-                            {course.CourseEnd.toDate().toLocaleDateString()}
-                          </label>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-gray-500">
+                              Ends on:{" "}
+                              {course.CourseEnd.toDate().toLocaleDateString()}
+                            </label>
+                            <label
+                              className={`text-sm p-1 rounded-sm ${
+                                course.Status === "Enabled"
+                                  ? "bg-green-200"
+                                  : "bg-red-200"
+                              } text-gray-500`}
+                            >
+                              {course.Status || "Enabled"}
+                            </label>
+                          </div>
                           <Link
                             to={`/acourse/${course.id}`}
                             className="text-sm flex flex-row gap-1 items-center"
