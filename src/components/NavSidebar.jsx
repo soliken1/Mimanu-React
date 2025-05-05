@@ -26,6 +26,9 @@ const NavSidebar = ({ userData }) => {
 
   const logout = async () => {
     try {
+        // Clear chat data
+  localStorage.removeItem("chatMessages");
+  localStorage.removeItem("chatGreeted");
       await signOut(auth);
       navigate("/");
     } catch (error) {
