@@ -79,6 +79,11 @@ const AdminDashboard = ({ getUser }) => {
         }
       } catch (error) {
         console.error("Error:", error);
+        setUserLoading(false);
+        setScreenTImeLoading(false);
+        setPerformanceLoading(false);
+        setEnrolleeActionsLoading(false);
+        setTotalTimeLoading(false);
       } finally {
         setUserLoading(false);
         setScreenTImeLoading(false);
@@ -115,6 +120,10 @@ const AdminDashboard = ({ getUser }) => {
         setActionsLoading(false);
       } catch (error) {
         console.error("Error:", error);
+        setEmployeeLoading(false);
+        setEnrollmentsLoading(false);
+        setCoursesLoading(false);
+        setActionsLoading(false);
       } finally {
         setEmployeeLoading(false);
         setEnrollmentsLoading(false);

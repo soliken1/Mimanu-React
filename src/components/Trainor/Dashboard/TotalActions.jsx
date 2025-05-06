@@ -3,6 +3,8 @@ import { AiOutlineDash } from "react-icons/ai";
 import { GoArrowUpRight } from "react-icons/go";
 
 const TotalActions = ({ actionCountData }) => {
+  if (!actionCountData) return;
+
   return (
     <>
       <label className="tracking-wider text-gray-400">TOTAL ACTIONS</label>
