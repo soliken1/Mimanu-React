@@ -170,7 +170,7 @@ const SuperiorFormScreen = () => {
         uid: assessedUser?.UID ?? "",
         answered: true,
         formType: "SuperiorForm",
-        answeredBy: user.uid || usernameParam || "anonymous",
+        answeredBy: user?.uid || usernameParam || "anonymous",
       };
 
       Object.entries(responses).forEach(([questionKey, answerValue]) => {
