@@ -53,22 +53,7 @@ const SuperiorFormScreen = () => {
   useEffect(() => {
     const fetchAssessedUser = async () => {
       try {
-        let userDocSnap;
-
-        if (uidParam) {
-          // Look up by UID
-          userDocSnap = await getDoc(doc(db, "Users", uidParam));
-        } else if (usernameParam) {
-          // Look up by Username
-          const q = query(
-            collection(db, "Users"),
-            where("Username", "==", usernameParam)
-          );
-          const querySnap = await getDocs(q);
-          if (!querySnap.empty) {
-            userDocSnap = querySnap.docs[0];
-          }
-        }
+        const userDocSnap = await getDoc(doc(db, "Users", uidParam));
 
         if (userDocSnap?.exists()) {
           const data = userDocSnap.data();
