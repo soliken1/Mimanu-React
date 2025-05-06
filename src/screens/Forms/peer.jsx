@@ -21,6 +21,9 @@ const PeerFormScreen = () => {
   const [responses, setResponses] = useState({});
   const [searchParams] = useSearchParams();
 
+  const uidParam = searchParams.get("uid");
+  const usernameParam = searchParams.get("username");
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
@@ -110,7 +113,7 @@ const PeerFormScreen = () => {
         uid: formIdentifier,
         answered: true,
         formType: "PeerForm",
-        answeredBy: user?.uid || usernameFromParams || "anonymous",
+        answeredBy: user?.uid || uidParam || usernameParam || "anonymous",
       };
 
       Object.entries(responses).forEach(([questionKey, answerValue]) => {

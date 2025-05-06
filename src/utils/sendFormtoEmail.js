@@ -5,13 +5,23 @@ import emailjs from "emailjs-com";
  * @param {string} email - The recipient's email address.
  * @param {string} formType - The form type to be sent (e.g., "Peer Form" or "Superior Form").
  */
-const sendFormToEmail = async ({ email, formType }) => {
+const sendFormToEmail = async ({ email, uid, formType }) => {
   const name = email.split("@")[0]; // Placeholder for recipient's name
   const username = name; // Assume username same as name part of email
-  const link =
-    formType === "Peer Form"
-      ? `https://mimanu-react.vercel.app/peer-form?username=${username}`
-      : `https://mimanu-react.vercel.app/superior-form?username=${username}`;
+  console.log(email, uid, formType);
+  let link = "";
+  if (!uid && email) {
+    console.log("triggered true");
+    link =
+      formType === "Peer Form"
+        ? `https://mimanu-react.vercel.app/peer-form?username=${username}`
+        : `https://mimanu-react.vercel.app/superior-form?username=${username}`;
+  } else if (uid && email) {
+    link =
+      formType === "Peer Form"
+        ? `https://mimanu-react.vercel.app/peer-form?uid=${uid}`
+        : `https://mimanu-react.vercel.app/superior-form?uid=${uid}`;
+  }
 
   const subject = `${formType} Evaluation Form`;
   const message = `Hello ${name},\n\nYou have been selected to complete a ${formType} for evaluation.\n\nPlease click the link below to begin:\n\n${link}\n\nUsername: ${username}\nEmail: ${email}\n\nThank you,\nMiManuTMS Team`;
