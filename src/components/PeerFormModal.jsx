@@ -12,7 +12,7 @@ const PeerFormModal = ({
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState("");
   const [formType, setFormType] = useState("Peer Form");
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(2);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
@@ -42,6 +42,25 @@ const PeerFormModal = ({
       user.FirstName.toLowerCase().includes(searchQuery) ||
       user.LastName.toLowerCase().includes(searchQuery)
   );
+
+  const handleConfirmSend = () => {
+    if (selectedPeers.length === 0) {
+      alert("Please select at least one user.");
+      return;
+    }
+
+    selectedPeers.forEach((user) => {
+      // Call your email sending utility
+      sendFormToEmail({
+        email: user.Email, // Ensure this field exists in each user object
+        uid: user.UID,
+        formType,
+      });
+    });
+
+    alert("Forms sent to selected users.");
+    onClose(); // Close modal after sending
+  };
 
   if (!isOpen) return null;
 
@@ -154,7 +173,7 @@ const PeerFormModal = ({
               </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={onClose}
+                onClick={handleConfirmSend}
               >
                 Confirm
               </button>
