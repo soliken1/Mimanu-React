@@ -12,7 +12,6 @@ const PeerFormModal = ({
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState("");
   const [formType, setFormType] = useState("Peer Form");
-  const [count, setCount] = useState(2);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
@@ -20,7 +19,7 @@ const PeerFormModal = ({
 
   const handleSelectUser = (user) => {
     if (
-      selectedPeers.length < count &&
+      selectedPeers.length < 1 &&
       !selectedPeers.find((u) => u.UID === user.UID)
     ) {
       setSelectedPeers([...selectedPeers, user]);
@@ -29,11 +28,6 @@ const PeerFormModal = ({
 
   const handleRemoveUser = (userId) => {
     setSelectedPeers(selectedPeers.filter((user) => user.UID !== userId));
-  };
-
-  const handleSendEmail = () => {
-    sendFormToEmail({ email, formType });
-    setShowEmailModal(false);
   };
 
   const filteredUsers = users.filter(
@@ -52,13 +46,13 @@ const PeerFormModal = ({
     selectedPeers.forEach((user) => {
       // Call your email sending utility
       sendFormToEmail({
-        email: user.Email, // Ensure this field exists in each user object
+        email: email,
         uid: user.UID,
         formType,
       });
     });
 
-    alert("Forms sent to selected users.");
+    alert("Forms sent to email for evaluation");
     onClose(); // Close modal after sending
   };
 
@@ -80,8 +74,6 @@ const PeerFormModal = ({
               value={formType}
               onChange={(e) => {
                 setFormType(e.target.value);
-                const listCount = e.target.value === "Peer Form" ? 2 : 1000;
-                setCount(listCount);
               }}
               className="w-full p-2 border rounded"
             >
@@ -117,8 +109,19 @@ const PeerFormModal = ({
                 </div>
               ))
             ) : (
-              <span className="text-gray-500">No users selected</span>
+              <span className="text-gray-500">No user selected</span>
             )}
+          </div>
+
+          <div>
+            <h3 className="text-lg font-bold mb-2">Send to Email</h3>
+            <input
+              type="email"
+              placeholder="Enter email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-2 border rounded mb-4"
+            />
           </div>
 
           <input
@@ -157,13 +160,7 @@ const PeerFormModal = ({
             )}
           </div>
 
-          <div className="flex justify-between gap-2 mt-4">
-            <button
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              onClick={() => setShowEmailModal(true)}
-            >
-              Send Via Email
-            </button>
+          <div className="flex justify-end gap-2 mt-4">
             <div className="flex flex-row gap-2">
               <button
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
@@ -181,35 +178,6 @@ const PeerFormModal = ({
           </div>
         </div>
       </div>
-
-      {showEmailModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md w-[400px]">
-            <h3 className="text-lg font-bold mb-2">Send to Email</h3>
-            <input
-              type="email"
-              placeholder="Enter email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded mb-4"
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={() => setShowEmailModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={handleSendEmail}
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
