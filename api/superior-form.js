@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       const formAnswersRef = db.collection("Form-Answers");
       const q = formAnswersRef
         .where("formType", "==", "SuperiorForm")
-        .where("answeredBy", "==", uid);
+        .where("uid", "==", uid);
 
       const querySnapshot = await q.get();
 
