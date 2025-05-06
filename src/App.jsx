@@ -527,29 +527,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        {/*Unprotected Routing Due to sending of emails directly */}
         <Route
           path="/superior-form/:uid"
           element={
-            <ProtectedRoute
-              role={role}
-              allowedRoles={["Admin", "Trainor", "Employee"]}
-              redirectTo={getDashboardRoute(role)}
-            >
-              <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
-            </ProtectedRoute>
+            <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
           }
         />
         <Route
           path="/peer-form"
-          element={
-            <ProtectedRoute
-              role={role}
-              allowedRoles={["Admin", "Trainor", "Employee"]}
-              redirectTo={getDashboardRoute(role)}
-            >
-              <PeerFormScreen getUser={getUser} onLogout={handleLogout} />
-            </ProtectedRoute>
-          }
+          element={<PeerFormScreen getUser={getUser} onLogout={handleLogout} />}
         />
         <Route
           path="/form-answers/:uid"
