@@ -110,7 +110,7 @@ const PeerFormScreen = () => {
         uid: formIdentifier,
         answered: true,
         formType: "PeerForm",
-        answeredBy: user?.uid || "anonymous",
+        answeredBy: user?.uid || usernameFromParams || "anonymous",
       };
 
       Object.entries(responses).forEach(([questionKey, answerValue]) => {
