@@ -12,9 +12,6 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-const [searchParams] = useSearchParams();
-const uidParam = searchParams.get("uid");
-const usernameParam = searchParams.get("username");
 
 const SuperiorFormScreen = () => {
   const [questionsData, setQuestionsData] = useState(null);
@@ -22,6 +19,10 @@ const SuperiorFormScreen = () => {
   const [responses, setResponses] = useState({});
   const [assessedUser, setAssessedUser] = useState(null);
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const uidParam = searchParams.get("uid");
+  const usernameParam = searchParams.get("username");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
