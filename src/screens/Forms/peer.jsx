@@ -19,6 +19,8 @@ const PeerFormScreen = () => {
   const [questionsData, setQuestionsData] = useState(null);
   const [user, setUser] = useState(null);
   const [responses, setResponses] = useState({});
+  const [assessedUser, setAssessedUser] = useState(null);
+
   const [searchParams] = useSearchParams();
 
   const uidParam = searchParams.get("uid");
@@ -30,6 +32,25 @@ const PeerFormScreen = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchAssessedUser = async () => {
+      try {
+        const userDocSnap = await getDoc(doc(db, "Users", uidParam));
+
+        if (userDocSnap?.exists()) {
+          const data = userDocSnap.data();
+          setAssessedUser(data);
+        } else {
+          console.log("Assessed user not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching assessed user:", error);
+      }
+    };
+
+    if (uidParam || usernameParam) fetchAssessedUser();
+  }, [uidParam, usernameParam]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -173,6 +194,12 @@ const PeerFormScreen = () => {
       <h2 className="text-2xl font-bold text-center mb-4">
         Peer Assessment Questionnaire
       </h2>
+
+      {assessedUser && (
+        <p className="text-sm text-gray-600 text-center mb-4">
+          Assessing: <strong>{assessedUser.Username ?? "Unnamed User"}</strong>
+        </p>
+      )}
 
       <p className="text-gray-700 text-sm text-center mb-6">
         <strong>Direction:</strong> Answer each question below honestly.

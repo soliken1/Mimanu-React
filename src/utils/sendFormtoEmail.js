@@ -6,6 +6,7 @@ import emailjs from "emailjs-com";
  * @param {string} formType - The form type to be sent (e.g., "Peer Form" or "Superior Form").
  */
 const sendFormToEmail = async ({ email, uid, formType }) => {
+  const name = email.split("@")[0];
   const link =
     formType === "Peer Form"
       ? `https://mimanu-react.vercel.app/peer-form?uid=${uid}`
