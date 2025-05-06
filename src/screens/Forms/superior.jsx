@@ -9,14 +9,14 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+const [searchParams] = useSearchParams();
+const uidParam = searchParams.get("uid");
+const usernameParam = searchParams.get("username");
 
 const SuperiorFormScreen = () => {
-  const params = useParams();
-  const uid = params?.uid ?? "";
-
   const [questionsData, setQuestionsData] = useState(null);
   const [user, setUser] = useState(null);
   const [responses, setResponses] = useState({});
@@ -31,8 +31,6 @@ const SuperiorFormScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) return;
-
     const fetchQuestions = async () => {
       try {
         const docRef = doc(db, "Questions", "sup-assessment");
@@ -49,26 +47,41 @@ const SuperiorFormScreen = () => {
     };
 
     fetchQuestions();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const fetchAssessedUser = async () => {
       try {
-        const userDoc = await getDoc(doc(db, "Users", uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          console.log("Assessed user data:", data);
-          setAssessedUser(data); // Optional: store in state
+        let userDocSnap;
+
+        if (uidParam) {
+          // Look up by UID
+          userDocSnap = await getDoc(doc(db, "Users", uidParam));
+        } else if (usernameParam) {
+          // Look up by Username
+          const q = query(
+            collection(db, "Users"),
+            where("Username", "==", usernameParam)
+          );
+          const querySnap = await getDocs(q);
+          if (!querySnap.empty) {
+            userDocSnap = querySnap.docs[0];
+          }
+        }
+
+        if (userDocSnap?.exists()) {
+          const data = userDocSnap.data();
+          setAssessedUser(data);
         } else {
-          console.log("No such user to assess.");
+          console.log("Assessed user not found.");
         }
       } catch (error) {
         console.error("Error fetching assessed user:", error);
       }
     };
 
-    if (uid) fetchAssessedUser();
-  }, [uid]);
+    if (uidParam || usernameParam) fetchAssessedUser();
+  }, [uidParam, usernameParam]);
 
   const handleResponseChange = (questionKey, value) => {
     setResponses((prev) => ({ ...prev, [questionKey]: value }));
@@ -97,14 +110,12 @@ const SuperiorFormScreen = () => {
   };
 
   const handleSubmit = async () => {
-    if (!user) return;
-
     // Prepare the query to check for duplicates
     const formAnswersRef = collection(db, "Form-Answers");
     const q = query(
       formAnswersRef,
       where("formType", "==", "SuperiorForm"),
-      where("uid", "==", assessedUser.UID)
+      where("uid", "==", assessedUser?.UID ?? "")
     );
 
     try {
@@ -155,10 +166,10 @@ const SuperiorFormScreen = () => {
 
       // Prepare the data to save
       const formattedResponses = {
-        uid: assessedUser.UID,
+        uid: assessedUser?.UID ?? "",
         answered: true,
         formType: "SuperiorForm",
-        answeredBy: user.uid,
+        answeredBy: user.uid || usernameParam || "anonymous",
       };
 
       Object.entries(responses).forEach(([questionKey, answerValue]) => {
