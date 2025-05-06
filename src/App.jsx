@@ -529,7 +529,7 @@ export default function App() {
         />
         {/*Unprotected Routing Due to sending of emails directly */}
         <Route
-          path="/superior-form/:uid"
+          path="/superior-form"
           element={
             <SuperiorFormScreen getUser={getUser} onLogout={handleLogout} />
           }
