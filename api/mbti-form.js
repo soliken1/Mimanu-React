@@ -36,11 +36,13 @@ export default async function handler(req, res) {
     const formData = querySnapshot.docs[0].data();
 
     // --- MBTI logic below ---
+    // true = high score favors FIRST trait (e.g. E, S, T, J)
+    // false = high score favors SECOND trait (e.g. I, N, F, P)
     const traitMapping = [
-      true, true, true, true,   // q1–q4 → E vs I
-      true, true, true, true,   // q5–q8 → S vs N
-      true, true, true, true,   // q9–q12 → T vs F
-      true, true, true, true    // q13–q16 → J vs P
+      false, false, true, false,   // q1–q4 → E vs I (most questions favor I with high scores)
+      true, true, true, true,      // q5–q8 → S vs N
+      true, true, true, true,      // q9–q12 → T vs F
+      true, true, true, true       // q13–q16 → J vs P
     ];
 
     const traitPairs = [
