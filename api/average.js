@@ -1,6 +1,3 @@
-// root/api/average.js (for pages/api in Next.js)
-// or root/api/average/route.js for App Router in Next.js 13+
-
 export default async function handler(req, res) {
     if (req.method !== "GET") {
       return res.status(405).json({ error: "Method not allowed" });
@@ -21,17 +18,21 @@ export default async function handler(req, res) {
       const responses = await Promise.all(urls.map((url) => fetch(url)));
       const data = await Promise.all(responses.map((r) => r.json()));
   
+      console.log("Fetched data:", JSON.stringify(data, null, 2)); // 👈 Debug
+  
       const questionTotals = {};
       const questionCounts = {};
   
       data.forEach((entry) => {
         const answers = entry.answers;
-        if (!answers || !answers.answered) return;
+        if (!answers) return;
   
         Object.keys(answers).forEach((key) => {
           if (key.startsWith("q")) {
-            const answer = answers[key].answer;
-            if (answer !== undefined) {
+            const value = answers[key];
+            const answer = value && typeof value === "object" ? value.answer : value;
+  
+            if (typeof answer === "number") {
               questionTotals[key] = (questionTotals[key] || 0) + answer;
               questionCounts[key] = (questionCounts[key] || 0) + 1;
             }
