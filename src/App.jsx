@@ -22,6 +22,7 @@ import MBTIScreen from "./screens/Forms/mbti.jsx";
 import SelfFormScreen from "./screens/Forms/self.jsx";
 import SuperiorFormScreen from "./screens/Forms/superior.jsx";
 import PeerFormScreen from "./screens/Forms/peer.jsx";
+import TMSFormScreen from "./screens/Forms/survey.jsx";
 import TrainorScreen from "./screens/Courses/Trainor/TrainorScreen.jsx";
 import TrainorDashboard from "./screens/DashboardViews/TrainorDashboard.jsx";
 import fetchUserRole from "./hooks/get/fetchUserRole.js";
@@ -516,6 +517,18 @@ export default function App() {
           }
         />
         <Route
+          path="/survey/:uid"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin", "Trainor", "Employee"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <TMSFormScreen getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+         <Route
           path="/self-form/:uid"
           element={
             <ProtectedRoute
