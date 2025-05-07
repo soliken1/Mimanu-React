@@ -18,31 +18,57 @@ export default async function handler(req, res) {
       const responses = await Promise.all(urls.map((url) => fetch(url)));
       const data = await Promise.all(responses.map((r) => r.json()));
   
+      const batches = {
+        "Critical Thinking": [1, 10],
+        "Time Management": [11, 20],
+        "Teamwork": [21, 30],
+        "Leadership": [31, 40],
+        "Communication": [41, 50],
+      };
+  
+      const batchTotals = {};
+      const batchCounts = {};
       const questionTotals = {};
       const questionCounts = {};
   
       data.forEach((entry) => {
-        const answers = entry;
-  
-        Object.keys(answers).forEach((key) => {
+        Object.keys(entry).forEach((key) => {
           if (key.startsWith("q")) {
-            const value = answers[key];
+            const value = entry[key];
             const answer = value && typeof value === "object" ? value.answer : value;
   
-            if (typeof answer === "number") {
+            const questionNumber = parseInt(key.slice(1), 10);
+            if (!isNaN(questionNumber) && typeof answer === "number") {
+              // Track per-question stats
               questionTotals[key] = (questionTotals[key] || 0) + answer;
               questionCounts[key] = (questionCounts[key] || 0) + 1;
+  
+              // Track batch stats
+              for (const [batchName, [start, end]] of Object.entries(batches)) {
+                if (questionNumber >= start && questionNumber <= end) {
+                  batchTotals[batchName] = (batchTotals[batchName] || 0) + answer;
+                  batchCounts[batchName] = (batchCounts[batchName] || 0) + 1;
+                  break;
+                }
+              }
             }
           }
         });
       });
   
-      const averages = {};
+      const batchAverages = {};
+      for (const batch in batches) {
+        const total = batchTotals[batch] || 0;
+        const count = batchCounts[batch] || 0;
+        batchAverages[batch] = count > 0 ? total / count : null;
+      }
+  
+      const questionAverages = {};
       Object.keys(questionTotals).forEach((key) => {
-        averages[key] = questionTotals[key] / questionCounts[key];
+        questionAverages[key] = questionTotals[key] / questionCounts[key];
       });
   
-      return res.status(200).json({ uid, averages });
+      return res.status(200).json({ uid, batchAverages, questionAverages });
     } catch (error) {
       console.error("Error calculating averages:", error);
       return res.status(500).json({ error: "Internal server error" });
