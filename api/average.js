@@ -18,14 +18,11 @@ export default async function handler(req, res) {
       const responses = await Promise.all(urls.map((url) => fetch(url)));
       const data = await Promise.all(responses.map((r) => r.json()));
   
-      console.log("Fetched data:", JSON.stringify(data, null, 2)); // 👈 Debug
-  
       const questionTotals = {};
       const questionCounts = {};
   
       data.forEach((entry) => {
-        const answers = entry.answers;
-        if (!answers) return;
+        const answers = entry;
   
         Object.keys(answers).forEach((key) => {
           if (key.startsWith("q")) {
