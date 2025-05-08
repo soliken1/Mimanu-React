@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebaseConfigs";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { FaUsers } from "react-icons/fa6";
+import {
+  FaCircle,
+  FaCircleQuestion,
+  FaHandsBubbles,
+  FaQuestion,
+  FaUsers,
+} from "react-icons/fa6";
 import { CiSettings } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaBook } from "react-icons/fa";
@@ -26,9 +32,9 @@ const NavSidebar = ({ userData }) => {
 
   const logout = async () => {
     try {
-        // Clear chat data
-  localStorage.removeItem("chatMessages");
-  localStorage.removeItem("chatGreeted");
+      // Clear chat data
+      localStorage.removeItem("chatMessages");
+      localStorage.removeItem("chatGreeted");
       await signOut(auth);
       navigate("/");
     } catch (error) {
@@ -118,6 +124,13 @@ const NavSidebar = ({ userData }) => {
                   <FaUsers className="w-6 h-6" />
                   <label className="cursor-pointer">Users</label>
                 </Link>
+                <Link
+                  className=" flex flex-col items-center justify-between"
+                  to="/feedback"
+                >
+                  <FaUsers className="w-6 h-6" />
+                  <label className="cursor-pointer">Feedback</label>
+                </Link>
               </div>
             ) : userData?.UserRole === "Trainor" ? (
               <div></div>
@@ -146,6 +159,10 @@ const NavSidebar = ({ userData }) => {
                     <Link className="flex flex-row gap-2 w-full" to="/register">
                       <FaUsers className="w-6 h-6" />
                       <label className="cursor-pointer">Users</label>
+                    </Link>
+                    <Link className="flex flex-row gap-2 w-full" to="/feedback">
+                      <FaCircleQuestion className="w-6 h-6" />
+                      <label className="cursor-pointer">Feedback</label>
                     </Link>
                   </>
                 ) : userData?.UserRole === "Trainor" ? (
