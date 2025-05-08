@@ -375,7 +375,7 @@ const RegisterScreen = ({ getUser }) => {
                             to={`/form-answers/${user.UID}`}
                             className="text-xs underline cursor-pointer"
                           >
-                            View Form Answers
+                            360 Assessment
                           </Link>
                         </>
                       )}

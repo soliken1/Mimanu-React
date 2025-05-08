@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+const MBTI_DESCRIPTIONS = {
+  ISTJ: "The Logistician – practical and fact-minded, with a strong sense of duty and responsibility.",
+  ISFJ: "The Defender – warm and dedicated, always ready to protect and help others.",
+  INFJ: "The Advocate – insightful and principled, with a quiet passion for helping others.",
+  INTJ: "The Architect – strategic and logical, with a clear vision for the future.",
+  ISTP: "The Virtuoso – bold and practical experimenters, masters of tools and techniques.",
+  ISFP: "The Adventurer – gentle, sensitive, and artistic, always exploring new ways to express themselves.",
+  INFP: "The Mediator – idealistic and empathetic, guided by core values and beliefs.",
+  INTP: "The Logician – innovative and curious, constantly seeking understanding and truth.",
+  ESTP: "The Entrepreneur – energetic and perceptive, who love living on the edge.",
+  ESFP: "The Entertainer – outgoing and spontaneous, who live for excitement and fun.",
+  ENFP: "The Campaigner – enthusiastic and creative free spirits, often inspiring others.",
+  ENTP: "The Debater – smart and curious thinkers, who enjoy intellectual challenges.",
+  ESTJ: "The Executive – organized and honest, who love bringing structure and order.",
+  ESFJ: "The Consul – caring and social, always eager to help and support others.",
+  ENFJ: "The Protagonist – charismatic and inspiring leaders, who love helping others grow.",
+  ENTJ: "The Commander – confident and strategic, born to lead and drive success.",
+};
+
 const FormAnswers = () => {
   const { uid } = useParams();
-
   const [selectedForm, setSelectedForm] = useState(null);
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mbtiType, setMbtiType] = useState(null);
 
   const getFormEndpoints = (uid) => ({
     MBTIForm: `/api/mbti-form?uid=${uid}`,
@@ -17,6 +36,21 @@ const FormAnswers = () => {
   });
 
   const formEndpoints = getFormEndpoints(uid);
+
+  useEffect(() => {
+    const fetchMbti = async () => {
+      try {
+        const res = await axios.get(formEndpoints.MBTIForm);
+        if (res.data?.mbtiType) {
+          setMbtiType(res.data.mbtiType);
+        }
+      } catch (err) {
+        console.error("Failed to fetch MBTI type:", err);
+      }
+    };
+
+    fetchMbti();
+  }, [uid]);
 
   const groupedQuestions = {
     "Critical Thinking": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -77,7 +111,7 @@ const FormAnswers = () => {
       <div className="space-y-2">
         {indexes.map((i) => {
           const key = `q${i}`;
-          const questionObj = response[key];
+          const questionObj = response?.[key];
           if (!questionObj) return null;
           return (
             <div key={key} className="bg-white p-4 rounded shadow-sm border">
@@ -105,7 +139,22 @@ const FormAnswers = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Form Responses</h1>
+      <h1 className="text-2xl font-bold mb-4">360 Assessment</h1>
+
+      {/* Top Personality Display */}
+      {mbtiType && (
+        <div className="bg-blue-50 p-5 mb-6 rounded border border-blue-200">
+          <h2 className="text-xl font-bold text-blue-700">
+            Personality Type: {mbtiType}
+          </h2>
+          <p className="text-gray-700 mt-2 italic">
+            {MBTI_DESCRIPTIONS[mbtiType] ||
+              "No description available for this type."}
+          </p>
+        </div>
+      )}
+
+      {/* Toggle Buttons */}
       <div className="flex gap-3 mb-6 flex-wrap">
         {Object.keys(formEndpoints).map((form) => (
           <button
@@ -122,12 +171,11 @@ const FormAnswers = () => {
         ))}
       </div>
 
+      {/* Form Results */}
       {loading && <p className="text-gray-600">Loading...</p>}
-
       {!loading && selectedForm && !response && (
         <p className="text-red-500">User has not answered this form.</p>
       )}
-
       {!loading && response && (
         <div className="space-y-8">
           <h2 className="text-xl font-bold mb-4 text-blue-700">
