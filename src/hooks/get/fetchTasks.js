@@ -1,5 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs"; // Adjust based on your project structure
+import { checkAndRecordTaskReminder } from "./checkAndRecordTaskReminder";
+import sendTaskNotif from "../../utils/sendTaskNotif";
 
 const combineDateAndTime = (date, timeStr) => {
   if (!date || !timeStr) return null;
@@ -53,7 +55,7 @@ const fetchTasks = async (courseId, enrollId) => {
     const availableTasks = [];
     const upcomingTasks = [];
 
-    tasks.forEach((task) => {
+    for (const task of tasks) {
       const startDateTime = combineDateAndTime(task.StartDate, task.StartTime);
       const endDateTime = combineDateAndTime(task.EndDate, task.EndTime);
       const isAnswered = !!completedTasks[task.id];
@@ -69,10 +71,29 @@ const fetchTasks = async (courseId, enrollId) => {
         endDateTime >= now
       ) {
         availableTasks.push(taskWithStatus);
+
+        // 🔔 Trigger notification for available task not yet answered
+        if (!isAnswered) {
+          const alreadySent = await checkAndRecordTaskReminder(
+            user.uid,
+            task.id,
+            courseId
+          );
+
+          if (!alreadySent) {
+            await sendTaskNotif({
+              courseId,
+              TaskId: task.id,
+              email: user.email,
+              name: user.displayName || user.email.split("@")[0],
+              taskTitle: task.TaskTitle,
+            });
+          }
+        }
       } else {
         upcomingTasks.push(taskWithStatus);
       }
-    });
+    }
 
     return { pastTasks, availableTasks, upcomingTasks };
   } catch (error) {
