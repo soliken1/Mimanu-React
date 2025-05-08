@@ -8,7 +8,6 @@ import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import formatTimestamp from "../../../helper/formatTimestamp";
 import calculateTotalScreenTime from "../../../helper/calculateTotalScreenTime"; // Import the function
 import ScreenTimeBar from "../../../components/ScreenTimeBar";
-import SkillRadarChart from "../../../components/SkillRadarChart";
 import CourseProgress from "../../../components/CourseProgress";
 import fetchTasks from "../../../hooks/get/fetchTasks";
 import { fetchModulesWithReadStatus } from "../../../hooks/get/fetchModulesWithReadStatus";
@@ -209,7 +208,6 @@ const AdminProgress = ({ getUser, onLogout }) => {
                   totalAvailableTasks + totalSubmodules + totalModules
                 }
               />
-              <SkillRadarChart />
             </div>
           </div>
         </div>

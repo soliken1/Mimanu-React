@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import axios from "axios";
 import fetchUser from "../../hooks/get/fetchUser";
+import SkillRadarChart from "../../components/SkillRadarChart";
 
 const MBTI_DESCRIPTIONS = {
   ISTJ: "The Logistician – practical and fact-minded, with a strong sense of duty and responsibility.",
@@ -52,7 +53,7 @@ const FormAnswers = () => {
   const [viewFormResults, setViewFormResults] = useState(false);
   const [viewChartAnalysis, setViewChartAnalysis] = useState(false);
   const [questionAverages, setQuestionAverages] = useState([]);
-  const [groupedQuestionAveragees, setGroupQuestionAverages] = useState([]);
+  const [chartType, setChartType] = useState("bar"); // "bar" or "radar"
 
   const getFormEndpoints = (uid) => ({
     MBTIForm: `https://mimanu-react.vercel.app/api/mbti-form?uid=${uid}`,
@@ -228,28 +229,61 @@ const FormAnswers = () => {
 
       {batchAverages ? (
         <div className="bg-green-50 p-5 mb-6 rounded border border-green-200">
+          <div className="flex justify-end space-x-2 mb-4">
+            <button
+              className={`px-4 py-2 rounded ${
+                chartType === "bar"
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setChartType("bar")}
+            >
+              Bar Chart
+            </button>
+            <button
+              className={`px-4 py-2 rounded ${
+                chartType === "radar"
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setChartType("radar")}
+            >
+              Spider Chart
+            </button>
+          </div>
+
           <h2 className="text-xl font-bold text-green-700 mb-4">
             Peer Group Averages
           </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={Object.entries(batchAverages).map(([category, avg]) => ({
-                category,
-                average: parseFloat(avg?.toFixed(2)),
+          {/* Conditionally render chart */}
+          {chartType === "bar" ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={Object.entries(batchAverages).map(([category, avg]) => ({
+                  category,
+                  average: parseFloat(avg?.toFixed(2)),
+                }))}
+                margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="category" />
+                <YAxis domain={[0, 5]} tickCount={6} />
+                <Tooltip />
+                <Bar dataKey="average" barSize={40} radius={[4, 4, 0, 0]}>
+                  {Object.entries(batchAverages).map(([category]) => (
+                    <Cell key={category} fill={BAR_COLORS[category]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <SkillRadarChart
+              data={Object.entries(batchAverages).map(([skill, avg]) => ({
+                skill,
+                rating: parseFloat(avg?.toFixed(2)),
               }))}
-              margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis domain={[0, 5]} tickCount={6} />
-              <Tooltip />
-              <Bar dataKey="average" barSize={40} radius={[4, 4, 0, 0]}>
-                {Object.entries(batchAverages).map(([category]) => (
-                  <Cell key={category} fill={BAR_COLORS[category]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+            />
+          )}
         </div>
       ) : (
         <div className="bg-green-50 p-5 mb-6 rounded border border-green-200 text-green-700 italic">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavSidebar from "../../components/NavSidebar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { db } from "../../config/firebaseConfigs";
 import fetchUser from "../../hooks/get/fetchUser";
 import HelpButton from "../../components/HelpButton";
 import Loader from "../../components/Loader";
@@ -47,6 +48,7 @@ const ProfileScreen = ({ getUser }) => {
 
         const coursePromises = querySnapshot.docs.map(async (docSnap) => {
           const courseID = docSnap.data().CourseID;
+          console.log(courseID);
           const courseRef = doc(db, "Course", courseID);
           const courseSnap = await getDoc(courseRef);
 

@@ -211,7 +211,6 @@ const Progress = ({ getUser, onLogout }) => {
                   totalAvailableTasks + totalSubmodules + totalModules
                 }
               />
-              <SkillRadarChart />
             </div>
           </div>
         </div>
