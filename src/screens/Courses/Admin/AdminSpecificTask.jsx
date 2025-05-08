@@ -14,6 +14,7 @@ import { toast, Bounce } from "react-toastify";
 import axios from "axios";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Loader from "../../../components/Loader";
+import { Timestamp } from "firebase/firestore";
 
 const AdminSpecificTask = ({ getUser }) => {
   const { courseId, taskId } = useParams();
@@ -27,6 +28,10 @@ const AdminSpecificTask = ({ getUser }) => {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
@@ -55,6 +60,7 @@ const AdminSpecificTask = ({ getUser }) => {
         setCourseData(course);
 
         const taskData = await fetchTask(courseId, taskId);
+        console.log(taskData);
         setTask(taskData);
 
         setLoading(false);
@@ -71,6 +77,18 @@ const AdminSpecificTask = ({ getUser }) => {
       setNewContent(task.TaskContent || "");
       setFileUrl(task.fileUrl || "");
       setEmbed(task.EmbedURL || "");
+      setStartDate(
+        task?.StartDate
+          ? new Date(task.StartDate.seconds * 1000).toISOString().split("T")[0]
+          : "" || ""
+      );
+      setEndDate(
+        task?.EndDate
+          ? new Date(task.EndDate.seconds * 1000).toISOString().split("T")[0]
+          : "" || ""
+      );
+      setStartTime(task.StartTime || "");
+      setEndTime(task.EndTime || "");
     }
   }, [task]);
 
@@ -107,6 +125,10 @@ const AdminSpecificTask = ({ getUser }) => {
       TaskContent: newContent,
       fileUrl: uploadedFileUrl,
       EmbedURL: embed.trim() ? embed : task?.EmbedURL || "",
+      StartDate: startDate ? Timestamp.fromDate(new Date(startDate)) : null,
+      EndDate: endDate ? Timestamp.fromDate(new Date(endDate)) : null,
+      StartTime: startTime, // string like "14:30"
+      EndTime: endTime, // string like "16:00"
     };
 
     try {
@@ -235,7 +257,7 @@ const AdminSpecificTask = ({ getUser }) => {
                     allowFullScreen
                   ></iframe>
                 )}
-                <label className=" text-lg font-semibold mt-5">
+                <label className="text-lg font-semibold mt-5">
                   Embed A Video:
                 </label>
                 <input
@@ -244,6 +266,54 @@ const AdminSpecificTask = ({ getUser }) => {
                   value={embed}
                   onChange={(e) => setEmbed(e.target.value)}
                 />
+              </div>
+
+              <div className="flex flex-row gap-5">
+                <div className="flex flex-col">
+                  <label className="text-lg font-semibold">
+                    Edit Start Date
+                  </label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="p-2 border rounded mb-3"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-lg font-semibold">Edit End Date</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="p-2 border rounded mb-3"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-row gap-5">
+                <div className="flex flex-col">
+                  <label className="text-lg font-semibold">
+                    Edit Start Time
+                  </label>
+                  <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className=" p-2 border rounded mb-3"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-lg font-semibold">Edit End Time</label>
+                  <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className=" p-2 border rounded mb-3"
+                  />
+                </div>
               </div>
 
               {/* Buttons */}
