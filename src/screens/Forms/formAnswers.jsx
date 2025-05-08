@@ -27,6 +27,7 @@ const FormAnswers = () => {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mbtiType, setMbtiType] = useState(null);
+  const [batchAverages, setBatchAverages] = useState(null);
 
   const getFormEndpoints = (uid) => ({
     MBTIForm: `/api/mbti-form?uid=${uid}`,
@@ -49,6 +50,20 @@ const FormAnswers = () => {
       }
     };
 
+    const fetchAverages = async () => {
+      try {
+        const res = await axios.get(
+          `https://mimanu-react.vercel.app/api/average?uid=${uid}`
+        );
+        if (res.data?.batchAverages) {
+          setBatchAverages(res.data.batchAverages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch batch averages:", err);
+      }
+    };
+
+    fetchAverages();
     fetchMbti();
   }, [uid]);
 
@@ -151,6 +166,22 @@ const FormAnswers = () => {
             {MBTI_DESCRIPTIONS[mbtiType] ||
               "No description available for this type."}
           </p>
+        </div>
+      )}
+
+      {batchAverages && (
+        <div className="bg-green-50 p-5 mb-6 rounded border border-green-200">
+          <h2 className="text-xl font-bold text-green-700 mb-3">
+            Peer Group Averages
+          </h2>
+          <ul className="space-y-1 text-gray-800">
+            {Object.entries(batchAverages).map(([category, avg]) => (
+              <li key={category} className="flex justify-between">
+                <span>{category}</span>
+                <span className="font-semibold">{avg.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
