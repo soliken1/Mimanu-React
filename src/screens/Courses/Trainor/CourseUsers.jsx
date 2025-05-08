@@ -129,8 +129,14 @@ const CourseUsers = ({ getUser }) => {
                           ).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-6">
-                          <label className="bg-green-500 text-white rounded-sm px-2 py-1">
-                            Active
+                          <label
+                            className={`${
+                              employee.Status === "Completed"
+                                ? "bg-green-200 text-green-600"
+                                : "bg-yellow-100 text-yellow-600"
+                            } rounded-sm px-2 py-1`}
+                          >
+                            {employee.Status}
                           </label>
                         </td>
                         <td className="py-3 px-6">

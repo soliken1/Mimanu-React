@@ -159,8 +159,7 @@ const TaskScreen = ({ getUser, onLogout }) => {
 
               {tasks.upcomingTasks.length > 0 ? (
                 tasks.upcomingTasks.map((task) => (
-                  <Link
-                    to={`/course/${courseId}/tasks/${task.id}`}
+                  <div
                     key={task.id}
                     className="p-4 shadow  flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
                   >
@@ -183,7 +182,7 @@ const TaskScreen = ({ getUser, onLogout }) => {
                         </label>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))
               ) : (
                 <p className="text-gray-500 p-4">No upcoming tasks.</p>
@@ -198,9 +197,8 @@ const TaskScreen = ({ getUser, onLogout }) => {
               </div>
               {tasks.pastTasks.length > 0 ? (
                 tasks.pastTasks.map((task) => (
-                  <Link
+                  <div
                     key={task.id}
-                    to={`/course/${courseId}/tasks/${task.id}`}
                     className="p-4 shadow flex flex-row items-center gap-3 bg-gray-100 border-b border-gray-300 hover:bg-gray-300"
                   >
                     <MdTask />
@@ -222,7 +220,7 @@ const TaskScreen = ({ getUser, onLogout }) => {
                         </label>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))
               ) : (
                 <p className="text-gray-500 p-4">No past tasks.</p>

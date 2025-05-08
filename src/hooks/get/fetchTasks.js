@@ -1,28 +1,37 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../config/firebaseConfigs"; // Adjust based on your project structure
 
+const combineDateAndTime = (date, timeStr) => {
+  if (!date || !timeStr) return null;
+  const dateObj = new Date(date.seconds * 1000);
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  return new Date(
+    dateObj.getFullYear(),
+    dateObj.getMonth(),
+    dateObj.getDate(),
+    hours,
+    minutes
+  );
+};
+
 const fetchTasks = async (courseId, enrollId) => {
   try {
     const user = auth.currentUser;
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+    if (!user) throw new Error("User not authenticated");
 
     if (!courseId || !enrollId) {
-      console.error("No courseId or enrollId provided for fetching tasks.");
+      console.error("No courseId or enrollId provided.");
       return { pastTasks: [], availableTasks: [], upcomingTasks: [] };
     }
 
-    // Reference to the "Tasks" subcollection inside the specific Course document
     const tasksRef = collection(db, "Course", courseId, "Task");
     const querySnapshot = await getDocs(tasksRef);
 
-    let tasks = [];
-    querySnapshot.forEach((doc) => {
-      tasks.push({ id: doc.id, ...doc.data() });
-    });
+    const tasks = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-    // Fetch the "CompletedTask" subcollection under "Enrolled"
     const completedTasksRef = collection(
       db,
       "Enrolled",
@@ -31,40 +40,34 @@ const fetchTasks = async (courseId, enrollId) => {
     );
     const completedQuerySnapshot = await getDocs(completedTasksRef);
 
-    // Store completed tasks along with their details
-    let completedTasks = {};
+    const completedTasks = {};
     completedQuerySnapshot.forEach((doc) => {
       const data = doc.data();
       if (data.Answered) {
-        completedTasks[doc.id] = { ...data }; // Store full details
+        completedTasks[doc.id] = { ...data };
       }
     });
 
-    // Get current date
     const now = new Date();
-
-    // Categorize tasks
     const pastTasks = [];
     const availableTasks = [];
     const upcomingTasks = [];
 
     tasks.forEach((task) => {
-      const startDate = task.StartDate?.seconds
-        ? new Date(task.StartDate.seconds * 1000)
-        : null;
-      const endDate = task.EndDate?.seconds
-        ? new Date(task.EndDate.seconds * 1000)
-        : null;
-
-      // Check if the task has been answered & attach details
+      const startDateTime = combineDateAndTime(task.StartDate, task.StartTime);
+      const endDateTime = combineDateAndTime(task.EndDate, task.EndTime);
+      const isAnswered = !!completedTasks[task.id];
       const completedData = completedTasks[task.id] || null;
-      const isAnswered = !!completedData;
+      const taskWithStatus = { ...task, isAnswered, completedData };
 
-      const taskWithStatus = { ...task, isAnswered, completedData }; // Append completed task details
-
-      if (endDate && endDate < now) {
+      if (endDateTime && endDateTime < now) {
         pastTasks.push(taskWithStatus);
-      } else if (startDate && startDate <= now && endDate && endDate >= now) {
+      } else if (
+        startDateTime &&
+        endDateTime &&
+        startDateTime <= now &&
+        endDateTime >= now
+      ) {
         availableTasks.push(taskWithStatus);
       } else {
         upcomingTasks.push(taskWithStatus);
@@ -86,9 +89,9 @@ const fetchAllTasks = async (courseId) => {
       return { pastTasks: [], availableTasks: [], upcomingTasks: [] };
     }
 
-    // Reference to the "Tasks" subcollection inside the specific Course document
     const tasksRef = collection(db, "Course", courseId, "Task");
     const querySnapshot = await getDocs(tasksRef);
+
     let pastTasks = [];
     let availableTasks = [];
     let upcomingTasks = [];
@@ -98,16 +101,17 @@ const fetchAllTasks = async (courseId) => {
     querySnapshot.forEach((doc) => {
       const task = { id: doc.id, ...doc.data() };
 
-      const startDate = task.StartDate?.seconds
-        ? new Date(task.StartDate.seconds * 1000)
-        : null;
-      const endDate = task.EndDate?.seconds
-        ? new Date(task.EndDate.seconds * 1000)
-        : null;
+      const startDateTime = combineDateAndTime(task.StartDate, task.StartTime);
+      const endDateTime = combineDateAndTime(task.EndDate, task.EndTime);
 
-      if (endDate && endDate < now) {
+      if (endDateTime && endDateTime < now) {
         pastTasks.push(task);
-      } else if (startDate && startDate <= now && endDate && endDate >= now) {
+      } else if (
+        startDateTime &&
+        endDateTime &&
+        startDateTime <= now &&
+        endDateTime >= now
+      ) {
         availableTasks.push(task);
       } else {
         upcomingTasks.push(task);
