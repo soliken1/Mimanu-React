@@ -324,12 +324,6 @@ const AdminDashboard = ({ getUser }) => {
                 </div>
               )}
             </div>
-            <div className="min-h-96 h-auto p-6 shadow-y flex flex-col rounded-lg bg-white">
-              <label className="text-gray-500">
-                Average Enrolled Employee Skill
-              </label>
-              <SkillRadarChart />
-            </div>
 
             <div className="min-h-96 h-auto p-6 shadow-y flex flex-col rounded-lg bg-white">
               <label className="text-gray-500">Course Average Breakdown:</label>
