@@ -51,8 +51,8 @@ const AdminProgressList = ({ getUser }) => {
         setCourseData(course);
 
         const enrolled = await fetchEnrolledUsersSummary(courseId);
-
         setEnrolledEmployees(enrolled);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

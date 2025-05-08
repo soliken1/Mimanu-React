@@ -71,15 +71,31 @@ const Progress = ({ getUser, onLogout }) => {
 
         // Extract available tasks
         const availableTasks = tasks.availableTasks || [];
+        const upcomingTasks = tasks.upcomingTasks || [];
+        const pastTasks = tasks.pastTasks || [];
 
         // Count completed tasks from availableTasks
         const completedTasksCount = availableTasks.filter(
           (task) => task.completedData?.Answered
         ).length;
 
+        const completedupcomingTasksCount = upcomingTasks.filter(
+          (task) => task.completedData?.Answered
+        ).length;
+
+        const completedpastTasksCount = pastTasks.filter(
+          (task) => task.completedData?.Answered
+        ).length;
+
         // Update state
-        setTotalAvailableTasks(availableTasks.length);
-        setTotalCompletedTasks(completedTasksCount);
+        setTotalAvailableTasks(
+          availableTasks.length + upcomingTasks.length + pastTasks.length
+        );
+        setTotalCompletedTasks(
+          completedTasksCount +
+            completedupcomingTasksCount +
+            completedpastTasksCount
+        );
 
         const modules = await fetchModulesWithReadStatus(
           courseId,

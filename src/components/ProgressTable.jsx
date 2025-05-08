@@ -8,17 +8,24 @@ const ProgressTable = ({ completedProgress, tasksData }) => {
   useEffect(() => {
     if (!tasksData) return;
 
-    // Filter answered tasks
-    const answeredTasks = tasksData.availableTasks?.filter(
+    // Combine all tasks into a single array
+    const allTasks = [
+      ...(tasksData.availableTasks || []),
+      ...(tasksData.pastTasks || []),
+      ...(tasksData.upcomingTasks || []),
+    ];
+
+    // Filter only answered tasks
+    const answeredTasks = allTasks.filter(
       (task) => task.completedData?.Answered
     );
 
-    // Calculate total score and total questions
-    const totalScoreSum = answeredTasks?.reduce(
+    // Sum total scores and total questions
+    const totalScoreSum = answeredTasks.reduce(
       (sum, task) => sum + (task.completedData?.Score || 0),
       0
     );
-    const totalQuestionsSum = answeredTasks?.reduce(
+    const totalQuestionsSum = answeredTasks.reduce(
       (sum, task) => sum + (task.completedData?.TotalQuestions || 0),
       0
     );
@@ -72,12 +79,18 @@ const ProgressTable = ({ completedProgress, tasksData }) => {
                 {isTask ? (
                   <td
                     className={`px-4 py-2 ${
-                      passed
+                      totalScore === 0
+                        ? "text-yellow-600"
+                        : passed
                         ? "bg-green-200 text-green-600"
                         : "bg-red-200 text-red-600"
                     }`}
                   >
-                    {passed ? "Passed" : "Failed"}
+                    {totalScore === 0
+                      ? "Pending"
+                      : passed
+                      ? "Passing"
+                      : "Failing"}
                   </td>
                 ) : null}
               </tr>
@@ -94,10 +107,14 @@ const ProgressTable = ({ completedProgress, tasksData }) => {
           </label>
           <span
             className={`font-semibold ${
-              passed ? "text-green-600" : "text-red-600"
+              totalScore === 0
+                ? "text-yellow-600"
+                : passed
+                ? "text-green-600"
+                : "text-red-600"
             }`}
           >
-            {passed ? "Passed" : "Failed"}
+            {totalScore === 0 ? "Pending" : passed ? "Passing" : "Failing"}
           </span>
         </div>
       </div>
