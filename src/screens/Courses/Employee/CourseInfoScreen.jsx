@@ -16,6 +16,8 @@ import { trackUserScreenTime } from "../../../helper/userScreenTime";
 import fetchEnrolled from "../../../hooks/get/fetchEnrolled";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
+import SurveyPopup from "../../../components/SurveyPopup";
+import checkEmployeeAnsweredForm from "../../../hooks/get/employee/checkEmployeeAnsweredForm";
 
 const CourseInfo = ({ getUser }) => {
   const { courseId } = useParams();
@@ -25,6 +27,8 @@ const CourseInfo = ({ getUser }) => {
   const [announcementsData, setAnnouncementsData] = useState([]);
   const [taskData, setTaskData] = useState(null);
   const [enrollData, setEnrollData] = useState(null);
+  const [showSurvey, setShowSurvey] = useState(true);
+  const [hasAnsweredSurvey, sethasAnsweredSurvey] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +44,9 @@ const CourseInfo = ({ getUser }) => {
 
         const enroll = await fetchEnrolled(getUser.uid, courseId);
         setEnrollData(enroll);
+
+        const hasAnswered = await checkEmployeeAnsweredForm();
+        sethasAnsweredSurvey(hasAnswered);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -65,6 +72,10 @@ const CourseInfo = ({ getUser }) => {
 
     fetchModuleData();
   }, [enrollData]);
+
+  const handleSurveyRedirect = () => {
+    window.location.href = `https://mimanu-react.vercel.app/survey/${getUser.uid}?courseId=${courseId}`;
+  };
 
   if (loading) {
     return <Loader />;
@@ -218,6 +229,14 @@ const CourseInfo = ({ getUser }) => {
           </div>
         </div>
       </div>
+
+      {enrollData?.Status === "Completed" && !hasAnsweredSurvey ? (
+        <SurveyPopup
+          show={showSurvey}
+          onClose={() => setShowSurvey(false)}
+          onRedirect={handleSurveyRedirect}
+        />
+      ) : null}
     </div>
   );
 };
