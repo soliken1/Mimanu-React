@@ -111,7 +111,7 @@ const FormAnswers = () => {
       <div className="space-y-2">
         {indexes.map((i) => {
           const key = `q${i}`;
-          const questionObj = response?.[key];
+          const questionObj = response?.[key] || response?.answers?.[key];
           if (!questionObj) return null;
           return (
             <div key={key} className="bg-white p-4 rounded shadow-sm border">
