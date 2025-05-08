@@ -7,15 +7,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { skill: "Communication", rating: 80 },
-  { skill: "Time Management", rating: 70 },
-  { skill: "Values Enhancement", rating: 90 },
-  { skill: "Teamwork", rating: 60 },
-  { skill: "Critical Thinking", rating: 70 },
-  { skill: "Leadership", rating: 80 },
-];
-
 const labelColors = {
   Communication: "#0000FF",
   Leadership: "#FF0000",
@@ -34,9 +25,9 @@ const CustomPolarAngleTick = ({ payload, x, y, textAnchor }) => {
   );
 };
 
-const SkillRadarChart = () => {
+const SkillRadarChart = ({ data }) => {
   return (
-    <div className="w-full flex flex-col justify-center items-center rounded-lg py-8 px-4 ">
+    <div className="w-full flex flex-col justify-center items-center rounded-lg py-8 px-4">
       <h2 className="text-lg font-semibold text-gray-700 mb-3">
         Skill Analysis
       </h2>
@@ -44,11 +35,7 @@ const SkillRadarChart = () => {
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid stroke="#ddd" />
           <PolarAngleAxis dataKey="skill" tick={<CustomPolarAngleTick />} />
-          <PolarRadiusAxis
-            angle={30}
-            domain={[0, 10]}
-            tick={{ fill: "#555", fontSize: 10 }}
-          />
+          <PolarRadiusAxis angle={30} domain={[0, 5]} />
           <Radar
             name="User Skills"
             dataKey="rating"
