@@ -4,6 +4,7 @@ import addEnrolledEmployee from "../hooks/post/addEnrolledEmployee";
 import { useParams } from "react-router-dom"; // To get CourseID from URL
 import { ToastContainer } from "react-toastify";
 import { toast, Bounce } from "react-toastify";
+import sendCourseNotif from "../utils/sendCourseNotif";
 const AddEmployeeModal = ({ isOpen, onClose }) => {
   const { courseId } = useParams(); // Extract courseID from URL
   const [employees, setEmployees] = useState([]);
@@ -40,6 +41,7 @@ const AddEmployeeModal = ({ isOpen, onClose }) => {
 
     for (const employee of selectedEmployees) {
       const result = await addEnrolledEmployee(employee.id, courseId);
+      await sendCourseNotif(courseId, employee.Email, employee.Username);
       if (result.success) {
         toast.success("User Added Successfully!", {
           position: "bottom-right",
