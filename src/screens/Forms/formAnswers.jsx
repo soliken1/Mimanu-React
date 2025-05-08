@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import axios from "axios";
 
 const MBTI_DESCRIPTIONS = {
@@ -19,6 +29,14 @@ const MBTI_DESCRIPTIONS = {
   ESFJ: "The Consul – caring and social, always eager to help and support others.",
   ENFJ: "The Protagonist – charismatic and inspiring leaders, who love helping others grow.",
   ENTJ: "The Commander – confident and strategic, born to lead and drive success.",
+};
+
+const BAR_COLORS = {
+  "Critical Thinking": "#3B82F6", // blue-500
+  "Time Management": "#10B981", // emerald-500
+  Teamwork: "#F59E0B", // amber-500
+  Leadership: "#EF4444", // red-500
+  Communication: "#8B5CF6", // violet-500
 };
 
 const FormAnswers = () => {
@@ -171,17 +189,36 @@ const FormAnswers = () => {
 
       {batchAverages && (
         <div className="bg-green-50 p-5 mb-6 rounded border border-green-200">
-          <h2 className="text-xl font-bold text-green-700 mb-3">
+          <h2 className="text-xl font-bold text-green-700 mb-4">
             Peer Group Averages
           </h2>
-          <ul className="space-y-1 text-gray-800">
-            {Object.entries(batchAverages).map(([category, avg]) => (
-              <li key={category} className="flex justify-between">
-                <span>{category}</span>
-                <span className="font-semibold">{avg.toFixed(2)}</span>
-              </li>
-            ))}
-          </ul>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={Object.entries(batchAverages).map(([category, avg]) => ({
+                category,
+                average: parseFloat(avg.toFixed(2)),
+              }))}
+              margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" />
+              <YAxis domain={[0, 5]} tickCount={6} />
+              <Tooltip />
+              <Legend />
+              {Object.entries(BAR_COLORS).map(([key, color]) => (
+                <Bar
+                  key={key}
+                  dataKey="average"
+                  name={key}
+                  fill={BAR_COLORS[key]}
+                  barSize={40}
+                  radius={[4, 4, 0, 0]}
+                  isAnimationActive={true}
+                />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       )}
 
