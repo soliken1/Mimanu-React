@@ -8,9 +8,6 @@ import { Link } from "react-router-dom";
 import AddCourseModal from "../../../components/AddCourseModal";
 import { ToastContainer } from "react-toastify";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import fetchAllCourses from "../../../hooks/get/fetchAllCourses";
 import Loader from "../../../components/Loader";
 

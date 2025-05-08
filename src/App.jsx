@@ -52,6 +52,7 @@ import AdminProgress from "./screens/Courses/Admin/AdminProgress.jsx";
 import TrainorProgressList from "./screens/Courses/Trainor/TrainorProgressList.jsx";
 import TrainorProgress from "./screens/Courses/Trainor/TrainorProgress.jsx";
 import FormAnswers from "./screens/Forms/formAnswers.jsx";
+import Feedback from "./screens/Feedback/Feedback.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -517,6 +518,18 @@ export default function App() {
           }
         />
         <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute
+              role={role}
+              allowedRoles={["Admin"]}
+              redirectTo={getDashboardRoute(role)}
+            >
+              <Feedback getUser={getUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/survey/:uid"
           element={
             <ProtectedRoute
@@ -528,7 +541,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/self-form/:uid"
           element={
             <ProtectedRoute
