@@ -48,7 +48,7 @@ const fetchEnrolledUsersSummary = async (courseID) => {
           } = await fetchModulesWithReadStatus(courseID, enrolled.id);
 
           // Fetch Task Progress
-          const { availableTasks, pastTasks } = await fetchTasks(
+          const { availableTasks, upcomingTasks, pastTasks } = await fetchTasks(
             courseID,
             enrolled.id
           );
@@ -63,6 +63,13 @@ const fetchEnrolledUsersSummary = async (courseID) => {
           let totalPossibleScore = 0;
 
           pastTasks.forEach((task) => {
+            if (task.isAnswered && task.completedData) {
+              totalScore += task.completedData.Score || 0;
+              totalPossibleScore += task.completedData.TotalQuestions || 0;
+            }
+          });
+
+          upcomingTasks.forEach((task) => {
             if (task.isAnswered && task.completedData) {
               totalScore += task.completedData.Score || 0;
               totalPossibleScore += task.completedData.TotalQuestions || 0;
