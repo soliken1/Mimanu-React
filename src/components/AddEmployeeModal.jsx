@@ -41,7 +41,11 @@ const AddEmployeeModal = ({ isOpen, onClose }) => {
 
     for (const employee of selectedEmployees) {
       const result = await addEnrolledEmployee(employee.id, courseId);
-      await sendCourseNotif(courseId, employee.Email, employee.Username);
+      await sendCourseNotif({
+        courseId: courseId,
+        email: employee.Email,
+        name: employee.Username,
+      });
       if (result.success) {
         toast.success("User Added Successfully!", {
           position: "bottom-right",
