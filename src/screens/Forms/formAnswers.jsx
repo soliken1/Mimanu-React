@@ -54,6 +54,8 @@ const FormAnswers = () => {
   const [viewChartAnalysis, setViewChartAnalysis] = useState(false);
   const [questionAverages, setQuestionAverages] = useState([]);
   const [chartType, setChartType] = useState("bar"); // "bar" or "radar"
+  const [aiPrediction, setAiPrediction] = useState(null);
+
 
   const getFormEndpoints = (uid) => ({
     MBTIForm: `https://mimanu-react.vercel.app/api/mbti-form?uid=${uid}`,
@@ -86,6 +88,9 @@ const FormAnswers = () => {
         }
         if (res.data?.questionAverages) {
           setQuestionAverages(res.data.questionAverages);
+        }
+        if (res.data?.predictions) {
+          setAiPrediction(res.data.predictions);
         }
       } catch (err) {
         console.error("Failed to fetch batch averages:", err);
@@ -226,6 +231,24 @@ const FormAnswers = () => {
           This user hasn't taken the MBTI assessment yet.
         </div>
       )}
+
+{aiPrediction && (
+  <div className="bg-yellow-50 p-5 mb-6 rounded border border-yellow-200">
+    <h2 className="text-xl font-bold text-yellow-700">
+      MiManu 360 AI Course Recommendation
+    </h2>
+    <div className="mt-4 space-y-2">
+      {Object.entries(aiPrediction).map(([skill, recommendation]) => (
+        <div key={skill}>
+          <span className="font-semibold text-gray-800">{skill}:</span>{" "}
+          <span className="text-gray-700 italic">{recommendation}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
 
       {batchAverages ? (
         <div className="bg-green-50 p-5 mb-6 rounded border border-green-200">
