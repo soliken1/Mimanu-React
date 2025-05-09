@@ -159,39 +159,79 @@ const EditProfileScreen = ({ getUser }) => {
         className="w-full ps-72 h-auto min-h-screen px-12 pb-12 pt-16 flex flex-col bg-[#FAF9F6]"
       >
         <div className="flex flex-row w-full gap-12">
-          <div className="w-2/4 shadow-y p-8 rounded-xl">
-            <label className="text-xl font-semibold">Edit Profile</label>
-            <div className="mb-4">
-              <div className="flex flex-col items-center mt-5">
-                <img
-                  src={previewImg || userImg || userData.UserImg}
-                  className="w-32 h-32 rounded-full object-cover mb-2"
-                  alt="Profile"
-                />
+        <div className="w-2/4 shadow-y p-8 rounded-xl">
+  <label className="text-xl font-semibold">Edit Profile</label>
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="mt-2 rounded-full py-1 shadow-md px-4"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
+  <div className="mb-4">
+    <div className="flex flex-col items-center mt-5">
+      <img
+        src={previewImg || userImg || userData.UserImg}
+        className="w-32 h-32 rounded-full object-cover mb-2"
+        alt="Profile"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        className="mt-2 rounded-full py-1 shadow-md px-4"
+        onChange={handleImageChange}
+      />
+    </div>
+  </div>
 
-            <div className="mb-4">
-              <label htmlFor="Email" className="block mb-2 font-medium">
-                Email
-              </label>
-              <input
-                type="email"
-                id="Email"
-                disabled={true}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full  px-4 py-2 rounded-lg bg-gray-200"
-              />
-            </div>
-          </div>
+  <div className="mb-4">
+    <label htmlFor="Username" className="block mb-2 font-medium">
+      Username
+    </label>
+    <input
+      type="text"
+      id="Username"
+      disabled={true}
+      value={userData.Username || ""}
+      className="w-full px-4 py-2 rounded-lg bg-gray-200"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label htmlFor="FirstName" className="block mb-2 font-medium">
+      First Name
+    </label>
+    <input
+      type="text"
+      id="FirstName"
+      disabled={true}
+      value={userData.FirstName || ""}
+      className="w-full px-4 py-2 rounded-lg bg-gray-200"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label htmlFor="LastName" className="block mb-2 font-medium">
+      Last Name
+    </label>
+    <input
+      type="text"
+      id="LastName"
+      disabled={true}
+      value={userData.LastName || ""}
+      className="w-full px-4 py-2 rounded-lg bg-gray-200"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label htmlFor="Email" className="block mb-2 font-medium">
+      Email
+    </label>
+    <input
+      type="email"
+      id="Email"
+      disabled={true}
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full px-4 py-2 rounded-lg bg-gray-200"
+    />
+  </div>
+</div>
+
           <div className="w-2/4 shadow-y p-8 rounded-xl">
             <label className="text-xl font-semibold">Change Password</label>
             <div className="mb-4 mt-8">
