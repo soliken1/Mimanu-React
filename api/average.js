@@ -98,10 +98,7 @@ export default async function handler(req, res) {
           const randomIndex = Math.floor(Math.random() * options.length);
           predictions[batch] = options[randomIndex];
         } else {
-
-          predictions = "Keep up the good work! Just maintain and continue improving.";
-
-
+          predictions[batch] = "Keep up the good work! Just maintain and continue improving.";
         }
       }
     }
