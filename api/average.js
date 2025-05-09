@@ -91,15 +91,18 @@ export default async function handler(req, res) {
       const count = batchCounts[batch] || 0;
       const average = count > 0 ? total / count : null;
       batchAverages[batch] = average;
-
-      if (average !== null && average < LOW_THRESHOLD) {
-        const options = courseSuggestions[batch];
-        if (options && options.length > 0) {
+    
+      const options = courseSuggestions[batch];
+      if (average !== null && options && options.length > 0) {
+        if (average < LOW_THRESHOLD) {
           const randomIndex = Math.floor(Math.random() * options.length);
           predictions[batch] = options[randomIndex];
+        } else {
+          predictions[batch] = "Keep up the good work! Just maintain and continue improving.";
         }
       }
     }
+    
 
     const questionAverages = {};
     Object.keys(questionTotals).forEach((key) => {
